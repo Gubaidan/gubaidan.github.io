@@ -1,0 +1,51 @@
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="<%= config.description %>">
+    <meta name="keyword" content="<%= config.keyword %>">
+    <meta name="theme-color" content="#600090">
+    <meta name="msapplication-navbutton-color" content="#600090">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="#600090">
+    <link rel="shortcut icon" href="<%- config.favicon || 'https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-person-128.png' %>">
+    <link rel="alternate" type="application/atom+xml" title="<%= config.title %>" href="/atom.xml">
+
+    <title>
+        <% if (page.title) { %>
+        <%= page.title + '｜' + config.SEOTitle %>
+        <% } else{ %>
+        <%= config.SEOTitle %>
+        <% } %>
+    </title>
+
+    <link rel="canonical" href="<%= config.url + config.root + (page.path || '').replace('index.html', '') %>">
+
+    <!-- Bootstrap Core CSS -->
+    <%- css('css/bootstrap.min.css') %>
+
+    <!-- Custom CSS -->
+    <%- css('css/blog-style.css') %>
+    <%- css('css/font-awesome.css') %>
+
+    <!-- Pygments Github CSS -->
+    <%- css('css/syntax') %>
+
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&amp;subset=latin,latin-ext" rel="stylesheet" type="text/css">
+    <script type="text/javascript"
+ 		src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+		MathJax.Hub.Config({
+	    extensions: ["tex2jax.js","TeX/noErrors.js","TeX/AMSsymbols.js"],
+	    jax: ["input/TeX","output/HTML-CSS"],
+	    tex2jax: {
+	      inlineMath: [['$','$'],["\\(","\\)"]],
+	      displayMath: [['\\[','\\]'], ['$$','$$']],
+	      balanceBraces: true
+	      
+	    },
+	    TeX: {equationNumbers: {autoNumber: ["AMS"], useLabelIds: true}},
+	    "HTML-CSS": {availableFonts:["TeX"]},
+	  });
+	</script>
+
+</head>

@@ -1,0 +1,409 @@
+---
+layout: post
+title: "回溯搜索算法总结"
+date: 2018-02-23 06:00
+author: "Gubaidan"
+header-img: "/Header/gs.png"
+cdn: 'header-on'
+tags:
+	- 算法
+---
+### 理解回溯法
+
+回溯法是一种选优搜索法，按选优条件向前搜索，以达到目标。但当探索到某一步时，发现原先选择并不优或达不到目标，就退回一步重新选择，这种走不通就退回再走的技术为回溯法，而满足回溯条件的某个状态的点称为“回溯点”。
+
+回溯法在解空间树中（解空间是一个树结构），按照深度优先策略进行搜索
+
+* 若用回溯法求问题的所有解时，要回溯到根，且根结点的所有可行的子树都要已被搜索遍才结束。
+
+
+* 若使用回溯法求任一个解时，只要搜索到问题的一个解就可以结束。
+
+
+
+回溯法中，首先需要明确下面三个概念：
+
+
+*  约束函数：约束函数是根据题意定出的。通过描述合法解的一般特征用于去除不合法的解，从而避免继续搜索出这个不合法解的剩余部分。因此，约束函数是对于任何状态空间树上的节点都有效、等价的。
+* 状态空间树：刚刚已经提到，状态空间树是一个对所有解的图形描述。树上的每个子节点的解都只有一个部分与父节点不同。
+* 扩展节点、活结点、死结点：所谓扩展节点，就是当前正在求出它的子节点的节点，在DFS中，只允许有一个扩展节点。活结点就是通过与约束函数的对照，节点本身和其父节点均满足约束函数要求的节点；死结点反之。由此很容易知道死结点是不必求出其子节点的（没有意义）。
+
+回溯法一般步骤：
+
+* 针对所给问题，确定问题的解空间，首先应明确定义问题的解空间，问题的解空间应至少包含问题的一个（最优）解。
+
+* 确定结点的扩展搜索规则
+
+* 以深度优先方式搜索解空间，并在搜索过程中用剪枝函数避免无效搜索。
+
+### 实战
+
+
+#### Subsets （Leetcode 78）
+
+> Given a set of distinct integers, nums, return all possible subsets (the power set).
+
+> Note: The solution set must not contain duplicate subsets.
+
+```sh
+Input: nums = [1,2,3]
+Output:
+[
+  [3],
+  [1],
+  [2],
+  [1,2,3],
+  [1,3],
+  [2,3],
+  [1,2],
+  []
+]
+```
+
+描述：求解一个数列的全部不重复子集，输入也是不重复的。
+
+设计思想：利用回溯法，深度优先遍历树结构即可得到结果
+
+解空间
+
+![subsets](http://p9n2j0ewi.bkt.clouddn.com/PostImg/2018-02-23-GS/subsets.png)
+
+实现：
+
+
+```java
+public static List<List<Integer>> subsets(int[] nums) {
+    //存储结果的list
+    List<List<Integer>> list = new ArrayList<>();
+    backtrack(list, new ArrayList<>(), nums, 0);
+    return list;
+}
+
+private static void backtrack(List<List<Integer>> list , List<Integer> tempList, int [] nums, int start) {
+    list.add(new ArrayList<>(tempList));
+    for (int i = start; i < nums.length; i++) {
+        tempList.add(nums[i]);
+        backtrack(list, tempList, nums, i + 1);
+        tempList.remove(tempList.size() - 1);
+    }
+}
+
+public static void main(String[] args) {
+    int[] nums = new int[]{1, 2, 3};
+    List<List<Integer>> lists = subsets(nums);
+    for (List l1: lists){
+        System.out.println(l1.toString());
+    }
+
+}
+```
+
+这道题因为输入没有重复，所以不必设置剪枝规则，只要深度优先搜索完树结构，结果就出来了，回溯法对于这道题并不是最优解法，旨在学习总结回溯法。
+
+#### Subsets II（Leetcode 90）
+
+> Given a collection of integers that might contain duplicates, nums, return all possible subsets (the power set).
+
+> The solution set must not contain duplicate subsets.
+
+```java
+Input: [1,2,2]
+Output:
+[
+  [2],
+  [1],
+  [1,2,2],
+  [2,2],
+  [1,2],
+  []
+]
+```
+
+描述：求解一个数列的全部不重复子集，**输入可能是重复的**。
+
+设计思想：因为输入包含重复，先对输入进行排序，然后利用回溯法，深度优先遍历树结构，如果当前节点与上一个节点相等则剪枝
+
+实现：
+
+```java
+ public static List<List<Integer>> subsetsWithDup(int[] nums) {
+    List<List<Integer>> list = new ArrayList<>();
+    //因为包含重复 先排序
+    Arrays.sort(nums);
+    backtrack(list, new ArrayList<>(), nums, 0);
+    return list;
+}
+
+private static void backtrack(List<List<Integer>> list, List<Integer> tempList, int [] nums, int start){
+    list.add(new ArrayList<>(tempList));
+    for(int i = start; i < nums.length; i++){
+
+		  回溯过程中，如果当前节点和上一节点相同则剪枝
+        if(i > start && nums[i] == nums[i-1]) continue;             			  tempList.add(nums[i]);
+        backtrack(list, tempList, nums, i + 1);
+        tempList.remove(tempList.size() - 1);
+    }
+}
+
+public static void main(String[] args) {
+    int[] nums = new int[]{1, 2, 2};
+    List<List<Integer>> lists = subsetsWithDup(nums);
+    for (List l1: lists){
+        System.out.println(l1.toString());  //打印
+    }
+
+}
+```
+
+#### Permutations（leetcode 46）
+
+> Given a collection of distinct integers, return all possible permutations.
+
+```sh
+Input: [1,2,3]
+Output:
+[
+  [1,2,3],
+  [1,3,2],
+  [2,1,3],
+  [2,3,1],
+  [3,1,2],
+  [3,2,1]
+]
+```
+
+描述：输入一个不重复数组，输出这个数组的全排列。
+
+问题分析：搜索解空间树，如果某一次搜索过程中结果的长度等于数组长度说明已经完成了一次从跟节点到叶节点的搜索，则把结果存储。如果在搜索过程中当前解已经存在于结果集，则剪枝。
+
+实现：
+
+```java
+ public static List<List<Integer>> permute(int[] nums) {
+    List<List<Integer>> list = new ArrayList<>();
+    backtrack(list, new ArrayList<>(), nums);
+    return list;
+}
+
+private static void backtrack(List<List<Integer>> list, List<Integer> tempList, int [] nums){
+    if(tempList.size() == nums.length){
+        //当list长度等于数组长度则加入结果集
+        list.add(new ArrayList<>(tempList));
+    } else{
+        //注意这里i从0开始
+        for(int i = 0; i < nums.length; i++){
+            //如果某一个结果已经包含这个数字 则剪枝
+            if(tempList.contains(nums[i])) continue; 
+            tempList.add(nums[i]);
+            backtrack(list, tempList, nums);
+            tempList.remove(tempList.size() - 1);
+        }
+    }
+}
+
+public static void main(String[] args) {
+    int[] nums = new int[]{1, 2, 3};
+    List<List<Integer>> lists = permute(nums);
+    for (List l1: lists){
+        System.out.println(l1.toString());
+    }
+}
+```
+
+#### Permutations II (leetcode 47)
+
+> Given a collection of numbers that might contain duplicates, return all possible unique permutations.
+
+```sh
+Input: [1,1,2]
+Output:
+[
+  [1,1,2],
+  [1,2,1],
+  [2,1,1]
+]
+```
+
+描述：与上一题不同的是，这里的输入是包含重复的，输出同样是不重复的全部排列
+
+分析：既然包含重复的，则搜索算法执行之前要对数组进行排序，以便在后续剪枝。开启一个boolen数组存储搜索过程中某个元素是否已经被使用。
+
+剪枝规则：除了对已经包含在临时队列中的元素进行剪枝，还有对下一个元素和当前元素相等的搜素路径进行剪枝
+
+实现：
+
+
+```java
+public static List<List<Integer>> permuteUnique(int[] nums) {
+    List<List<Integer>> list = new ArrayList<>();
+    //排序
+    Arrays.sort(nums);
+    backtrack(list, new ArrayList<>(), nums, new boolean[nums.length]);
+    return list;
+}
+
+private static void backtrack(List<List<Integer>> list, List<Integer> tempList, int [] nums, boolean [] used){
+    if(tempList.size() == nums.length){
+        list.add(new ArrayList<>(tempList));
+    } else{
+        for(int i = 0; i < nums.length; i++){
+        		//如果已经使用过 
+            if(used[i] || i > 0 && nums[i] == nums[i-1] && !used[i - 1]) continue;
+            used[i] = true;
+            tempList.add(nums[i]);
+            backtrack(list, tempList, nums, used);
+            used[i] = false;
+            tempList.remove(tempList.size() - 1);
+        }
+    }
+}
+
+public static void main(String[] args) {
+    int[] nums = new int[]{1, 2, 2};
+    List<List<Integer>> lists = permuteUnique(nums);
+    for (List l1: lists){
+        System.out.println(l1.toString());
+    }
+}
+```
+
+分析：
+
+```java
+if(used[i] || i > 0 && nums[i] == nums[i-1] && !used[i - 1]) continue;
+```
+
+如果按照上面题目的模式，将剪枝规则写为：
+
+```java
+if(i > 0 && nums[i] == nums[i-1] && tempList.contains(nums[i])) continue;
+```
+
+则结果为：
+
+```sh
+[1, 1, 1]
+[1, 1, 2]
+[1, 1, 2]
+[1, 2, 1]
+[1, 2, 2]
+[1, 2, 1]
+[1, 2, 2]
+[2, 1, 1]
+[2, 1, 2]
+[2, 2, 1]
+[2, 2, 2]
+[2, 1, 1]
+[2, 1, 2]
+[2, 2, 1]
+[2, 2, 2]
+```
+
+产生这种情况的原因是：因为输入是可重复的，所以每一个全排列组合是允许出现重复元素的，如果单单只是判断是不是包含在某个结果中，会导致元素的重复使用。
+
+#### Combination Sum（leetcode 39）
+> Given a set of candidate numbers (candidates) (without duplicates) and a target number (target), find all unique combinations in candidates where the candidate numbers sums to target.
+
+> The same repeated number may be chosen from candidates unlimited number of times.
+
+```sh
+Input: candidates = [2,3,6,7], target = 7,
+A solution set is:
+[
+  [7],
+  [2,2,3]
+]
+```
+
+描述：输入一个不重复的数组和一个目标整数，求数组中所有加起来等于目标整数的集合，其中数组内的数可以多次使用。
+
+设计思路：搜索解空间时，用target 减去当前节点值，当值为0，就是其中一个解。如果小于0，则剪枝。排序是为了加快执行效率。
+
+实现：
+
+```java
+public static List<List<Integer>> combinationSum(int[] nums, int target) {
+    List<List<Integer>> list = new ArrayList<>();
+    Arrays.sort(nums);
+    backtrack(list, new ArrayList<>(), nums, target, 0);
+    return list;
+}
+
+private static void backtrack(List<List<Integer>> list, List<Integer> tempList, int[] nums, int remain, int start) {
+    if (remain < 0) return;
+    else if (remain == 0) list.add(new ArrayList<>(tempList));
+    else {
+        for (int i = start; i < nums.length; i++) {
+            tempList.add(nums[i]);
+            backtrack(list, tempList, nums, remain - nums[i], i); // not i + 1 because we can reuse same elements
+            tempList.remove(tempList.size() - 1);
+        }
+    }
+}
+
+public static void main(String[] args) {
+    int[] nums = new int[]{2, 3, 6, 7};
+    List<List<Integer>> lists = combinationSum(nums,7);
+    for (List l1 : lists) {
+        System.out.println(l1.toString());
+    }
+}
+```
+
+#### Combination Sum II（leetcode 40）
+
+> Given a collection of candidate numbers (candidates) and a target number (target), find all unique combinations in candidates where the candidate numbers sums to target.
+
+> Each number in candidates may only be used once in the combination.
+
+```sh
+Input: candidates = [10,1,2,7,6,1,5], target = 8,
+A solution set is:
+[
+  [1, 7],
+  [1, 2, 5],
+  [2, 6],
+  [1, 1, 6]
+]
+```
+
+描述：输入一个**可重复**的数组和一个目标整数，求数组中所有加起来等于目标整数的集合，**其中数组内的数不可以多次使用**。
+
+设计思路：和上题类似，只是可使用的元素使用前会判断，如果和上一个元素相同则剪枝
+
+实现：
+
+```java
+public static List<List<Integer>> combinationSum2(int[] nums, int target) {
+    List<List<Integer>> list = new ArrayList<>();
+    Arrays.sort(nums);
+    backtrack(list, new ArrayList<>(), nums, target, 0);
+    return list;
+
+}
+
+private static void backtrack(List<List<Integer>> list, List<Integer> tempList, int[] nums, int remain, int start) {
+    if (remain < 0) return;
+    else if (remain == 0) list.add(new ArrayList<>(tempList));
+    else {
+        for (int i = start; i < nums.length; i++) {
+            if (i > start && nums[i] == nums[i - 1]) continue; // 剪枝
+            tempList.add(nums[i]);
+            backtrack(list, tempList, nums, remain - nums[i], i + 1);
+            tempList.remove(tempList.size() - 1);
+        }
+    }
+}
+
+public static void main(String[] args) {
+    int[] nums = new int[]{10, 1, 2, 7, 6, 1, 5};
+    List<List<Integer>> lists = combinationSum2(nums, 8);
+    for (List l1 : lists) {
+        System.out.println(l1.toString());
+    }
+}
+```
+
+
+
+

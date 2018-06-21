@@ -1,0 +1,153 @@
+---
+layout: post
+title: "团队开发 - git整理"
+date: 2017-06-03 06:00
+author: "Gubaidan"
+header-img: ""
+cdn: 'header-on'
+tags:
+	- git
+---
+### git常见名词整理
+
+
+* Repository：仓库，用于存储项目文件，分为远程和本地仓库，一般将本地仓库代码上传到远程仓库，以便多人合作和代码保存。
+
+* Branch：分支，一个git仓库可以有多个分支，每个分支代表一个工作流程，最后可以合并也可以舍弃，一般默认为master主分支。
+
+* Remote：远程仓库，在git命令行，远程仓库默认名称origin
+
+* 工作区（Working Directory）：是由我们直接控制和编辑代码的地方，也就是我们的编辑环境
+
+* 暂存区Stage）：当我们git add之后，文件就会存放到这里，等待提交。当然这里的数据是可以撤回的。
+
+* 版本库（commit History）：存放已经提交的数据，push操作就是将这里的数据上传到远程仓库，版本库的存在为git添加很多灵活性，在之后的操作中如果想回滚到之前的commit可以在这里根据记录回滚。
+* orogin：默认远程仓库名
+
+### git基本操作：
+
+![git流程](http://p9n2j0ewi.bkt.clouddn.com/PostImg/2017-06-03-git/git-prosessor.png)
+
+#### 一、 git init 
+
+```shell
+git init  //在当前目录初始化一个空的本地仓库
+
+git init name //在当前目录下新建一个名称为name的文件夹并初始化name这个文件夹为git本地仓库
+
+git clone url //url 远程仓库地址
+```
+
+#### 二、git add
+
+```shell
+git add file1 file2 ...   //添加一个或多个文件到暂存区,可以是目录
+
+git add .  或者 git add --all  //添加当前目录下所有文件到暂存区
+
+git remote add origin git@github.com:xxxx/xxxx.git //当前git仓库连接到远程仓库
+```
+
+#### 三、git rm
+
+
+```shell
+git rm file // 把一个文件从暂存区和工作区删除
+
+git rm * // 当前目录下所有文件从暂存区和工作区删除
+
+git rm -r dir // 把一个文件夹从暂存区和工作区删除
+
+git rm --cached file //把一个文件从暂存区删除，但不从工作区删除，只是不希望被版本控制
+
+git remote rm [name]  //删除远程仓库
+
+git branch -d [name]  //删除分支
+
+git push origin :[name] //删除远程为name的分支
+
+git mv original-name rename //重命名 并放入暂存区
+```
+
+#### 四、git commit
+
+```shell
+git commit -m "message" //提交更改或文件到版本库
+
+git commit file1 file2 .. -m "message" //提交指定文件
+
+git commit -a  //提交工作区自上次commit之后的变化，直接到仓库区
+
+git commit --amend -m "message" // 如果代码没有任何新变化，则用来改写上一次commit的提交信息
+```
+
+#### 五、git branch
+
+```shell
+git branch //查看本地所有分支
+
+git branch -a // 查看本地所有分支及其 远程所有分支
+
+git branch branch-name //创建分支
+
+git checkout branch-name //切换分支
+
+git branch -m name1 name2 //分支改名
+```
+
+
+​	
+#### 六、git push
+```shell
+所有的修改想要提交到远程仓库必须push，否则修改不生效
+
+git push origin branch-name //推送更新到远程分支，默认远程主分支 master
+
+git push origin :branch-name //删除远程分支
+
+git push -u origin master //加了这个参数后 以后可以直接使用 git push 简化操作 
+```
+
+#### 七、杂项
+
+
+```shell
+git status //所有变更的文件
+
+git log //查看当前分支所有历史版本
+
+git log --stat // commit历史 显示每次提交的所有更改
+
+git log -S keyword //搜素历史
+
+git diff //暂存区和工作区差异
+
+git diff --cached filename //显示暂存区的当前文件和上一次commit差异
+
+git checkout file  //恢复暂存区文件到工作区
+
+git checkout [commit] [file] //恢复commit文件到暂存区和工作区
+
+git reset --hard // 重置暂存区，工作区，回滚到上一次提交
+```
+
+
+​	
+
+​	
+
+
+
+
+​	
+
+
+
+​	
+
+
+
+
+
+> 参考：[Git 常用命令大全](https://blog.csdn.net/halaoda/article/details/78661334)
+

@@ -1,0 +1,94 @@
+---
+layout: post
+title: "编写mac、Linux下 .sh启动脚本"
+date: 2017-06-04 22:06
+author: "Gubaidan"
+header-img: "/Header/lake.jpg"
+cdn: 'header-on'
+tags:
+	- shell
+---
+# 背景
+
+因为电脑中装了很多非图形化应用程序，例如nginx，zoonkeeper、ActivityMQ等，每次都忘了这些应用装在了哪里，就算记得在那个目录下还是要cd 到指定目录启动，所以写了几个脚本用于启动这些服务。
+
+1. 在任意文件夹下新建 .sh 文件，然后赋予文件执行权限和读写权限，为了方便暂时给予777权限，如：
+
+   ```sh
+   touch nginx.sh
+   sudo chmod 777 nginx.sh
+   ```
+
+2. 找到nginx服务所在目录，pwd命令获得全路径
+
+   ```sh
+   MacBook-Gu:bin gubaidan$ pwd
+   /usr/local/Cellar/nginx/1.13.12/bin    //全路径
+   MacBook-Gu:bin gubaidan$ 
+   ```
+
+3. vim nginx.sh编写脚本
+
+   ```sh
+   #! /bin/bash 
+   while true; do
+     echo  " ------------------------------- "
+     echo  "            "
+     echo  "1.Start Nginx"      //开启服务
+     echo  "2.Stop Nginx"		//停止服务
+     echo  "3.Check Conf"		//查看配置
+     echo  "4.Nginx Reload"	//重启
+     echo  "5.Nginx Status"	//查看状态
+     echo  "6.Quit"			//退出
+     echo  -n "Choice Option:"   
+     read tag                //读取输入
+   
+     if [[ $tag = "1" ]]; then
+       cd /usr/local/Cellar/nginx/1.13.12/bin
+       echo 'xxxx'|sudo -S nginx    	//管道免密操作 xxxx为sudo密码
+     fi
+   
+     if [[ $tag = "2" ]]; then
+        cd /usr/local/Cellar/nginx/1.13.12/bin
+        echo 'xxxx'|sudo -S nginx -s stop
+     fi
+   
+     if [[ $tag = "3" ]]; then
+        cd /usr/local/Cellar/nginx/1.13.12/bin
+        echo 'xxxx'|sudo nginx -t
+     fi
+   
+     if [[ $tag = "4" ]]; then
+        cd /usr/local/Cellar/nginx/1.13.12/bin
+        echo 'xxxx'|sudo nginx -s reload
+     fi
+   
+     if [[ $tag = "5" ]]; then
+        ps -ef | grep nginx
+     fi
+   
+     if [[ $tag = "6" ]]; then
+        break;
+     fi
+   
+     echo  "            "
+     echo  "Nginx Deal Success"
+     echo  "            "
+   
+   
+   done
+   ```
+
+4. 运行
+
+   ```
+   ./nginx.sh          //在nginx.sh目录下运行
+   ```
+
+5. 效果
+
+   ![sh](http://p9n2j0ewi.bkt.clouddn.com/PostImg/2017-06-04-sh/nginx.png)
+
+6. mac可以把.sh文件后缀改为.command，这样双击就可以直接运行。
+
+   ![command](http://p9n2j0ewi.bkt.clouddn.com/PostImg/2017-06-04-sh/command.png)

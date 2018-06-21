@@ -1,0 +1,258 @@
+---
+layout: post
+title: "如何写出一个动态规划"
+date: 2018-03-02 06:00
+author: "Gubaidan"
+header-img: "/Header/dp.jpg"
+cdn: 'header-on'
+tags:
+	- 算法
+---
+### 动态规划一般流程
+
+说到动态规划我是拒绝的，一般来说都很恶心。。。
+
+
+DP的核心是将一个问题分解成为若干个子问题，解决一个动态规划大体分为三步：暴力搜索、查找冗余、消除冗余
+
+分解子问题需要注意的点：
+
+* 具有相同的子问题：必须保证我们分割成的子问题也能按照相同的方法分割成更小的自问题， 并这些自问题的最终分割情况是可以解决的
+
+* 满足最优子结构：就是一个决策的子决策也是最优的
+
+* 无后效性：这是DP中最重要的一点， 他要求每个子问题的决策不能对后面其他未解决的问题产影响， 如果产生就无法保证决策的最优性， 这就是无后效性。往往需要我们找到一个合适的状态。（非常重要）
+
+### Fibnacci数列
+
+在学习动态规划之前我根本不认为fibnacci数列是个动态规划题
+
+fibnacci数列: 1 1 2 3 5 8 13 ... 当n大于2时，第n项等于前两项之和。
+
+所以递推公式为fn(n) = f(n-1)+(fn-2)
+
+#### 1) 写出暴力递归（自顶向下）
+
+```java
+     private static long fib(int n){
+        if (n <= 2) return 1;
+        return fib(n - 1) + fib(n - 2);
+    }
+
+    public static void main(String[] args) {
+        long start = System.currentTimeMillis();
+        long i = fib(10000);
+        long end = System.currentTimeMillis() - start;
+        System.out.println("time:"+end + "ms," + i);
+    }
+```
+
+
+时间复杂度：O(2^n)
+
+
+第一次：我将 n 设置了1000000直接爆栈
+
+第二次执行：n = 10000 ，时间很长我等不住了，强制退出
+
+第三次执行 n = 1000 ,依然很长时间，强制退出
+
+第四次执行 n = 50,运行结果：time:34397ms,12586269025
+
+只有前50项结果已经到达了13位数，所以暴力递归花费的时间是非常长的
+
+#### 2) 找出冗余
+
+冗余分析：分解为当前问题为 fn(n) = f(n-1)+(fn-2)后，每一次计算子问题f(n)（如递推式中的f(n - 1)）,都会重新计算n-1之前的子问题，导致重复计算。以n=10为例，要求得f(10)，需要求得f(9)和f(8)。同样，要求得f(9)，要先求得f(8)和f(7)
+
+```
+                f(10)
+              /        \
+            f(9)         f(8)
+           /     \       /    \
+        (8)     f(7)  f(7)   f(6)
+       /   \     /   \ 
+     f(7)  f(6)  f(6) f(5)
+```
+
+  	
+
+
+
+#### 3) 消除冗余（计划搜索）
+
+在每算过一个子问题之后，将结果记录，在下一个子问题需要需要计算同一个子问题时，直接将结果return
+
+代码如下：
+
+```java
+private static long[] res; // 声明一个全局数组，存储计算过的子项
+
+    private static long fib(int n){
+        if (n <= 2) return 1;
+        if(res[n] > 0){
+            return res[n];
+        }
+        res[n] =  fib(n - 1) + fib(n - 2);
+        return res[n];
+    }
+
+    public static void main(String[] args) {
+        long start = System.currentTimeMillis();
+        int n = 50;
+        res = new long[n+1];
+        for(int i = 0; i < n;i++){  //初始化数组
+            res[i] = -1;
+        }
+        long r = fib(n);
+        long end = System.currentTimeMillis() - start;
+        System.out.println("time:"+end + "ms," + r);
+    }
+```
+
+同样求解 n= 50 ,运行结果：time:0ms,12586269025
+
+求解 n = 1000 ,运行结果：time:0ms,817770325994397771
+
+在经过消除冗余后，时间复杂度O(n)
+
+#### 4) 转换为递推式（自底向上）
+
+```java
+        public static void main(String[] args) {
+        long start = System.currentTimeMillis();
+        int n = 50;
+        long[] res = new long[n];
+        res[0] = 1;
+        res[1] = 1;
+        for(int i = 2; i < n;i++){
+            res[i] = res[i - 1] + res[i - 2];
+        }
+
+        long end = System.currentTimeMillis() - start;
+        System.out.println("time:"+end + "ms," + res[n -1]);
+    }
+```
+
+### House Robber(Leet code 198)
+
+
+>	You are a professional robber planning to rob houses along a street. Each house has a certain amount of money stashed, the only constraint stopping you from robbing each of them is that adjacent houses have security system connected and it will automatically contact the police if two adjacent houses were broken into on the same night.
+
+> Given a list of non-negative integers representing the amount of money of each house, determine the maximum amount of money you can rob tonight without alerting the police.
+
+问题大意：
+
+你是一名专业的强盗，计划抢劫沿街的房屋。每间房屋都藏有一定数量的金钱，如果在同一晚上有两间相邻的房屋被闯入，它将自动与警方联系。
+给出一份代表每个房屋的金额的非负整数列表，确定你可以在没有提醒警方的情况下抢劫的最高金额。
+
+问题分析：假设在抢劫第n家店时会有两种决策
+
+* 抢这家店，但是就不能抢下一家，抢到的金额加上当前这家店的金额，表达式 
+
+* 不抢这家店，则直接跳过，抢劫金额不变
+
+由于问题为抢劫金额最高，所以递归表达式为：
+
+```java
+f(n) = Max(f(n- 2) + value, f(n - 1))
+```
+
+#### 1) 暴力递归（自顶向下）
+
+```java
+private static int solve(int idx, int[] nums) {
+    if (idx < 0) return 0;
+    return Math.max(nums[idx] + solve(idx - 2, nums),solve(idx -1 ,nums));
+}
+
+public static void main(String[] args) {
+    long start = System.currentTimeMillis();
+    int[] nums = new int[]{
+            1, 2, 3, 1, 2, 7, 9, 3, 1, 2, 9, 3, 7, 9,
+            7, 9, 3, 1, 2, 7, 9, 3, 12, 7, 9, 3, 7, 9,
+            12, 7, 9, 3, 1, 2, 7, 9, 3, 12, 7, 7, 9
+    };
+    int res = solve(nums.length - 1, nums);
+    long end = System.currentTimeMillis() - start;
+    System.out.println("time:" + end + "ms," + res);
+}
+```
+
+运行结果：time:1471ms,135
+
+时间复杂度：O(2^n)
+
+#### 2) 冗余分析
+
+和Fibnaicc数列类似，每次执行搜索时，依赖子项重复计算，开启一个数组保存计算过的结果
+
+#### 4）消除冗余（计划搜索）
+
+将计算过的子项保存
+
+```java
+    private static int[] result;
+
+private static int solve(int idx, int[] nums) {
+    if (idx < 0) return 0;
+    if (result[idx] >= 0) return result[idx];
+        result[idx] = Math.max(nums[idx] + solve(idx - 2, nums),
+            solve(idx - 1, nums));
+    return result[idx];
+}
+
+public static void main(String[] args) {
+    long start = System.currentTimeMillis();
+    int[] nums = new int[]{
+            1, 2, 3, 1, 2, 7, 9, 3, 1, 2, 9, 3, 7, 9,
+            7, 9, 3, 1, 2, 7, 9, 3, 12, 7, 9, 3, 7, 9,
+            12, 7, 9, 3, 1, 2, 7, 9, 3, 12, 7, 7, 9
+    };
+    result = new int[nums.length];
+    for(int i = 0; i < nums.length; i++){
+        result[i] = -1;
+    }
+    int res = solve(nums.length - 1, nums);
+    long end = System.currentTimeMillis() - start;
+    System.out.println("time:" + end + "ms," + res);
+} 
+```
+
+运行结果：time:0ms,135
+
+时间复杂度：O(n)
+
+#### 5）转换为递推式（自底向上）
+
+```java
+    public static void main(String[] args) {
+    long start = System.currentTimeMillis();
+    int[] nums = new int[]{
+            1, 2, 3, 1, 2, 7, 9, 3, 1, 2, 9, 3, 7, 9,
+            7, 9, 3, 1, 2, 7, 9, 3, 12, 7, 9, 3, 7, 9,
+            12, 7, 9, 3, 1, 2, 7, 9, 3, 12, 7, 7, 9
+    };
+    // a是上次的最大收益
+    int a = nums[0];
+    // b是当前的最大受益
+    int b = Math.max(nums[0], nums[1]);
+    for(int i = 2; i < nums.length; i++){
+        int tmp = b;
+        // 当前的最大收益是两种选择里较大的那个
+        b = Math.max(a + nums[i], b);
+        a = tmp;
+    }
+    long end = System.currentTimeMillis() - start;
+    System.out.println("time:" + end + "ms," + b);
+}
+```
+
+运行结果：time:0ms,135
+
+时间复杂度：O(n)
+
+​	
+
+
+
