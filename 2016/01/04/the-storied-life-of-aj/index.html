@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="花有重开日，人无再少年">
+    <meta name="keyword" content="前端,js,jquery,javascript,html5,开发者,程序猿编程,代码,开源,Developer,Programmer,Coder,html,css,css3,用户体验">
+    <meta name="theme-color" content="#600090">
+    <meta name="msapplication-navbutton-color" content="#600090">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="#600090">
+    <link rel="shortcut icon" href="http://p9n2j0ewi.bkt.clouddn.com/img/favicon.ico">
+    <link rel="alternate" type="application/atom+xml" title="Gubaidan" href="/atom.xml">
+
+    <title>
+        
+        从《岛上书店》说开去｜Gubaidan&#39;s blog
+        
+    </title>
+
+    <link rel="canonical" href="http://www.gubaidan.top/2016/01/04/the-storied-life-of-aj/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/blog-style.css">
+    <link rel="stylesheet" href="/css/font-awesome.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&amp;subset=latin,latin-ext" rel="stylesheet" type="text/css">
+    <script type="text/javascript"
+ 		src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+		MathJax.Hub.Config({
+	    extensions: ["tex2jax.js","TeX/noErrors.js","TeX/AMSsymbols.js"],
+	    jax: ["input/TeX","output/HTML-CSS"],
+	    tex2jax: {
+	      inlineMath: [['$','$'],["\\(","\\)"]],
+	      displayMath: [['\\[','\\]'], ['$$','$$']],
+	      balanceBraces: true
+	      
+	    },
+	    TeX: {equationNumbers: {autoNumber: ["AMS"], useLabelIds: true}},
+	    "HTML-CSS": {availableFonts:["TeX"]},
+	  });
+	</script>
+
+</head>
+
+<style>
+
+    header.intro-header {
+        background-image: url('http://p9n2j0ewi.bkt.clouddn.com/blogimg/water.jpg')
+    }
+</style>
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="" class="animated fadeIn">
+<!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top " id="nav-top" data-ispost = "true" data-istags="false
+" data-ishome = "false" >
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand animated pulse" href="/">
+                <span class="brand-logo">
+                    Gubaidan
+                </span>
+                's Blog
+            </a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <!-- /.navbar-collapse -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+					
+                    
+                        
+							
+                        <li>
+                            <a href="/archive/">archive</a>
+                        </li>
+							
+						
+                    
+                        
+							
+                        <li>
+                            <a href="/tags/">tags</a>
+                        </li>
+							
+						
+                    
+					
+					
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+//    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+<!-- Main Content -->
+
+<!--only post-->
+
+
+<img class="wechat-title-img"
+     src="http://p9n2j0ewi.bkt.clouddn.com/Header/water.jpg">
+
+
+<style>
+    
+    header.intro-header {
+        background-image: url('http://p9n2j0ewi.bkt.clouddn.com/Header/water.jpg')
+    }
+
+    
+</style>
+
+<header class="intro-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <div class="post-heading">
+                    <h1>从《岛上书店》说开去</h1>
+                    
+                    <span class="meta">
+                         作者 Gubaidan
+                        <span>
+                          日期 2016-01-04
+                         </span>
+                    </span>
+                    <div class="tags text-center">
+                        
+                        <a class="tag" href="/tags/#旧事"
+                           title="旧事">旧事</a>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="post-title-haojen">
+        <span>
+            从《岛上书店》说开去
+        </span>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <!-- Post Container -->
+            <div class="col-lg-8 col-lg-offset-1 col-sm-9 post-container">
+                <p><img src="/assets/blogImg/aj.jpg" alt=""></p>
+<h6 id="Picture-by-Anna-Paschenko-for-Doubble"><a href="#Picture-by-Anna-Paschenko-for-Doubble" class="headerlink" title="Picture by Anna Paschenko for Doubble"></a>Picture by <a href="https://dribbble.com/shots/1188443-Sea" target="_blank" rel="noopener">Anna Paschenko</a> for Doubble</h6><p>“无人为孤岛，一书一世界”。<br>小岛书店的褪色招牌上，写着这么一句话。<br>显然，从一开始，这就是一句假话。</p>
+<p><strong>孤独难以描述，偏偏人们喜欢写</strong>。<br>马尔克斯的荒诞深邃，东野圭吾把绝望写进了骨髓里，阿多尼斯却说那是他的一座花园。而在《岛上书店》里，孤独是温暖的。这就很少见。</p>
+<p>看完书时正巧在飞机上，底下应该是海，云层漫漫令人遐想。书中艾莉丝岛的模样依然模糊，倒是人物分明。那间“十五个玛雅宽，二十个玛雅长”的书店越发清晰。它经行光影，穿越时间，仿佛就在眼前。流水般的笔调，不做作的幽默，我猜玛雅会喜欢它的。<br>总的来说，叙事方式不是我喜欢的那种，但就如刚才所说，它比较特殊。令我总是想起一些，以前的事情…</p>
+<p>可是，<strong>孤独难以去写，偏偏人们总遇到</strong>。</p>
+<a id="more"></a>
+<p>那时，A.J.与志趣相投的妻子妮可，放弃了文学博士学位，跑来孤远的艾莉丝岛，开一间书店。仅仅因为“一个地方如果没有一家书店，就算不上一个地方了”。</p>
+<p>然而，生活让A.J.太过失望。<br>挚爱的妮可去世，志趣相投的图书销售员哈维也长辞，镇店之宝《帖木儿》被盗。一件件烦心事让A.J.越发孤僻冷漠，不近人情，排斥一切。内心，渐如书店所在的孤岛。</p>
+<p>“没有人喜欢孤独，只是不喜欢失望。”村上春树说。</p>
+<p>命运像小偷，失望的A.J.却没想过，这个小偷竟会送给他什么。<br>玛雅，一个弃婴，出现在小岛书店中。</p>
+<p>犹豫不决中，还是选择收养玛雅的A.J.，不得不与身边的人进行交流。</p>
+<p>多年以后，A.J.想说“爱”却说不出来的时候，他才明白，“一书一世界”，靠书去排解孤独的说法，分明是句假话。<br>使他不再孤独的，永远是身边的人。</p>
+<p><strong>又由结局后的艾米想到了三毛，特别在今天</strong>。<br>二十五年前的今天，三毛与她的自由，永远的私奔而去。</p>
+<p>得知三毛生平后，再看《撒哈拉的故事》其实是另一番天地，你看到她的车子在沙漠狂奔时，总想帮她踩一脚刹车，因为昨日的欢歌和明日的悲伤总成正比。看《万水千山走遍》时依然心惊，你希望她能流露些悲伤的情绪，合适就好，然而她身影匆匆，仿佛面无表情，走马而过。<br>然后你只能听之任之，对这波澜壮阔的生命鞠一个躬。</p>
+<p>后来你寻到一个解释叫“万物皆空”。原来在时间的不同刻度，孤独都不相雷同，无论描述它的文字，是温暖的，还是刻薄的。它就在那儿，一动不动，仿佛又不在那儿。</p>
+<p>就像，A.J.只能把love，说成glove；<br>就像，玛雅只能在《海滩一日》里回忆着亲生母亲；<br>就像，艾米到最后都深藏着《迟暮花开》的真相；<br>就像，兰比亚斯与伊斯梅最后守护着的那家小岛书店。</p>
+<p>你说这是一本温暖的小说，但它的冷酷又摆在你触手可及的地方。<br>像一张薄薄的被子，你拥之入眠，而后又半夜冷醒。所谓冷暖自知，大抵如此。<br>那，既然不可能雨季不再来，能做的，只有毫无畏惧，热烈而宁静地走遍万水千山吧。</p>
+<p>“一书一世界，一岁一枯荣；无人为孤岛，春风吹又生”。<br>又或许，那句假话，从一开始，就是真的呢。</p>
+<p>——Litten 2016.1.4</p>
+
+                <hr>
+                
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2016/02/09/my-fairy-tale3/" data-toggle="tooltip" data-placement="top"
+                           title="失眠故事四【扎龙人】">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/2015/11/03/nginx-in-fe/" data-toggle="tooltip" data-placement="top"
+                           title="Nginx能为前端开发带来什么？">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+                
+
+                
+
+
+                <!--加入新的评论系统-->
+                
+                <!-- 来必力City版安装代码 -->
+                <div id="lv-container" data-id="city" data-uid="MTAyMC8zNjcxNC8xMzI0OQ==">
+                    <script type="text/javascript">
+                        (function(d, s) {
+                            var j, e = d.getElementsByTagName(s)[0];
+
+                            if (typeof LivereTower === 'function') { return; }
+
+                            j = d.createElement(s);
+                            j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+                            j.async = true;
+
+                            e.parentNode.insertBefore(j, e);
+                        })(document, 'script');
+                    </script>
+                    <noscript> 为正常使用来必力评论功能请激活JavaScript</noscript>
+                </div>
+                <!-- City版安装代码已完成 -->
+                
+            </div>
+
+            <div class="hidden-xs col-sm-3 toc-col">
+                <div class="toc-wrap">
+                    <ol class="toc"><li class="toc-item toc-level-6"><a class="toc-link" href="#Picture-by-Anna-Paschenko-for-Doubble"><span class="toc-text">Picture by Anna Paschenko for Doubble</span></a></li></ol>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5 class="text-center">
+                        <a href="/tags/">FEATURED TAGS</a>
+                    </h5>
+                    <div class="tags">
+                        
+                        <a class="tag" href="/tags/#旧事"
+                           title="旧事">旧事</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+                <div style="margin-top: 20px;">
+                    <h5 class="text-center">FRIENDS</h5>
+                    <ul class="list-inline text-center">
+                        
+                        <li><a href="http://www.hulichao.top">Hu</a></li>
+                        
+                        <li><a href="http://www.gubaidan.top">Gu</a></li>
+                        
+                    </ul>
+                </div>
+                
+            </div>
+        </div>
+
+    </div>
+</article>
+
+
+
+
+
+
+
+<!-- Footer -->
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <br>
+                <ul class="list-inline text-center">
+                
+                
+                    <li>
+                        <a target="_blank" href="https://twitter.com/gubaidan">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+                
+                    <li>
+                        <a target="_blank" href="https://www.zhihu.com/people/gubaidan">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa  fa-stack-1x fa-inverse">知</i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank" href="http://weibo.com/gubaidan">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank" href="https://www.facebook.com/gubaidan">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/gubaidan">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://www.linkedin.com/in/gubaidan">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-linkedin fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; Gubaidan 2018
+                    <br>
+                    <span id="busuanzi_container_site_pv" style="font-size: 12px;">PV: <span id="busuanzi_value_site_pv"></span> Times</span>
+                    <br>
+                    Theme by <a href="https://haojen.github.io/">Gubaidan</a>
+                </p>
+
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/blog.js"></script>
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("http://www.gubaidan.top/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+<!-- Google Analytics -->
+
+
+
+<!-- Baidu Tongji -->
+
+
+<!-- swiftype -->
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install','','2.0.0');
+</script>
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<!--wechat title img-->
+<img class="wechat-title-img" src="http://p9n2j0ewi.bkt.clouddn.com/img/log.JPG">
+</body>
+
+</html>
