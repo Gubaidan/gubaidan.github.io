@@ -17,11 +17,11 @@
 
     <title>
         
-        编写mac、Linux下 .sh启动脚本｜Gubaidan&#39;s blog
+        Navicat for Oracle 表名不存在 ORA00903｜Gubaidan&#39;s blog
         
     </title>
 
-    <link rel="canonical" href="http://www.gubaidan.top/2017/06/04/2017-06-04-sh/">
+    <link rel="canonical" href="http://www.gubaidan.top/2018/04/22/2018-04-22-ORA00903/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -171,18 +171,18 @@
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
                 <div class="post-heading">
-                    <h1>编写mac、Linux下 .sh启动脚本</h1>
+                    <h1>Navicat for Oracle 表名不存在 ORA00903</h1>
                     
                     <span class="meta">
                          作者 Gubaidan
                         <span>
-                          日期 2017-06-04
+                          日期 2018-04-22
                          </span>
                     </span>
                     <div class="tags text-center">
                         
-                        <a class="tag" href="/tags/#shell"
-                           title="shell">shell</a>
+                        <a class="tag" href="/tags/#Oracle"
+                           title="Oracle">Oracle</a>
                         
                     </div>
                 </div>
@@ -191,7 +191,7 @@
     </div>
     <div class="post-title-haojen">
         <span>
-            编写mac、Linux下 .sh启动脚本
+            Navicat for Oracle 表名不存在 ORA00903
         </span>
     </div>
 </header>
@@ -202,42 +202,26 @@
         <div class="row">
             <!-- Post Container -->
             <div class="col-lg-8 col-lg-offset-1 col-sm-9 post-container">
-                <h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>因为电脑中装了很多非图形化应用程序，例如nginx，zoonkeeper、ActivityMQ等，每次都忘了这些应用装在了哪里，就算记得在那个目录下还是要cd 到指定目录启动，所以写了几个脚本用于启动这些服务。</p>
+                <p>项目中用用的数据库是Oracle，数据库可视化工具用的Navicat，Mybatis自动生成的xml文件和mapper接口。既然SQL语句是自动生成的，语法肯定没有错误。</p>
+<p>后来发现<strong>Navicat 在创建表的时候会自动给表名和字段加上引号</strong>，导致找不到表。</p>
 <ol>
-<li><p>在任意文件夹下新建 .sh 文件，然后赋予文件执行权限和读写权限，为了方便暂时给予777权限，如：</p>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">touch nginx.sh</span><br><span class="line">sudo chmod 777 nginx.sh</span><br></pre></td></tr></table></figure>
+<li><p>oracle表和字段是有大小写的区别。oracle默认是大写，如果我们用双引号括起来的就区分大小写，如果没有，系统会自动转成大写。</p>
 </li>
-<li><p>找到nginx服务所在目录，pwd命令获得全路径</p>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">MacBook-Gu:bin gubaidan$ <span class="built_in">pwd</span></span><br><span class="line">/usr/<span class="built_in">local</span>/Cellar/nginx/1.13.12/bin    //全路径</span><br><span class="line">MacBook-Gu:bin gubaidan$</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>vim nginx.sh编写脚本</p>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="meta">#! /bin/bash </span></span><br><span class="line"><span class="keyword">while</span> <span class="literal">true</span>; <span class="keyword">do</span></span><br><span class="line">  <span class="built_in">echo</span>  <span class="string">" ------------------------------- "</span></span><br><span class="line">  <span class="built_in">echo</span>  <span class="string">"            "</span></span><br><span class="line">  <span class="built_in">echo</span>  <span class="string">"1.Start Nginx"</span>      //开启服务</span><br><span class="line">  <span class="built_in">echo</span>  <span class="string">"2.Stop Nginx"</span>		//停止服务</span><br><span class="line">  <span class="built_in">echo</span>  <span class="string">"3.Check Conf"</span>		//查看配置</span><br><span class="line">  <span class="built_in">echo</span>  <span class="string">"4.Nginx Reload"</span>	//重启</span><br><span class="line">  <span class="built_in">echo</span>  <span class="string">"5.Nginx Status"</span>	//查看状态</span><br><span class="line">  <span class="built_in">echo</span>  <span class="string">"6.Quit"</span>			//退出</span><br><span class="line">  <span class="built_in">echo</span>  -n <span class="string">"Choice Option:"</span>   </span><br><span class="line">  <span class="built_in">read</span> tag                //读取输入</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> [[ <span class="variable">$tag</span> = <span class="string">"1"</span> ]]; <span class="keyword">then</span></span><br><span class="line">    <span class="built_in">cd</span> /usr/<span class="built_in">local</span>/Cellar/nginx/1.13.12/bin</span><br><span class="line">    <span class="built_in">echo</span> <span class="string">'xxxx'</span>|sudo -S nginx    	//管道免密操作 xxxx为sudo密码</span><br><span class="line">  <span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> [[ <span class="variable">$tag</span> = <span class="string">"2"</span> ]]; <span class="keyword">then</span></span><br><span class="line">     <span class="built_in">cd</span> /usr/<span class="built_in">local</span>/Cellar/nginx/1.13.12/bin</span><br><span class="line">     <span class="built_in">echo</span> <span class="string">'xxxx'</span>|sudo -S nginx -s stop</span><br><span class="line">  <span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> [[ <span class="variable">$tag</span> = <span class="string">"3"</span> ]]; <span class="keyword">then</span></span><br><span class="line">     <span class="built_in">cd</span> /usr/<span class="built_in">local</span>/Cellar/nginx/1.13.12/bin</span><br><span class="line">     <span class="built_in">echo</span> <span class="string">'xxxx'</span>|sudo nginx -t</span><br><span class="line">  <span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> [[ <span class="variable">$tag</span> = <span class="string">"4"</span> ]]; <span class="keyword">then</span></span><br><span class="line">     <span class="built_in">cd</span> /usr/<span class="built_in">local</span>/Cellar/nginx/1.13.12/bin</span><br><span class="line">     <span class="built_in">echo</span> <span class="string">'xxxx'</span>|sudo nginx -s reload</span><br><span class="line">  <span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> [[ <span class="variable">$tag</span> = <span class="string">"5"</span> ]]; <span class="keyword">then</span></span><br><span class="line">     ps -ef | grep nginx</span><br><span class="line">  <span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> [[ <span class="variable">$tag</span> = <span class="string">"6"</span> ]]; <span class="keyword">then</span></span><br><span class="line">     <span class="built_in">break</span>;</span><br><span class="line">  <span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line">  <span class="built_in">echo</span>  <span class="string">"            "</span></span><br><span class="line">  <span class="built_in">echo</span>  <span class="string">"Nginx Deal Success"</span></span><br><span class="line">  <span class="built_in">echo</span>  <span class="string">"            "</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">done</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>运行</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">./nginx.sh          //在nginx.sh目录下运行</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>效果</p>
-<p><img src="http://p9n2j0ewi.bkt.clouddn.com/PostImg/2017-06-04-sh/nginx.png" alt="sh"></p>
-</li>
-<li><p>mac可以把.sh文件后缀改为.command，这样双击就可以直接运行。</p>
-<p><img src="http://p9n2j0ewi.bkt.clouddn.com/PostImg/2017-06-04-sh/command.png" alt="command"></p>
+<li><p>我们在使用navicat使用可视化创建数据库时候，navicat自动给我们加上了“”，在创建数据库时实际的代码是这样的：</p>
 </li>
 </ol>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">DROP</span> <span class="keyword">TABLE</span> <span class="string">"alarm_data"</span>.<span class="string">"users"</span>;</span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> <span class="string">"alarm_data"</span>.<span class="string">"users"</span> (</span><br><span class="line"><span class="string">"id"</span> <span class="built_in">NUMBER</span>(<span class="number">2</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span> </span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p>解决办法就是去掉引号重新建表。</p>
 
                 <hr>
                 
 
                 <ul class="pager">
                     
-                    <li class="previous">
-                        <a href="/2017/06/05/my-fairy-tale4/" data-toggle="tooltip" data-placement="top"
-                           title="失眠故事五【花匠与候鸟】">&larr; Previous Post</a>
-                    </li>
-                    
                     
                     <li class="next">
-                        <a href="/2017/06/03/1-partten/" data-toggle="tooltip" data-placement="top"
-                           title="别说话，摇头">Next Post &rarr;</a>
+                        <a href="/2018/03/23/2018-03-23-Shiro.mrkdown/" data-toggle="tooltip" data-placement="top"
+                           title="轻量级权限管理框架之Shiro">Next Post &rarr;</a>
                     </li>
                     
                 </ul>
@@ -272,7 +256,7 @@
 
             <div class="hidden-xs col-sm-3 toc-col">
                 <div class="toc-wrap">
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#背景"><span class="toc-text">背景</span></a></li></ol>
+                    
                 </div>
             </div>
         </div>
@@ -294,8 +278,8 @@
                     </h5>
                     <div class="tags">
                         
-                        <a class="tag" href="/tags/#shell"
-                           title="shell">shell</a>
+                        <a class="tag" href="/tags/#Oracle"
+                           title="Oracle">Oracle</a>
                         
                     </div>
                 </section>
