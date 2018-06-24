@@ -1,0 +1,29 @@
+---
+layout: post
+title: "Navicat for Oracle 表名不存在 ORA00903"
+date: 2018-04-22 16:50
+author: "Gubaidan"
+header-img: "/Header/lake.jpg"
+cdn: 'header-on'
+tags:
+	- Oracle
+---
+
+项目中用用的数据库是Oracle，数据库可视化工具用的Navicat，Mybatis自动生成的xml文件和mapper接口。既然SQL语句是自动生成的，语法肯定没有错误。
+
+后来发现**Navicat 在创建表的时候会自动给表名和字段加上引号**，导致找不到表。
+
+1. oracle表和字段是有大小写的区别。oracle默认是大写，如果我们用双引号括起来的就区分大小写，如果没有，系统会自动转成大写。
+
+2. 我们在使用navicat使用可视化创建数据库时候，navicat自动给我们加上了“”，在创建数据库时实际的代码是这样的：
+
+   
+
+```sql
+DROP TABLE "alarm_data"."users";
+CREATE TABLE "alarm_data"."users" (
+"id" NUMBER(2) NOT NULL 
+)
+```
+
+解决办法就是去掉引号重新建表。
