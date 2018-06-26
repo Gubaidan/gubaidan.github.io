@@ -52,6 +52,12 @@ duoshuo_share: true                     # set to false if you want to use Commen
 use_livere: true
 livere_uid: MTAyMC8zNjcxNC8xMzI0OQ==
 
+# Use Valine
+use_valine: true
+app_id: of1DDfgnQatrGzmmyWPIFpQ3-gzGzoHsz
+app_key: DHsYN2WmzGB9jJdl9vrnhomK
+placeholder: 'ヾﾉ≧∀≦)o来啊，快活啊!'
+
 
 # Analytics settings
 # Baidu Analytics
