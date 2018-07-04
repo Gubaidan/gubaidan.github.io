@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "pjax: 当ajax遇上pushState"
-date: 2014-02-12 08:55
+date: 2018-02-12 08:55
 comments: true
 tags: 
 	- js 

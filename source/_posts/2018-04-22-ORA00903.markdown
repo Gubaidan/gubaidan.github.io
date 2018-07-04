@@ -3,7 +3,7 @@ layout: post
 title: "Navicat for Oracle 表名不存在 ORA00903"
 date: 2018-04-22 16:50
 author: "Gubaidan"
-header-img: "/Header/lake.jpg"
+header-img:  "/Header/RbM63-XsLUY.png"
 cdn: 'header-on'
 tags:
 	- Oracle
