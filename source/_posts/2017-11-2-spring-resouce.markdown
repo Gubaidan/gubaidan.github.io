@@ -11,6 +11,10 @@ tags:
 
 # Spring资源加载
 
+---
+
+
+
 ![Resource接口依赖](http://p9n2j0ewi.bkt.clouddn.com/PostImg/2017-11-02-spring-resource/ResourceClassDependence.png)
 
 为了访问访问不同的资源类型，必须使用不同的Resource实现类，这个是比较麻烦的，Spring提供了Resource这个强大的资源加载机制，不但能识别ftp、http、classpath等前缀的资源，还支持ant风格带通配符的资源地址。
@@ -91,3 +95,5 @@ public class ResourceLoaderText {
 ### 注意
 
 用Resource操作文件时，如果文件在项目发布时会打包到jar包，那么不能使用Resource.getFile()方法，否则会抛出FileNotFound异常，但可以使用Resource.getInputStream()读取。
+
+>参考：《Spring技术内幕》、《精通Spring 4.x 企业应用开发实战》
