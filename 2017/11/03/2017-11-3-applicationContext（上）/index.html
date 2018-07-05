@@ -247,7 +247,7 @@
 <h3 id="Groovy-DSL配置Bean"><a href="#Groovy-DSL配置Bean" class="headerlink" title="Groovy DSL配置Bean"></a>Groovy DSL配置Bean</h3><p>Spring 4.x支持使用Groovy DSL来进行Bean定义配置。其与基于XML文件的配置类似，只不过基于Groovy脚本语言可以实现更复杂的Bean配置逻辑：</p>
 <figure class="highlight groovy"><table><tr><td class="code"><pre><span class="line">beans&#123;</span><br><span class="line">    Jerry(Person)&#123;<span class="comment">//名字（类型）</span></span><br><span class="line">        name = <span class="string">"jerry"</span></span><br><span class="line">        sex = <span class="string">"female"</span></span><br><span class="line">        age = <span class="number">22</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>基于Groovy的配置方式很容易让开发者配置复杂的Bean初始化过程，比@Configuration和XML更加灵活，读取Groovy也有专门的ApplicationContext - &gt; GenericGorrvyApplicationContet:</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public class GroovyConfig &#123;</span><br><span class="line">    </span><br><span class="line">    @Test</span><br><span class="line">    public void getBean()&#123;</span><br><span class="line">        ApplicationContext act = </span><br><span class="line">        new GenericGorrvyApplicationContet(&quot;com.xxx.beans.groovy&quot;);</span><br><span class="line">        Femail Jerry = act.getBean(&quot;Female&quot;);</span><br><span class="line">        assertNotNull(Jerry);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">GroovyConfig</span> </span>&#123;</span><br><span class="line">    </span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">getBean</span><span class="params">()</span></span>&#123;</span><br><span class="line">        ApplicationContext act = </span><br><span class="line">        <span class="keyword">new</span> GenericGorrvyApplicationContet(<span class="string">"com.xxx.beans.groovy"</span>);</span><br><span class="line">        Femail Jerry = act.getBean(<span class="string">"Female"</span>);</span><br><span class="line">        assertNotNull(Jerry);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>对于BeanFactory和ApplicationContext，ApplicationContext面向的是代码开发人员，而BeanFactory则是底层支持，由ApplicationContext实现和扩展，几乎所有的场景都可以使用ApplicationContext。</p>
 <blockquote>
 <p>参考：《Spring技术内幕》、《精通Spring 4.x 企业应用开发实战》</p>
@@ -435,7 +435,7 @@
                     <br>
                     <span id="busuanzi_container_site_pv" style="font-size: 12px;">PV: <span id="busuanzi_value_site_pv"></span> Times</span>
                     <br>
-                    Theme by <a href="https://haojen.github.io/">Gubaidan</a>
+                    Theme by <a href="https://gubaidan.github.io/">Gubaidan</a>
                 </p>
 
             </div>
