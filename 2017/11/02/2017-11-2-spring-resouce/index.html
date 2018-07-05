@@ -267,6 +267,9 @@
 <p><img src="http://p9n2j0ewi.bkt.clouddn.com/PostImg/2017-11-02-spring-resource/loader.png" alt="loader"></p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> org.junit.jupiter.api.Test;</span><br><span class="line"><span class="keyword">import</span> org.springframework.core.io.Resource;</span><br><span class="line"><span class="keyword">import</span> org.springframework.core.io.support.PathMatchingResourcePatternResolver;</span><br><span class="line"><span class="keyword">import</span> org.springframework.core.io.support.ResourcePatternResolver;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="keyword">static</span> org.hibernate.validator.internal.util.Contracts.assertNotNull;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ResourceLoaderText</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">getResource</span><span class="params">()</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">        ResourcePatternResolver resourcePatternResolver = <span class="keyword">new</span> PathMatchingResourcePatternResolver();</span><br><span class="line"></span><br><span class="line">        <span class="comment">//加载所有com.smart 下。xml结尾的文件</span></span><br><span class="line">        Resource resource[] = resourcePatternResolver.getResources(<span class="string">"classpath*: com.smart.**/*.properties"</span>);</span><br><span class="line"></span><br><span class="line">        assertNotNull(resource);</span><br><span class="line">        <span class="keyword">for</span>(Resource item: resource)&#123;</span><br><span class="line">            System.out.println(item.getDescription());</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h3 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h3><p>用Resource操作文件时，如果文件在项目发布时会打包到jar包，那么不能使用Resource.getFile()方法，否则会抛出FileNotFound异常，但可以使用Resource.getInputStream()读取。</p>
+<blockquote>
+<p>参考：《Spring技术内幕》、《精通Spring 4.x 企业应用开发实战》</p>
+</blockquote>
 
                 <hr>
                 
@@ -274,8 +277,8 @@
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/2017/12/16/theme-update1-dot-0/" data-toggle="tooltip" data-placement="top"
-                           title="Blog主题更新-1.0">&larr; Previous Post</a>
+                        <a href="/2017/11/03/2017-11-3-applicationContext（上）/" data-toggle="tooltip" data-placement="top"
+                           title="Spring-BeanFactory与ApplicationContext基础">&larr; Previous Post</a>
                     </li>
                     
                     
