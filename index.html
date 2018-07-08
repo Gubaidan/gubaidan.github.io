@@ -467,17 +467,18 @@ var pjax = pushState + ajax;小时候，小浣熊方便面里面有各种水浒�
 
 <div class="post-preview "
      style="background-image: url('http://p9n2j0ewi.bkt.clouddn.com/Header/hero@2x.jpg')">
-    <a href="/2017/11/03/2017-11-3-applicationContext（上）/">
+    <a href="/2017/11/06/2017-11-06-refresh/">
         <h2 class="post-title">
-            Spring-BeanFactory与ApplicationContext基础
+            Spring-AbstractApplicationContext refresh()方法源码解析
         </h2>
         <p class="post-meta">
-            <i class="fa fa-calendar" aria-hidden="true"></i> 2017-11-03
+            <i class="fa fa-calendar" aria-hidden="true"></i> 2017-11-06
         </p>
         
         <div class="post-content-preview">
             <p>
-                BeanFactory介绍BeanFactory 是Spring中两大核心模块（AOP、IOC）之一IOC的基础，与传统的BeanFactory 不同，BeanFactory时一个通用型的Bean工厂，它可以创建和管理这些Bean，所有可以被Spring 容器实例化并管理的Java类都可以称作B..
+                内部工作机制Spring的 AbstractApplicationContext 是ApplicationContext 接口的抽象实现类，该抽象类中的refresh（）方法定义了Spring容器在加载配置文件之后的处理过程。即整个IOC容器的启动过程。
+public void refresh(..
             </p>
         </div>
     </a>
@@ -489,21 +490,18 @@ var pjax = pushState + ajax;小时候，小浣熊方便面里面有各种水浒�
 
 
 <div class="post-preview "
-     style="background-image: url('http://p9n2j0ewi.bkt.clouddn.com/Header/RbM63-XsLUY.png')">
-    <a href="/2017/11/02/2017-11-2-spring-resouce/">
+     style="background-image: url('http://p9n2j0ewi.bkt.clouddn.com/Header/hero@2x.jpg')">
+    <a href="/2017/11/03/2017-11-3-applicationContext（上）/">
         <h2 class="post-title">
-            Spring-资源加载的方式
+            Spring-BeanFactory与ApplicationContext基础
         </h2>
         <p class="post-meta">
-            <i class="fa fa-calendar" aria-hidden="true"></i> 2017-11-02
+            <i class="fa fa-calendar" aria-hidden="true"></i> 2017-11-03
         </p>
         
         <div class="post-content-preview">
             <p>
-                Spring资源加载
-
-为了访问访问不同的资源类型，必须使用不同的Resource实现类，这个是比较麻烦的，Spring提供了Resource这个强大的资源加载机制，不但能识别ftp、http、classpath等前缀的资源，还支持ant风格带通配符的资源地址。
-资源地址表达式以下是Spring..
+                BeanFactory介绍BeanFactory 是Spring中两大核心模块（AOP、IOC）之一IOC的基础，与传统的BeanFactory 不同，BeanFactory时一个通用型的Bean工厂，它可以创建和管理这些Bean，所有可以被Spring 容器实例化并管理的Java类都可以称作B..
             </p>
         </div>
     </a>
@@ -641,8 +639,13 @@ var pjax = pushState + ajax;小时候，小浣熊方便面里面有各种水浒�
                     
                     
                     
+                    <a href="/tags/#css3" title="css3"
+                       rel="1">css3</a>
+                    
+                    
+                    
                     <a href="/tags/#Spring" title="Spring"
-                       rel="2">Spring</a>
+                       rel="3">Spring</a>
                     
                     
                     
@@ -666,13 +669,13 @@ var pjax = pushState + ajax;小时候，小浣熊方便面里面有各种水浒�
                     
                     
                     
-                    <a href="/tags/#css3" title="css3"
-                       rel="1">css3</a>
-                    
-                    
-                    
                     <a href="/tags/#旧事" title="旧事"
                        rel="4">旧事</a>
+                    
+                    
+                    
+                    <a href="/tags/#旅行" title="旅行"
+                       rel="1">旅行</a>
                     
                     
                     
@@ -686,8 +689,13 @@ var pjax = pushState + ajax;小时候，小浣熊方便面里面有各种水浒�
                     
                     
                     
-                    <a href="/tags/#web" title="web"
-                       rel="1">web</a>
+                    <a href="/tags/#前端" title="前端"
+                       rel="1">前端</a>
+                    
+                    
+                    
+                    <a href="/tags/#安全" title="安全"
+                       rel="1">安全</a>
                     
                     
                     
@@ -696,18 +704,8 @@ var pjax = pushState + ajax;小时候，小浣熊方便面里面有各种水浒�
                     
                     
                     
-                    <a href="/tags/#旅行" title="旅行"
-                       rel="1">旅行</a>
-                    
-                    
-                    
-                    <a href="/tags/#前端" title="前端"
-                       rel="1">前端</a>
-                    
-                    
-                    
-                    <a href="/tags/#安全" title="安全"
-                       rel="1">安全</a>
+                    <a href="/tags/#web" title="web"
+                       rel="1">web</a>
                     
                     
                 </div>

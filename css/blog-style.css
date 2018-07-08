@@ -1065,7 +1065,7 @@ img::-moz-selection {
 }
 
 .container .toc-wrap .toc-level-2 > a {
-    color: #0085a1;
+    color: #555;
     font-size: .9em;
 }
 

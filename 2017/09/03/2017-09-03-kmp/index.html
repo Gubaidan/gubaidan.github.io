@@ -253,7 +253,9 @@
 <p>时间复杂度O(n*m)</p>
 <h3 id="总结："><a href="#总结：" class="headerlink" title="总结："></a>总结：</h3><p>可能是JDK的编写者们认为大多数情况下，字符串都不长，使用原始实现可能代价更低。在我测试过程中，使用indexOf方法时要比KMP算法要快一点。KMP算法对与超长字符串子匹配速度上是优于IndexOf的。</p>
 <p>因为KMP算法需要预先计算处理来获得辅助数组，需要一定的时间和空间，这可能在短字符串查找中相比较原始实现耗费更大的代价。而且一般大字符串查找时，程序员们也会使用其它特定的数据结构，查找起来更简单。这有点类似于排除特定情况下的快速排序了。不同环境选择不同算法。</p>
+<blockquote>
 <p>参考：<a href="https://blog.csdn.net/starstar1992/article/details/54913261/" target="_blank" rel="noopener">经典算法-KMP</a></p>
+</blockquote>
 
                 <hr>
                 
