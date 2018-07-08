@@ -1,0 +1,332 @@
+---
+layout: post
+title: "Spring-AbstractApplicationContext refresh()方法源码解析"
+date: 2017-11-06 21:13
+author: "Gubaidan"
+header-img: "/Header/hero@2x.jpg"
+cdn: 'header-on'
+tags:
+	- Spring
+---
+
+# 内部工作机制
+
+Spring的 AbstractApplicationContext 是ApplicationContext 接口的抽象实现类，该抽象类中的refresh（）方法定义了Spring容器在加载配置文件之后的处理过程。即整个IOC容器的启动过程。
+
+```java
+public void refresh() throws BeansException, IllegalStateException {
+	synchronized (this.startupShutdownMonitor) {
+	// 准备上下文刷新，准备此上下文以进行刷新，设置其启动日期和是否正在刷新的,
+	//标志以及验证标记为必需的所有属性是否可解析等。
+	prepareRefresh();
+
+	// 告诉子类刷新内部bean工厂，并返回一个ConfigurableListableBeanFactory实例,
+	//在这一步里，Spring将配置文件的信息装入容器的BeanDefintion，此时Bean还未初始化。
+	ConfigurableListableBeanFactory beanFactory = obtainFreshBeanFactory();
+
+	// 让当前这个beanfactory接手当前上下文，包括设置类加载器（setBeanClassLoader）,
+	//设置后置处理器（addBeanPostProcessor），BeanFactory接口不在普通工厂中注册为可解析类型。
+	prepareBeanFactory(beanFactory);
+
+	try {
+		// 允许在上下文子类中对bean工厂进行后处理。
+		postProcessBeanFactory(beanFactory);
+
+		//调用工厂后置处理器
+		invokeBeanFactoryPostProcessors(beanFactory);
+
+		// 注册后置处理器
+		registerBeanPostProcessors(beanFactory);
+
+		// 初始化消息源
+		initMessageSource();
+
+		// 初始化上下文事件广播器.
+		initApplicationEventMulticaster();
+
+		// 初始化其他特殊的Bean，由具体子类实现
+		onRefresh();
+
+		// 检查并注册事件监听器
+		registerListeners();
+
+		// 除了懒加载模式的Bean，其他的Bean全部初始化并且单实例化
+		finishBeanFactoryInitialization(beanFactory);
+
+		// 发布事件公高，完成容器刷新.
+		finishRefresh();
+	}
+
+	catch (BeansException ex) {
+		if (logger.isWarnEnabled()) {
+		logger.warn("Exception encountered during context initialization - " +
+			"cancelling refresh attempt: " + ex);
+		}
+
+		// 清除已经加载的Bean，避免资源浪费
+		destroyBeans();
+
+		// 重置刷新标志为false（active = false）
+		cancelRefresh(ex);
+
+		// 发布异常
+		throw ex;
+	}
+
+	finally {
+		//重置Spring在初始化IOC容器过程中的缓存
+		resetCommonCaches();
+	}
+	}
+}
+```
+
+## 相对重要的方法：
+
+### prepareRefresh 
+
+```java
+protected void prepareRefresh() {
+	// 表示在真正做refresh操作之前需要准备做的事情：
+ 
+	// 设置Spring容器的启动时间，撤销关闭状态，开启活跃状态。
+	this.startupDate = System.currentTimeMillis();
+	this.closed.set(false);
+	this.active.set(true);
+ 
+	if (logger.isInfoEnabled()) {
+		logger.info("Refreshing " + this);
+	}
+ 
+	// Initialize any placeholder property sources in the context environment
+	// 初始化属性源信息,初始化占位符
+	initPropertySources();
+ 
+	// Validate that all properties marked as required are resolvable
+	// see ConfigurablePropertyResolver#setRequiredProperties
+	// 验证环境信息里一些必须存在的属性
+	getEnvironment().validateRequiredProperties();
+ 
+	// Allow for the collection of early ApplicationEvents,
+	// to be published once the multicaster is available...
+	this.earlyApplicationEvents = new LinkedHashSet<>();
+}
+
+```
+
+### obtainFreshBeanFactory
+
+**ConfigurableListableBeanFactory beanFactory = obtainFreshBeanFactory()**：初始化BeanFactory: 根据配置文件实例化BeanFactory, 在obtainFreshBeanFactory0方法中，首先调用refreshBeanFactory0方法 刷新BeanFactory, 然后调用getBeanFactory0方法获取BeanFactory, 这两个方法都是由具体子类实现的。在这一一步目，Spring将配置文件的信息装入容器的Bean定义注册表(BeanDefinitionRegistry)中，但此时Bean还未初始化。
+
+```java
+protected ConfigurableListableBeanFactory obtainFreshBeanFactory() {
+	// 获取刷新Spring上下文的Bean工厂
+	refreshBeanFactory();
+	ConfigurableListableBeanFactory beanFactory = getBeanFactory();
+	if (logger.isDebugEnabled()) {
+		logger.debug("Bean factory for " + getDisplayName() + ": " + beanFactory);
+	}
+	return beanFactory;
+}
+
+```
+
+因为在一个web项目中测试，所有BeanDefintion 中已经包含了一些基本的Bean，当前classLoader为WebAppClassoader
+
+![beanfactory](http://p9n2j0ewi.bkt.clouddn.com/PostImg/2017-05-31-refresh/Beanfactory.png)
+
+
+
+### prepareBeanFactory
+
+
+```java
+protected void prepareBeanFactory(ConfigurableListableBeanFactory beanFactory) {
+	// Tell the internal bean factory to use the context's class loader etc.
+	// 设置classloader(用于加载bean)，设置表达式解析器(解析bean定义中的一些表达式)，添加属性编辑注册器(注册属性编辑器)
+	beanFactory.setBeanClassLoader(getClassLoader());
+	beanFactory.setBeanExpressionResolver(new StandardBeanExpressionResolver(beanFactory.getBeanClassLoader()));
+	beanFactory.addPropertyEditorRegistrar(new ResourceEditorRegistrar(this, getEnvironment()));
+ 
+	// Configure the bean factory with context callbacks.
+	// 添加ApplicationContextAwareProcessor这个BeanPostProcessor。取消ResourceLoaderAware、ApplicationEventPublisherAware、MessageSourceAware、ApplicationContextAware、EnvironmentAware这5个接口的自动注入。
+	// 因为ApplicationContextAwareProcessor把这6个接口的实现工作做了
+	beanFactory.addBeanPostProcessor(new ApplicationContextAwareProcessor(this));
+	beanFactory.ignoreDependencyInterface(EnvironmentAware.class);
+	beanFactory.ignoreDependencyInterface(EmbeddedValueResolverAware.class);
+	beanFactory.ignoreDependencyInterface(ResourceLoaderAware.class);
+	beanFactory.ignoreDependencyInterface(ApplicationEventPublisherAware.class);
+	beanFactory.ignoreDependencyInterface(MessageSourceAware.class);
+	beanFactory.ignoreDependencyInterface(ApplicationContextAware.class);
+ 
+	// BeanFactory interface not registered as resolvable type in a plain factory.
+	// MessageSource registered (and found for autowiring) as a bean.
+	// 设置特殊的类型对应的bean。BeanFactory对应刚刚获取的BeanFactory；
+	// ResourceLoader、ApplicationEventPublisher、ApplicationContext这3个接口对应的bean都设置为当前的Spring容器
+	beanFactory.registerResolvableDependency(BeanFactory.class, beanFactory);
+	beanFactory.registerResolvableDependency(ResourceLoader.class, this);
+	beanFactory.registerResolvableDependency(ApplicationEventPublisher.class, this);
+	beanFactory.registerResolvableDependency(ApplicationContext.class, this);
+ 
+	// Register early post-processor for detecting inner beans as ApplicationListeners.
+	beanFactory.addBeanPostProcessor(new ApplicationListenerDetector(this));
+ 
+	// Detect a LoadTimeWeaver and prepare for weaving, if found.
+	if (beanFactory.containsBean(LOAD_TIME_WEAVER_BEAN_NAME)) {
+		beanFactory.addBeanPostProcessor(new LoadTimeWeaverAwareProcessor(beanFactory));
+		// Set a temporary ClassLoader for type matching.
+		beanFactory.setTempClassLoader(new ContextTypeMatchClassLoader(beanFactory.getBeanClassLoader()));
+	}
+ 
+	// Register default environment beans.
+	// 注入一些其它信息的bean实例，比如environment、systemProperties等
+	if (!beanFactory.containsLocalBean(ENVIRONMENT_BEAN_NAME)) {
+		beanFactory.registerSingleton(ENVIRONMENT_BEAN_NAME, getEnvironment());
+	}
+	if (!beanFactory.containsLocalBean(SYSTEM_PROPERTIES_BEAN_NAME)) {
+		beanFactory.registerSingleton(SYSTEM_PROPERTIES_BEAN_NAME, getEnvironment().getSystemProperties());
+	}
+	if (!beanFactory.containsLocalBean(SYSTEM_ENVIRONMENT_BEAN_NAME)) {
+		beanFactory.registerSingleton(SYSTEM_ENVIRONMENT_BEAN_NAME, getEnvironment().getSystemEnvironment());
+	}
+}	
+```
+
+
+
+### invokeBeanFactoryPostProcessors
+
+```java
+protected void invokeBeanFactoryPostProcessors(ConfigurableListableBeanFactory beanFactory) {
+	PostProcessorRegistrationDelegate.invokeBeanFactoryPostProcessors(beanFactory, getBeanFactoryPostProcessors());
+ 
+	// Detect a LoadTimeWeaver and prepare for weaving, if found in the meantime
+	// (e.g. through an @Bean method registered by ConfigurationClassPostProcessor)
+	if (beanFactory.getTempClassLoader() == null && beanFactory.containsBean(LOAD_TIME_WEAVER_BEAN_NAME)) {
+		beanFactory.addBeanPostProcessor(new LoadTimeWeaverAwareProcessor(beanFactory));
+		beanFactory.setTempClassLoader(new ContextTypeMatchClassLoader(beanFactory.getBeanClassLoader()));
+	}
+}
+
+```
+
+### invokeBeanFactoryPostProcessors(beanFactory)
+
+调用工厂后处理器:根据反射机制从BeanDefinitionRegistry 中找出所有实现了BeanFactoryPostProcessor接口的Bean,并调用其postProcessBeanFactory0接口方法。
+
+### registerBeanPostProcessors(beanFactory)
+注册Bean后处理器:根据反射机制从BeanDefinitionRegistry 中找出所有实现了BeanPostProcessor 接口的Bean,并将它们注册到容器Bean后处理器的注册表中。
+
+在Spring容器中找出实现了BeanFactoryPostProcessor接口的processor并执行。Spring容器会委托给PostProcessorRegistrationDelegate的invokeBeanFactoryPostProcessors方法执行。
+
+介绍两个接口：
+
+1. BeanFactoryPostProcessor：用来修改Spring容器中已经存在的bean的定义，使用ConfigurableListableBeanFactory对bean进行处理
+2. BeanDefinitionRegistryPostProcessor：继承BeanFactoryPostProcessor，作用跟BeanFactoryPostProcessor一样，只不过是使用BeanDefinitionRegistry对bean进行处理
+
+基于web程序的Spring容器AnnotationConfigEmbeddedWebApplicationContext构造的时候，会初始化内部属性AnnotatedBeanDefinitionReader reader，这个reader构造的时候会在BeanFactory中注册一些post processor，包括BeanPostProcessor和BeanFactoryPostProcessor(比如ConfigurationClassPostProcessor、AutowiredAnnotationBeanPostProcessor)：
+
+```java
+AnnotationConfigUtils.registerAnnotationConfigProcessors(this.registry);
+```
+
+接下来从Spring容器内查找BeanFactoryPostProcessor接口的实现类，然后执行(如果processor已经执行过，则忽略)，这里的查找规则跟上面查找BeanDefinitionRegistryPostProcessor一样，先找PriorityOrdered，然后是Ordered，最后是两者都没。
+
+这里需要说明的是**ConfigurationClassPostProcessor**这个processor是**优先级最高**的被执行的processor(实现了PriorityOrdered接口)。这个ConfigurationClassPostProcessor会去BeanFactory中找出所有有@Configuration注解的bean，然后使用**ConfigurationClassParser**去解析这个类。**ConfigurationClassParser内部有个Map类型的configurationClasses属性用于保存解析的类，ConfigurationClass是一个对要解析的配置类的封装，内部存储了配置类的注解信息、被@Bean注解修饰的方法、@ImportResource注解修饰的信息、ImportBeanDefinitionRegistrar等都存储在这个封装类中**。
+
+这里ConfigurationClassPostProcessor最先被处理还有另外一个原因是如果程序中有自定义的BeanFactoryPostProcessor，那么这个PostProcessor首先得通过ConfigurationClassPostProcessor被解析出来，然后才能被Spring容器找到并执行。(ConfigurationClassPostProcessor不先执行的话，这个Processor是不会被解析的，不会被解析的话也就不会执行了)。
+
+在我们的程序中，只有主类CoreApplication有@Configuration注解(@SpringBootApplication注解带有@Configuration注解)，所以这个配置类会被ConfigurationClassParser的parse(set<BeanDefinitionHolder>)方法解析,这个方法又会递归调用parse(AnnotationMetadate,String)，调用processConfigurationClass(ConfigurationClass)   ConfigurationClass可以有多种创建方法，最终实际调用doProcessConfigurationClass（ConfigurationClass,SourceClass）方法。
+
+
+
+### initMessageSource()
+
+
+初始化消息源:初始化容器的国际化消息资源。初始化应用上下文事件广播器。
+
+
+
+### onRefresh()
+
+
+
+初始化其他特殊的Bean: 这是一个钩子方法，子类可以借助这个方法执行一些特殊的操作，如AbstractRefreshableWebApplicationContext 就使用该方法执行初始化ThemeSource的操作。
+
+
+
+### registerListeners()
+
+
+
+注册事件监听器。
+
+
+
+### finishBeanFactoryInitialization(beanFactory)
+
+
+
+初始化所有单实例的Bean,使用懒加载模式的Bean除外:初始化Bean后，将它们放入Spring容器的缓存池中。
+
+
+
+### finishRefresh()
+
+
+
+发布上下文刷新事件:创建上下文刷新事件，事件广播器负责将这些事件广播到每个注册的事件监听器中。
+
+
+
+### resetCommonCaches()
+
+
+
+重置Spring在初始化IOC容器过程中的缓存。
+
+
+
+resfresh（）方法在一个项目启动时会启动2次，第二次加载时加载Serlvet相关bean和Web监听器等。
+
+
+
+# 流程整理
+
+![process](http://p9n2j0ewi.bkt.clouddn.com/PostImg/2017-05-31-refresh/process.png)
+
+Spring协调多个组件共同完成整个IOC启动，上图描述了从加载配置文件到实例化一个Bean的过程。
+
+1. Rourelade从存储介质中加载sping配置信息并使用Rsouce表示这个配置文件资源。
+
+2. BeanDeinitionReader 读取Resource所指向的配置文件资源，然后解析配置文件。配置文件中的每个bean解析成一个 BeanDefinition 对象，并保存到BeanDefinitionRegistry中。
+
+3. 容器扫描BeanDefinitionRegistry中的BeanDefinition, 使用Java反射机制自动识别出Bean工厂后处理器( 实现BeanFactoryPostProcessor接口的Bean)，然后调用这些Bean工厂后处理器对BeanDefinitionRegstry中的BeanDefinition 进行加工处理。主要总结完成以下两项工作:
+
+   ①对使用占位符的-bean元素标签进行解析，得到最终的配置值。 这意味着对一些半成品式的BeanDefinition对象进行加工处理并得到成品的BeanDefnition对象。
+
+   ②对BeanDefnitionRegisty中的BeanDefnition进行扫描，通过Java反射机制找出所有属性编辑器的Bean (实现jabcans PopertyEditor接口的Bean),并自动将它们注册到Spring容器的属性编辑器注册表中(ProetyEdiorRegisty)
+
+4. Spring 容器从BeanDefnitionRegistry中取出加工后的BeanDeinition,并调用InstantiationStrategy着手进行Bean实例化的工作。
+
+5. 在实例化Bean时，Spring容器使用BeanWrapper对Bean进行封装。BeanWrapper提供了很多以Java反射机制操作Bean的方法，它将结合该Bean的BeanDefnition及容器中的属性编辑器，完成Bean属性注入工作。
+
+6. 利用容器中注册的Bean后处理器(实现BeanPstProcessor接口的Bean)对已经完成属性设置工作的Bean进行后续加工，直接装配出一个准备就绪的Bean。
+
+  Spring容器堪称部设计精密的机器， 其内部拥有众多的组件和装置。Spring 的高明之处在于，它使用众多接口描绘出了所有装置的协作蓝图，构建好Spring的骨架，继而通过继承体系层层推演、不断丰富，最终让Spring成为有血有肉的完整的框架。所以在查看Spring框架的源码时，有两条清晰可见的脉络:
+
+1. 接口层描述了容器的重要组件及组件间的协作关系。
+2. 继承体系逐步实现组件的各项功能。
+
+接口层清晰地勾勒出Spring框架的高层功能，框架整体结构非常清晰。有了接口层抽象的描述后，不但Spring自己可以提供具体的实现，任何第三方组织也可以提供不同的实现，可以说Spring完善的接口层使框架的扩展性得到了很好的保证。纵向继承体系的逐步扩展，分步骤地实现框架的功能，这种实现方案保证了框架功能不会堆积在某些类身上，从而造成过重的代码逻辑负载，框架的复杂度被完美地分解开了。
+
+# 总结
+
+整个Spring的启动还是非常复杂，这里只是大概的介绍一下整体流程，具体的细节还需要继续研磨观看。
+
+> 参考: 《Spring技术内幕》、《精通Spring 4.x 企业应用开发实战》
+>
+> [SpringBoot源码分析之Spring容器的refresh过程](http://fangjian0423.github.io/2017/05/10/springboot-context-refresh/)
+>
+> [[Spring]容器刷新](http://zhangh.tk/2017/07/16/%E3%80%90Spring%E3%80%91%E5%AE%B9%E5%99%A8%E5%88%B7%E6%96%B0/#initMessageSource)
+

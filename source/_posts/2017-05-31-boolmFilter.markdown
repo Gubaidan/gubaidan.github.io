@@ -289,15 +289,15 @@ get方法大致可以分为两部分
 
 # 参考
 
-[维基百科](<https://en.wikipedia.org/wiki/Bloom_filter>)
+> [维基百科](<https://en.wikipedia.org/wiki/Bloom_filter>)
 
-[Dalhousie University](https://www.cs.dal.ca/research/techreports/cs-2002-10)
+> [Dalhousie University](https://www.cs.dal.ca/research/techreports/cs-2002-10)
 
-[Guava笔记](http://leadtoit.iteye.com/blog/1961751)
+> [Guava笔记](http://leadtoit.iteye.com/blog/1961751)
 
-[Counting Bloom Filter](https://blog.csdn.net/jiaomeng/article/details/1498283)
+> [Counting Bloom Filter](https://blog.csdn.net/jiaomeng/article/details/1498283)
 
-[http://ifeve.com/google-guava-hashing/](http://ifeve.com/google-guava-hashing/)
+> [http://ifeve.com/google-guava-hashing/](http://ifeve.com/google-guava-hashing/)
 
 
 
