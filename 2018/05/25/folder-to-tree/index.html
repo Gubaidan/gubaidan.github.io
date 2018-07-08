@@ -17,11 +17,11 @@
 
     <title>
         
-        Navicat for Oracle 表名不存在 ORA00903｜Gubaidan&#39;s blog
+        工具 | CSDN博客转 -&gt; markdown｜Gubaidan&#39;s blog
         
     </title>
 
-    <link rel="canonical" href="http://www.gubaidan.top/2018/04/22/2018-04-22-ORA00903/">
+    <link rel="canonical" href="http://www.gubaidan.top/2018/05/25/folder-to-tree/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -154,13 +154,13 @@
 
 
 <img class="wechat-title-img"
-     src="http://p9n2j0ewi.bkt.clouddn.com/Header/RbM63-XsLUY.png">
+     src="http://p9n2j0ewi.bkt.clouddn.com/Header/water.jpg">
 
 
 <style>
     
     header.intro-header {
-        background-image: url('http://p9n2j0ewi.bkt.clouddn.com/Header/RbM63-XsLUY.png?imageView2/1/w/1400/h/400/interlace/1/q/90')
+        background-image: url('http://p9n2j0ewi.bkt.clouddn.com/Header/water.jpg')
     }
 
     
@@ -171,18 +171,18 @@
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
                 <div class="post-heading">
-                    <h1>Navicat for Oracle 表名不存在 ORA00903</h1>
+                    <h1>工具 | CSDN博客转 -&gt; markdown</h1>
                     
                     <span class="meta">
                          作者 Gubaidan
                         <span>
-                          日期 2018-04-22
+                          日期 2018-05-25
                          </span>
                     </span>
                     <div class="tags text-center">
                         
-                        <a class="tag" href="/tags/#Oracle"
-                           title="Oracle">Oracle</a>
+                        <a class="tag" href="/tags/#工具"
+                           title="工具">工具</a>
                         
                     </div>
                 </div>
@@ -191,7 +191,7 @@
     </div>
     <div class="post-title-haojen">
         <span>
-            Navicat for Oracle 表名不存在 ORA00903
+            工具 | CSDN博客转 -> markdown
         </span>
     </div>
 </header>
@@ -202,31 +202,24 @@
         <div class="row">
             <!-- Post Container -->
             <div class="col-lg-8 col-lg-offset-1 col-sm-9 post-container">
-                <p>项目中用用的数据库是Oracle，数据库可视化工具用的Navicat，Mybatis自动生成的xml文件和mapper接口。既然SQL语句是自动生成的，语法肯定没有错误。</p>
-<p>后来发现<strong>Navicat 在创建表的时候会自动给表名和字段加上引号</strong>，导致找不到表。</p>
-<ol>
-<li><p>oracle表和字段是有大小写的区别。oracle默认是大写，如果我们用双引号括起来的就区分大小写，如果没有，系统会自动转成大写。</p>
-</li>
-<li><p>我们在使用navicat使用可视化创建数据库时候，navicat自动给我们加上了“”，在创建数据库时实际的代码是这样的：</p>
-</li>
-</ol>
-<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">DROP</span> <span class="keyword">TABLE</span> <span class="string">"alarm_data"</span>.<span class="string">"users"</span>;</span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> <span class="string">"alarm_data"</span>.<span class="string">"users"</span> (</span><br><span class="line"><span class="string">"id"</span> <span class="built_in">NUMBER</span>(<span class="number">2</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span> </span><br><span class="line">)</span><br></pre></td></tr></table></figure>
-<p>解决办法就是去掉引号重新建表。</p>
+                <h1 id="csdn2md"><a href="#csdn2md" class="headerlink" title="csdn2md"></a>csdn2md</h1><blockquote>
+<p>转换html至markdown</p>
+</blockquote>
+<h3 id="前言-Before"><a href="#前言-Before" class="headerlink" title="前言 Before:"></a>前言 Before:</h3><p>如何转换html至md，简直纠结。         </p>
+<p><strong>因而，用来迁移博客的工具当然有呀。</strong><a href="https://github.com/Gubaidan/csdn2md.git" target="_blank" rel="noopener">github here</a>.<br><a id="more"></a></p>
+<h3 id="使用-Usage"><a href="#使用-Usage" class="headerlink" title="使用 Usage:"></a>使用 Usage:</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@param</span> &#123;author&#125; csdn用户名               </span><br><span class="line"><span class="meta">@param</span> &#123;dirPath&#125; 文件保存路径</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Main</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> String host = <span class="string">"http://blog.csdn.net"</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String args[])</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line"></span><br><span class="line">        String author = <span class="string">"xxxx"</span>;                           <span class="comment">//csdn用户名</span></span><br><span class="line"></span><br><span class="line">        String dirPath = <span class="string">"/Users/xxxx/"</span>;   <span class="comment">//文件保存路径（绝对路径）</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">new</span> CorePaser().parse(host, author, dirPath, <span class="keyword">true</span>);  <span class="comment">//是否爬取图片 默认false</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="展示-Show"><a href="#展示-Show" class="headerlink" title="展示 Show:"></a>展示 Show:</h3><p>展示某个人博客的转换效果</p>
+<p><img src="http://p9n2j0ewi.bkt.clouddn.com/PostImg/csdn/D2338CFF-0768-4E86-AAAA-9E8305FE381F.png" alt="csdn"></p>
 
                 <hr>
                 
 
                 <ul class="pager">
                     
-                    <li class="previous">
-                        <a href="/2018/05/25/folder-to-tree/" data-toggle="tooltip" data-placement="top"
-                           title="工具 | CSDN博客转 -> markdown">&larr; Previous Post</a>
-                    </li>
-                    
                     
                     <li class="next">
-                        <a href="/2018/03/23/2018-03-23-Shiro.mrkdown/" data-toggle="tooltip" data-placement="top"
-                           title="轻量级权限管理框架之Shiro">Next Post &rarr;</a>
+                        <a href="/2018/04/22/2018-04-22-ORA00903/" data-toggle="tooltip" data-placement="top"
+                           title="Navicat for Oracle 表名不存在 ORA00903">Next Post &rarr;</a>
                     </li>
                     
                 </ul>
@@ -261,7 +254,7 @@
 
             <div class="hidden-xs col-sm-3 toc-col">
                 <div class="toc-wrap">
-                    
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#csdn2md"><span class="toc-text">csdn2md</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#前言-Before"><span class="toc-text">前言 Before:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#使用-Usage"><span class="toc-text">使用 Usage:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#展示-Show"><span class="toc-text">展示 Show:</span></a></li></ol></li></ol></li></ol>
                 </div>
             </div>
         </div>
@@ -283,8 +276,8 @@
                     </h5>
                     <div class="tags">
                         
-                        <a class="tag" href="/tags/#Oracle"
-                           title="Oracle">Oracle</a>
+                        <a class="tag" href="/tags/#工具"
+                           title="工具">工具</a>
                         
                     </div>
                 </section>
