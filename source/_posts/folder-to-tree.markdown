@@ -1,86 +1,44 @@
 ---
 layout: post
-title: "一个文件夹的自我介绍"
-date: 2017-07-25 08:52
-comments: true
+title: "工具 | CSDN博客转 -> markdown"
+date: 2018-05-25 08:52
 tags: 
 	- 工具 
-	- js
 ---
 
-#folder2tree
+# csdn2md
 
-> 用字符展示文件夹结构
+> 转换html至markdown
 
 ### 前言 Before:
-如何介绍一个文件夹，简直纠结。 
+如何转换html至md，简直纠结。         
 
-要么**图片**，如果在截图前，你真的愿意，一层一层一层的剥开我的心。你会鼻酸你会流泪；                 
-要么**靠说**，那么你可能得这么说：从前，有一个文件夹，文件夹里有两张图片；大图片在跟小图片讲故事…讲个什么故事额          
-
-**因而，用纯字符描述文件夹的小工具必须得有呀。**[github here](https://github.com/litten/folder2tree).
+**因而，用来迁移博客的工具当然有呀。**[github here](https://github.com/Gubaidan/csdn2md.git).
 <!-- more -->
+
 ### 使用 Usage:
 
-```js
-@param {Dom} 父级dom节点               
-@param {Array} 描述文件夹层级关系对象
+```java
+@param {author} csdn用户名               
+@param {dirPath} 文件保存路径
 
-folder2tree.init(document.getElementById("ctn"), [
-	{
-		"img" : [
-			"sprite.png",
-			"bg.png"
-		]
-	},{
-		"js": [{
-			"common": [
-				"jquery.js",{
-					"highcharts": [{
-						"modules": ["exporting.js"]
-					},
-					"highcharts.js"
-				]}
-			]
-		},{
-			"index": [
-				"mian.js",{
-					"modules": ["mod.video.js"]
-				}
-			]
-		}]
-	},{
-		"css": [
-			"base.css",
-			"index-main.css",
-			"index-video.css"
-		]
-	},
-	"index.html",
-	"favicon.ico"
-]);
+public class Main {
+
+    private static String host = "http://blog.csdn.net";
+
+    public static void main(String args[]) throws IOException {
+
+        String author = "xxxx";                           //csdn用户名
+
+        String dirPath = "/Users/xxxx/";   //文件保存路径（绝对路径）
+
+        new CorePaser().parse(host, author, dirPath, true);  //是否爬取图片 默认false
+    }
+}
 ```
 
 ### 展示 Show:
-```
-├─img
-│ ├─sprite.png
-│ └─bg.png
-├─js
-│ ├─common
-│ │ ├─jquery.js
-│ │ └─highcharts
-│ │    ├─modules
-│ │    │ └─exporting.js
-│ │    └─highcharts.js
-│ └─index
-│    ├─mian.js
-│    └─modules
-│       └─mod.video.js
-├─css
-│ ├─base.css
-│ ├─index-main.css
-│ └─index-video.css
-├─index.html
-└─favicon.ico
-```
+
+展示某个人博客的转换效果
+
+![csdn](http://p9n2j0ewi.bkt.clouddn.com/PostImg/csdn/D2338CFF-0768-4E86-AAAA-9E8305FE381F.png)
