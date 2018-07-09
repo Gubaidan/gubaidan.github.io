@@ -8,8 +8,6 @@ tags:
 	- 旅行
 ---
 
-![尝尝雪味道](/assets/blogImg/changbaishan-1.jpg)
-
 —— 写于 2015.12.02 ， 一篇旧游记 
 
 ### 冷！

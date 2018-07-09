@@ -1,0 +1,949 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="花有重开日，人无再少年">
+    <meta name="keyword" content="前端,js,jquery,javascript,html5,开发者,程序猿编程,代码,开源,Developer,Programmer,Coder,html,css,css3,用户体验">
+    <meta name="theme-color" content="#600090">
+    <meta name="msapplication-navbutton-color" content="#600090">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="#600090">
+    <link rel="shortcut icon" href="http://p9n2j0ewi.bkt.clouddn.com/img/favicon.ico">
+    <link rel="alternate" type="application/atom+xml" title="Gubaidan" href="/atom.xml">
+
+    <title>
+        
+        Gubaidan&#39;s blog
+        
+    </title>
+
+    <link rel="canonical" href="http://www.gubaidan.top/archives/2017/06/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/blog-style.css">
+    <link rel="stylesheet" href="/css/font-awesome.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&amp;subset=latin,latin-ext" rel="stylesheet" type="text/css">
+    <script type="text/javascript"
+ 		src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+		MathJax.Hub.Config({
+	    extensions: ["tex2jax.js","TeX/noErrors.js","TeX/AMSsymbols.js"],
+	    jax: ["input/TeX","output/HTML-CSS"],
+	    tex2jax: {
+	      inlineMath: [['$','$'],["\\(","\\)"]],
+	      displayMath: [['\\[','\\]'], ['$$','$$']],
+	      balanceBraces: true
+	      
+	    },
+	    TeX: {equationNumbers: {autoNumber: ["AMS"], useLabelIds: true}},
+	    "HTML-CSS": {availableFonts:["TeX"]},
+	  });
+	</script>
+
+</head>
+
+<style>
+
+    header.intro-header {
+        background-image: url('http://p9n2j0ewi.bkt.clouddn.com/blogimg/water.jpg')
+    }
+</style>
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="" class="animated fadeIn">
+<!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top " id="nav-top" data-ispost = "false" data-istags="false
+" data-ishome = "false" >
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand animated pulse" href="/">
+                <span class="brand-logo">
+                    Gubaidan
+                </span>
+                's Blog
+            </a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <!-- /.navbar-collapse -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+					
+                    
+                        
+							
+                        <li>
+                            <a href="/archive/">archive</a>
+                        </li>
+							
+						
+                    
+                        
+							
+                        <li>
+                            <a href="/tags/">tags</a>
+                        </li>
+							
+						
+                    
+					
+					
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+//    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+<!-- Main Content -->
+<style>
+    .intro-header .site-heading {
+        margin: 50px;
+    }
+    
+    header.intro-header {
+        background-image: url('http://p9n2j0ewi.bkt.clouddn.com/Header/water.jpg')
+    }
+    
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        body{
+            font-size: 14px;
+            -webkit-user-select: none;
+            -webkit-touch-callout: none;
+            -webkit-tap-highlight-color:rgba(0, 0, 0, 0);
+            -webkit-font-smoothing: antialiased;
+            -webkit-text-size-adjust: 100%;
+            font-family:"Helvetica Neue", Helvetica, Arial, sans-serif;
+            word-wrap: break-word;
+            padding-bottom: 20px;
+        }
+        #list {
+            margin: 0 4px 0;
+            overflow-x: hidden;
+            overflow-y: auto;
+        }
+        .listItem {
+            position: relative;
+            padding-left: 40px;
+            padding-top: 4px;
+        }
+        .listItem:before {
+            content: "";
+            display: inline-block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 1px;
+            height: 100%;
+            border-right: 1px solid #f3f3f3;
+            left: 19px;
+            z-index: 1;
+        }
+        .listItem-first:before {
+            height: 50%;
+            top: 50%;
+        }
+        .listItem-last:before {
+            height: 50%;
+        }
+        .listItem:after {
+            content: "";
+            display: inline-block;
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background-color: #e0e0e0;
+            border-radius: 4px;
+            left: 16px;
+            top: 50%;
+            margin-top: -2px;
+            z-index: 1;
+        }
+        .listItem.highlight:after {
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
+            width: 16px;
+            height: 16px;
+            background-color: #f4f4f4;
+            border: 4px solid #f4f4f4;
+            border-radius: 8px;
+            left: 12px;
+            -webkit-box-shadow: 0 0 0 3px #d8e9ff;
+            box-shadow: 0 0 0 3px #d8e9ff;
+            z-index: 2;
+        }
+        .listItem.highlight > .listItemContent {
+            background-color: #f4f4f4;
+            color: #000000;
+        }
+        .listItem.highlight .listItemContent-date{
+            color: #000000;
+        }
+        .listItemContent {
+            padding: 10px;
+            border: 1px solid #f3f3f3;
+            border-radius: 4px;
+        }
+        .listItemContent-date {
+            color: #cacaca;
+        }
+    .intro-header .site-heading {
+        margin: 50px;
+    }
+    
+    header.intro-header {
+        background-image: url('http://p9n2j0ewi.bkt.clouddn.com/Header/water.jpg')
+    }
+</style>
+
+<!-- Page Header -->
+<header class="intro-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 ">
+                <div class="site-heading text-center">
+                    <h1>archives</h1>
+                    <span class="subheading">可以根据归档日期检索所有博客</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Main Content -->
+<div class="container">
+    <div class="row">
+        <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+            <span style="height: 40px;font-size: 22px;margin-left: 30px;">目前共计  25  篇博客</span>
+            <!-- archive list -->
+            
+				
+				
+				
+					
+					
+					<div class="archive archive-year" data-date="2018">
+						<div class="listItem highlight">
+							<span style="height: 40px;font-size: 25px;">2018</span>
+						</div>
+				
+				
+					
+					
+					<div class="archive archive-month" data-date="20180525">
+                        <div class="listItem ">
+                            <div class="listItemContent">
+                                <div class="listItemContent-date">05-25 </div>
+                                <div class="listItemContent-content">
+                                    <a href="/2018/05/25/folder-to-tree/">工具 | CSDN博客转 -> markdown</a>
+                                </div>
+                            </div>
+                        </div>
+
+				
+            
+				
+				
+				
+				
+					
+					</div><!--month-->
+					
+					
+					<div class="archive archive-month" data-date="20180422">
+                        <div class="listItem ">
+                            <div class="listItemContent">
+                                <div class="listItemContent-date">04-22 </div>
+                                <div class="listItemContent-content">
+                                    <a href="/2018/04/22/2018-04-22-ORA00903/">Navicat for Oracle 表名不存在 ORA00903</a>
+                                </div>
+                            </div>
+                        </div>
+
+				
+            
+				
+				
+				
+				
+					
+					</div><!--month-->
+					
+					
+					<div class="archive archive-month" data-date="20180323">
+                        <div class="listItem ">
+                            <div class="listItemContent">
+                                <div class="listItemContent-date">03-23 </div>
+                                <div class="listItemContent-content">
+                                    <a href="/2018/03/23/2018-03-23-Shiro.mrkdown/">轻量级权限管理框架之Shiro</a>
+                                </div>
+                            </div>
+                        </div>
+
+				
+            
+				
+				
+				
+				
+					
+					</div><!--month-->
+					
+					
+					<div class="archive archive-month" data-date="20180302">
+                        <div class="listItem ">
+                            <div class="listItemContent">
+                                <div class="listItemContent-date">03-02 </div>
+                                <div class="listItemContent-content">
+                                    <a href="/2018/03/02/2018-03-02-DP/">如何写出一个动态规划</a>
+                                </div>
+                            </div>
+                        </div>
+
+				
+            
+				
+				
+				
+				
+					
+					</div><!--month-->
+					
+					
+					<div class="archive archive-month" data-date="20180223">
+                        <div class="listItem ">
+                            <div class="listItemContent">
+                                <div class="listItemContent-date">02-23 </div>
+                                <div class="listItemContent-content">
+                                    <a href="/2018/02/23/2018-02-23-GS/">回溯搜索算法总结</a>
+                                </div>
+                            </div>
+                        </div>
+
+				
+            
+				
+				
+				
+				
+					
+					</div><!--month-->
+					
+					
+					<div class="archive archive-month" data-date="20180212">
+                        <div class="listItem ">
+                            <div class="listItemContent">
+                                <div class="listItemContent-date">02-12 </div>
+                                <div class="listItemContent-content">
+                                    <a href="/2018/02/12/about-pjax/">pjax: 当ajax遇上pushState</a>
+                                </div>
+                            </div>
+                        </div>
+
+				
+            
+				
+				
+				
+					
+					</div><!--month-->
+					</div><!--year-->
+					
+					
+					
+					<div class="archive archive-year" data-date="2017">
+						<div class="listItem highlight">
+							<span style="height: 40px;font-size: 25px;">2017</span>
+						</div>
+				
+				
+					
+					
+					<div class="archive archive-month" data-date="20171216">
+                        <div class="listItem ">
+                            <div class="listItemContent">
+                                <div class="listItemContent-date">12-16 </div>
+                                <div class="listItemContent-content">
+                                    <a href="/2017/12/16/theme-update1-dot-0/">Blog主题更新-1.0</a>
+                                </div>
+                            </div>
+                        </div>
+
+				
+            
+				
+				
+				
+				
+					
+					</div><!--month-->
+					
+					
+					<div class="archive archive-month" data-date="20171109">
+                        <div class="listItem ">
+                            <div class="listItemContent">
+                                <div class="listItemContent-date">11-09 </div>
+                                <div class="listItemContent-content">
+                                    <a href="/2017/11/09/2017-11-9-spring-aop/">Spring-AOP理解及实现</a>
+                                </div>
+                            </div>
+                        </div>
+
+				
+            
+				
+				
+				
+				
+					
+					</div><!--month-->
+					
+					
+					<div class="archive archive-month" data-date="20171106">
+                        <div class="listItem ">
+                            <div class="listItemContent">
+                                <div class="listItemContent-date">11-06 </div>
+                                <div class="listItemContent-content">
+                                    <a href="/2017/11/06/2017-11-06-refresh/">Spring-AbstractApplicationContext refresh()方法源码解析</a>
+                                </div>
+                            </div>
+                        </div>
+
+				
+            
+				
+				
+				
+				
+					
+					</div><!--month-->
+					
+					
+					<div class="archive archive-month" data-date="20171103">
+                        <div class="listItem ">
+                            <div class="listItemContent">
+                                <div class="listItemContent-date">11-03 </div>
+                                <div class="listItemContent-content">
+                                    <a href="/2017/11/03/2017-11-3-applicationContext（上）/">Spring-BeanFactory与ApplicationContext基础</a>
+                                </div>
+                            </div>
+                        </div>
+
+				
+            
+				
+				
+				
+				
+					
+					</div><!--month-->
+					
+					
+					<div class="archive archive-month" data-date="20171102">
+                        <div class="listItem ">
+                            <div class="listItemContent">
+                                <div class="listItemContent-date">11-02 </div>
+                                <div class="listItemContent-content">
+                                    <a href="/2017/11/02/2017-11-2-spring-resouce/">Spring-资源加载的方式</a>
+                                </div>
+                            </div>
+                        </div>
+
+				
+            
+				
+				
+				
+				
+					
+					</div><!--month-->
+					
+					
+					<div class="archive archive-month" data-date="20170903">
+                        <div class="listItem ">
+                            <div class="listItemContent">
+                                <div class="listItemContent-date">09-03 </div>
+                                <div class="listItemContent-content">
+                                    <a href="/2017/09/03/2017-09-03-kmp/">Java String.indexOf对比KMP</a>
+                                </div>
+                            </div>
+                        </div>
+
+				
+            
+				
+				
+				
+				
+					
+					</div><!--month-->
+					
+					
+					<div class="archive archive-month" data-date="20170822">
+                        <div class="listItem ">
+                            <div class="listItemContent">
+                                <div class="listItemContent-date">08-22 </div>
+                                <div class="listItemContent-content">
+                                    <a href="/2017/08/22/2017-08-22-thin-border/">移动端html5 1px border的实现</a>
+                                </div>
+                            </div>
+                        </div>
+
+				
+            
+				
+				
+				
+				
+					
+					</div><!--month-->
+					
+					
+					<div class="archive archive-month" data-date="20170709">
+                        <div class="listItem ">
+                            <div class="listItemContent">
+                                <div class="listItemContent-date">07-09 </div>
+                                <div class="listItemContent-content">
+                                    <a href="/2017/07/09/prevent-spiders/">反击爬虫，前端工程师的脑洞可以有多大？</a>
+                                </div>
+                            </div>
+                        </div>
+
+				
+            
+				
+				
+				
+				
+					
+					</div><!--month-->
+					
+					
+					<div class="archive archive-month" data-date="20170604">
+                        <div class="listItem ">
+                            <div class="listItemContent">
+                                <div class="listItemContent-date">06-04 </div>
+                                <div class="listItemContent-content">
+                                    <a href="/2017/06/04/2017-06-04-sh/">编写mac、Linux下 .sh启动脚本</a>
+                                </div>
+                            </div>
+                        </div>
+
+				
+            
+				
+				
+				
+				
+					
+					</div><!--month-->
+					
+					
+					<div class="archive archive-month" data-date="20170603">
+                        <div class="listItem ">
+                            <div class="listItemContent">
+                                <div class="listItemContent-date">06-03 </div>
+                                <div class="listItemContent-content">
+                                    <a href="/2017/06/03/2017-06-03-git/">团队开发 - git整理</a>
+                                </div>
+                            </div>
+                        </div>
+
+				
+            
+				
+				
+				
+				
+            
+				
+				
+				
+				
+					
+					</div><!--month-->
+					
+					
+					<div class="archive archive-month" data-date="20170523">
+                        <div class="listItem ">
+                            <div class="listItemContent">
+                                <div class="listItemContent-date">05-23 </div>
+                                <div class="listItemContent-content">
+                                    <a href="/2017/05/23/2017-05-31-boolmFilter/">BoolmFilter算法解析</a>
+                                </div>
+                            </div>
+                        </div>
+
+				
+            
+				
+				
+				
+					
+					</div><!--month-->
+					</div><!--year-->
+					
+					
+					
+					<div class="archive archive-year" data-date="2016">
+						<div class="listItem highlight">
+							<span style="height: 40px;font-size: 25px;">2016</span>
+						</div>
+				
+				
+					
+					
+					<div class="archive archive-month" data-date="20161030">
+                        <div class="listItem ">
+                            <div class="listItemContent">
+                                <div class="listItemContent-date">10-30 </div>
+                                <div class="listItemContent-content">
+                                    <a href="/2016/10/30/diary-2016-1023-1029/">旧事 木头人 10.23-10.29</a>
+                                </div>
+                            </div>
+                        </div>
+
+				
+            
+				
+				
+				
+				
+					
+					</div><!--month-->
+					
+					
+					<div class="archive archive-month" data-date="20160911">
+                        <div class="listItem ">
+                            <div class="listItemContent">
+                                <div class="listItemContent-date">09-11 </div>
+                                <div class="listItemContent-content">
+                                    <a href="/2016/09/11/diary-2016-0904-0910/">旧事 imweb-conf 9.4-9.10</a>
+                                </div>
+                            </div>
+                        </div>
+
+				
+            
+				
+				
+				
+				
+					
+					</div><!--month-->
+					
+					
+					<div class="archive archive-month" data-date="20160821">
+                        <div class="listItem ">
+                            <div class="listItemContent">
+                                <div class="listItemContent-date">08-21 </div>
+                                <div class="listItemContent-content">
+                                    <a href="/2016/08/21/diary-2016-0814-0820/">旧事 奥运 8.14-8.20</a>
+                                </div>
+                            </div>
+                        </div>
+
+				
+            
+				
+				
+				
+				
+					
+					</div><!--month-->
+					
+					
+					<div class="archive archive-month" data-date="20160807">
+                        <div class="listItem ">
+                            <div class="listItemContent">
+                                <div class="listItemContent-date">08-07 </div>
+                                <div class="listItemContent-content">
+                                    <a href="/2016/08/07/diary-2016-0731-0806/">旧事 等风来 7.31-8.6</a>
+                                </div>
+                            </div>
+                        </div>
+
+				
+            
+				
+				
+				
+				
+					
+					</div><!--month-->
+					
+					
+					<div class="archive archive-month" data-date="20160428">
+                        <div class="listItem ">
+                            <div class="listItemContent">
+                                <div class="listItemContent-date">04-28 </div>
+                                <div class="listItemContent-content">
+                                    <a href="/2016/04/28/img-lazy-load/">说到加载图片，我们可以谈些什么</a>
+                                </div>
+                            </div>
+                        </div>
+
+				
+            
+				
+				
+				
+				
+					
+					</div><!--month-->
+					
+					
+					<div class="archive archive-month" data-date="20160413">
+                        <div class="listItem ">
+                            <div class="listItemContent">
+                                <div class="listItemContent-date">04-13 </div>
+                                <div class="listItemContent-content">
+                                    <a href="/2016/04/13/hello-world/">Hello World</a>
+                                </div>
+                            </div>
+                        </div>
+
+				
+            
+				
+				
+				
+				
+					
+					</div><!--month-->
+					
+					
+					<div class="archive archive-month" data-date="20160401">
+                        <div class="listItem ">
+                            <div class="listItemContent">
+                                <div class="listItemContent-date">04-01 </div>
+                                <div class="listItemContent-content">
+                                    <a href="/2016/04/01/changbaishan/">长白山 | 来去匆匆，惊鸿一瞥</a>
+                                </div>
+                            </div>
+                        </div>
+
+				
+            
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+<!-- Footer -->
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <br>
+                <ul class="list-inline text-center">
+                
+                
+                    <li>
+                        <a target="_blank" href="https://twitter.com/gubaidan">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+                
+                    <li>
+                        <a target="_blank" href="https://www.zhihu.com/people/gubaidan">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa  fa-stack-1x fa-inverse">知</i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank" href="http://weibo.com/gubaidan">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank" href="https://www.facebook.com/gubaidan">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/gubaidan">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://www.linkedin.com/in/gubaidan">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-linkedin fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; Gubaidan 2018
+                    <br>
+                    <span id="busuanzi_container_site_pv" style="font-size: 12px;">PV: <span id="busuanzi_value_site_pv"></span> Times</span>
+                    <br>
+                    Theme by <a href="https://gubaidan.github.io/">Gubaidan</a>
+                </p>
+
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/blog.js"></script>
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("http://www.gubaidan.top/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+<!-- Google Analytics -->
+
+
+
+<!-- Baidu Tongji -->
+
+
+<!-- swiftype -->
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install','','2.0.0');
+</script>
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<!--wechat title img-->
+<img class="wechat-title-img" src="http://p9n2j0ewi.bkt.clouddn.com/img/log.JPG">
+</body>
+
+</html>

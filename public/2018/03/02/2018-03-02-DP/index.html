@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="花有重开日，人无再少年">
+    <meta name="keyword" content="前端,js,jquery,javascript,html5,开发者,程序猿编程,代码,开源,Developer,Programmer,Coder,html,css,css3,用户体验">
+    <meta name="theme-color" content="#600090">
+    <meta name="msapplication-navbutton-color" content="#600090">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="#600090">
+    <link rel="shortcut icon" href="http://p9n2j0ewi.bkt.clouddn.com/img/favicon.ico">
+    <link rel="alternate" type="application/atom+xml" title="Gubaidan" href="/atom.xml">
+
+    <title>
+        
+        如何写出一个动态规划｜Gubaidan&#39;s blog
+        
+    </title>
+
+    <link rel="canonical" href="http://www.gubaidan.top/2018/03/02/2018-03-02-DP/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/blog-style.css">
+    <link rel="stylesheet" href="/css/font-awesome.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&amp;subset=latin,latin-ext" rel="stylesheet" type="text/css">
+    <script type="text/javascript"
+ 		src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+		MathJax.Hub.Config({
+	    extensions: ["tex2jax.js","TeX/noErrors.js","TeX/AMSsymbols.js"],
+	    jax: ["input/TeX","output/HTML-CSS"],
+	    tex2jax: {
+	      inlineMath: [['$','$'],["\\(","\\)"]],
+	      displayMath: [['\\[','\\]'], ['$$','$$']],
+	      balanceBraces: true
+	      
+	    },
+	    TeX: {equationNumbers: {autoNumber: ["AMS"], useLabelIds: true}},
+	    "HTML-CSS": {availableFonts:["TeX"]},
+	  });
+	</script>
+
+</head>
+
+<style>
+
+    header.intro-header {
+        background-image: url('http://p9n2j0ewi.bkt.clouddn.com/blogimg/water.jpg')
+    }
+</style>
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="" class="animated fadeIn">
+<!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top " id="nav-top" data-ispost = "true" data-istags="false
+" data-ishome = "false" >
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand animated pulse" href="/">
+                <span class="brand-logo">
+                    Gubaidan
+                </span>
+                's Blog
+            </a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <!-- /.navbar-collapse -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+					
+                    
+                        
+							
+                        <li>
+                            <a href="/archive/">archive</a>
+                        </li>
+							
+						
+                    
+                        
+							
+                        <li>
+                            <a href="/tags/">tags</a>
+                        </li>
+							
+						
+                    
+					
+					
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+//    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+<!-- Main Content -->
+
+<!--only post-->
+
+
+<img class="wechat-title-img"
+     src="http://p9n2j0ewi.bkt.clouddn.com/Header/dp.jpg">
+
+
+<style>
+    
+    header.intro-header {
+        background-image: url('http://p9n2j0ewi.bkt.clouddn.com/Header/dp.jpg?imageView2/1/w/1400/h/400/interlace/1/q/90')
+    }
+
+    
+</style>
+
+<header class="intro-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <div class="post-heading">
+                    <h1>如何写出一个动态规划</h1>
+                    
+                    <span class="meta">
+                         作者 Gubaidan
+                        <span>
+                          日期 2018-03-02
+                         </span>
+                    </span>
+                    <div class="tags text-center">
+                        
+                        <a class="tag" href="/tags/#算法"
+                           title="算法">算法</a>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="post-title-haojen">
+        <span>
+            如何写出一个动态规划
+        </span>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <!-- Post Container -->
+            <div class="col-lg-8 col-lg-offset-1 col-sm-9 post-container">
+                <h3 id="动态规划一般流程"><a href="#动态规划一般流程" class="headerlink" title="动态规划一般流程"></a>动态规划一般流程</h3><p>说到动态规划我是拒绝的，一般来说都很恶心。。。</p>
+<p>DP的核心是将一个问题分解成为若干个子问题，解决一个动态规划大体分为三步：暴力搜索、查找冗余、消除冗余</p>
+<p>分解子问题需要注意的点：</p>
+<ul>
+<li><p>具有相同的子问题：必须保证我们分割成的子问题也能按照相同的方法分割成更小的自问题， 并这些自问题的最终分割情况是可以解决的</p>
+</li>
+<li><p>满足最优子结构：就是一个决策的子决策也是最优的</p>
+</li>
+<li><p>无后效性：这是DP中最重要的一点， 他要求每个子问题的决策不能对后面其他未解决的问题产影响， 如果产生就无法保证决策的最优性， 这就是无后效性。往往需要我们找到一个合适的状态。（非常重要）</p>
+</li>
+</ul>
+<h3 id="Fibnacci数列"><a href="#Fibnacci数列" class="headerlink" title="Fibnacci数列"></a>Fibnacci数列</h3><p>在学习动态规划之前我根本不认为fibnacci数列是个动态规划题</p>
+<p>fibnacci数列: 1 1 2 3 5 8 13 … 当n大于2时，第n项等于前两项之和。</p>
+<p>所以递推公式为fn(n) = f(n-1)+(fn-2)</p>
+<h4 id="1-写出暴力递归（自顶向下）"><a href="#1-写出暴力递归（自顶向下）" class="headerlink" title="1) 写出暴力递归（自顶向下）"></a>1) 写出暴力递归（自顶向下）</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"> <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">long</span> <span class="title">fib</span><span class="params">(<span class="keyword">int</span> n)</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (n &lt;= <span class="number">2</span>) <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">return</span> fib(n - <span class="number">1</span>) + fib(n - <span class="number">2</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">long</span> start = System.currentTimeMillis();</span><br><span class="line">    <span class="keyword">long</span> i = fib(<span class="number">10000</span>);</span><br><span class="line">    <span class="keyword">long</span> end = System.currentTimeMillis() - start;</span><br><span class="line">    System.out.println(<span class="string">"time:"</span>+end + <span class="string">"ms,"</span> + i);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>时间复杂度：O(2^n)</p>
+<p>第一次：我将 n 设置了1000000直接爆栈</p>
+<p>第二次执行：n = 10000 ，时间很长我等不住了，强制退出</p>
+<p>第三次执行 n = 1000 ,依然很长时间，强制退出</p>
+<p>第四次执行 n = 50,运行结果：time:34397ms,12586269025</p>
+<p>只有前50项结果已经到达了13位数，所以暴力递归花费的时间是非常长的</p>
+<h4 id="2-找出冗余"><a href="#2-找出冗余" class="headerlink" title="2) 找出冗余"></a>2) 找出冗余</h4><p>冗余分析：分解为当前问题为 fn(n) = f(n-1)+(fn-2)后，每一次计算子问题f(n)（如递推式中的f(n - 1)）,都会重新计算n-1之前的子问题，导致重复计算。以n=10为例，要求得f(10)，需要求得f(9)和f(8)。同样，要求得f(9)，要先求得f(8)和f(7)</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">           f(10)</span><br><span class="line">         /        \</span><br><span class="line">       f(9)         f(8)</span><br><span class="line">      /     \       /    \</span><br><span class="line">   (8)     f(7)  f(7)   f(6)</span><br><span class="line">  /   \     /   \ </span><br><span class="line">f(7)  f(6)  f(6) f(5)</span><br></pre></td></tr></table></figure>
+<h4 id="3-消除冗余（计划搜索）"><a href="#3-消除冗余（计划搜索）" class="headerlink" title="3) 消除冗余（计划搜索）"></a>3) 消除冗余（计划搜索）</h4><p>在每算过一个子问题之后，将结果记录，在下一个子问题需要需要计算同一个子问题时，直接将结果return</p>
+<p>代码如下：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">long</span>[] res; <span class="comment">// 声明一个全局数组，存储计算过的子项</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">long</span> <span class="title">fib</span><span class="params">(<span class="keyword">int</span> n)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (n &lt;= <span class="number">2</span>) <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">if</span>(res[n] &gt; <span class="number">0</span>)&#123;</span><br><span class="line">            <span class="keyword">return</span> res[n];</span><br><span class="line">        &#125;</span><br><span class="line">        res[n] =  fib(n - <span class="number">1</span>) + fib(n - <span class="number">2</span>);</span><br><span class="line">        <span class="keyword">return</span> res[n];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">long</span> start = System.currentTimeMillis();</span><br><span class="line">        <span class="keyword">int</span> n = <span class="number">50</span>;</span><br><span class="line">        res = <span class="keyword">new</span> <span class="keyword">long</span>[n+<span class="number">1</span>];</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n;i++)&#123;  <span class="comment">//初始化数组</span></span><br><span class="line">            res[i] = -<span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">long</span> r = fib(n);</span><br><span class="line">        <span class="keyword">long</span> end = System.currentTimeMillis() - start;</span><br><span class="line">        System.out.println(<span class="string">"time:"</span>+end + <span class="string">"ms,"</span> + r);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>同样求解 n= 50 ,运行结果：time:0ms,12586269025</p>
+<p>求解 n = 1000 ,运行结果：time:0ms,817770325994397771</p>
+<p>在经过消除冗余后，时间复杂度O(n)</p>
+<h4 id="4-转换为递推式（自底向上）"><a href="#4-转换为递推式（自底向上）" class="headerlink" title="4) 转换为递推式（自底向上）"></a>4) 转换为递推式（自底向上）</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">long</span> start = System.currentTimeMillis();</span><br><span class="line">    <span class="keyword">int</span> n = <span class="number">50</span>;</span><br><span class="line">    <span class="keyword">long</span>[] res = <span class="keyword">new</span> <span class="keyword">long</span>[n];</span><br><span class="line">    res[<span class="number">0</span>] = <span class="number">1</span>;</span><br><span class="line">    res[<span class="number">1</span>] = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">2</span>; i &lt; n;i++)&#123;</span><br><span class="line">        res[i] = res[i - <span class="number">1</span>] + res[i - <span class="number">2</span>];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">long</span> end = System.currentTimeMillis() - start;</span><br><span class="line">    System.out.println(<span class="string">"time:"</span>+end + <span class="string">"ms,"</span> + res[n -<span class="number">1</span>]);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="House-Robber-Leet-code-198"><a href="#House-Robber-Leet-code-198" class="headerlink" title="House Robber(Leet code 198)"></a>House Robber(Leet code 198)</h3><blockquote>
+<p>   You are a professional robber planning to rob houses along a street. Each house has a certain amount of money stashed, the only constraint stopping you from robbing each of them is that adjacent houses have security system connected and it will automatically contact the police if two adjacent houses were broken into on the same night.</p>
+</blockquote>
+<blockquote>
+<p>Given a list of non-negative integers representing the amount of money of each house, determine the maximum amount of money you can rob tonight without alerting the police.</p>
+</blockquote>
+<p>问题大意：</p>
+<p>你是一名专业的强盗，计划抢劫沿街的房屋。每间房屋都藏有一定数量的金钱，如果在同一晚上有两间相邻的房屋被闯入，它将自动与警方联系。<br>给出一份代表每个房屋的金额的非负整数列表，确定你可以在没有提醒警方的情况下抢劫的最高金额。</p>
+<p>问题分析：假设在抢劫第n家店时会有两种决策</p>
+<ul>
+<li><p>抢这家店，但是就不能抢下一家，抢到的金额加上当前这家店的金额，表达式 </p>
+</li>
+<li><p>不抢这家店，则直接跳过，抢劫金额不变</p>
+</li>
+</ul>
+<p>由于问题为抢劫金额最高，所以递归表达式为：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">f(n) = Max(f(n- <span class="number">2</span>) + value, f(n - <span class="number">1</span>))</span><br></pre></td></tr></table></figure>
+<h4 id="1-暴力递归（自顶向下）"><a href="#1-暴力递归（自顶向下）" class="headerlink" title="1) 暴力递归（自顶向下）"></a>1) 暴力递归（自顶向下）</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">solve</span><span class="params">(<span class="keyword">int</span> idx, <span class="keyword">int</span>[] nums)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (idx &lt; <span class="number">0</span>) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">return</span> Math.max(nums[idx] + solve(idx - <span class="number">2</span>, nums),solve(idx -<span class="number">1</span> ,nums));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">long</span> start = System.currentTimeMillis();</span><br><span class="line">    <span class="keyword">int</span>[] nums = <span class="keyword">new</span> <span class="keyword">int</span>[]&#123;</span><br><span class="line">            <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">7</span>, <span class="number">9</span>, <span class="number">3</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">9</span>, <span class="number">3</span>, <span class="number">7</span>, <span class="number">9</span>,</span><br><span class="line">            <span class="number">7</span>, <span class="number">9</span>, <span class="number">3</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">7</span>, <span class="number">9</span>, <span class="number">3</span>, <span class="number">12</span>, <span class="number">7</span>, <span class="number">9</span>, <span class="number">3</span>, <span class="number">7</span>, <span class="number">9</span>,</span><br><span class="line">            <span class="number">12</span>, <span class="number">7</span>, <span class="number">9</span>, <span class="number">3</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">7</span>, <span class="number">9</span>, <span class="number">3</span>, <span class="number">12</span>, <span class="number">7</span>, <span class="number">7</span>, <span class="number">9</span></span><br><span class="line">    &#125;;</span><br><span class="line">    <span class="keyword">int</span> res = solve(nums.length - <span class="number">1</span>, nums);</span><br><span class="line">    <span class="keyword">long</span> end = System.currentTimeMillis() - start;</span><br><span class="line">    System.out.println(<span class="string">"time:"</span> + end + <span class="string">"ms,"</span> + res);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>运行结果：time:1471ms,135</p>
+<p>时间复杂度：O(2^n)</p>
+<h4 id="2-冗余分析"><a href="#2-冗余分析" class="headerlink" title="2) 冗余分析"></a>2) 冗余分析</h4><p>和Fibnaicc数列类似，每次执行搜索时，依赖子项重复计算，开启一个数组保存计算过的结果</p>
+<h4 id="4）消除冗余（计划搜索）"><a href="#4）消除冗余（计划搜索）" class="headerlink" title="4）消除冗余（计划搜索）"></a>4）消除冗余（计划搜索）</h4><p>将计算过的子项保存</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span>[] result;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">solve</span><span class="params">(<span class="keyword">int</span> idx, <span class="keyword">int</span>[] nums)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (idx &lt; <span class="number">0</span>) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">if</span> (result[idx] &gt;= <span class="number">0</span>) <span class="keyword">return</span> result[idx];</span><br><span class="line">        result[idx] = Math.max(nums[idx] + solve(idx - <span class="number">2</span>, nums),</span><br><span class="line">            solve(idx - <span class="number">1</span>, nums));</span><br><span class="line">    <span class="keyword">return</span> result[idx];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">long</span> start = System.currentTimeMillis();</span><br><span class="line">    <span class="keyword">int</span>[] nums = <span class="keyword">new</span> <span class="keyword">int</span>[]&#123;</span><br><span class="line">            <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">7</span>, <span class="number">9</span>, <span class="number">3</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">9</span>, <span class="number">3</span>, <span class="number">7</span>, <span class="number">9</span>,</span><br><span class="line">            <span class="number">7</span>, <span class="number">9</span>, <span class="number">3</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">7</span>, <span class="number">9</span>, <span class="number">3</span>, <span class="number">12</span>, <span class="number">7</span>, <span class="number">9</span>, <span class="number">3</span>, <span class="number">7</span>, <span class="number">9</span>,</span><br><span class="line">            <span class="number">12</span>, <span class="number">7</span>, <span class="number">9</span>, <span class="number">3</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">7</span>, <span class="number">9</span>, <span class="number">3</span>, <span class="number">12</span>, <span class="number">7</span>, <span class="number">7</span>, <span class="number">9</span></span><br><span class="line">    &#125;;</span><br><span class="line">    result = <span class="keyword">new</span> <span class="keyword">int</span>[nums.length];</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; nums.length; i++)&#123;</span><br><span class="line">        result[i] = -<span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">int</span> res = solve(nums.length - <span class="number">1</span>, nums);</span><br><span class="line">    <span class="keyword">long</span> end = System.currentTimeMillis() - start;</span><br><span class="line">    System.out.println(<span class="string">"time:"</span> + end + <span class="string">"ms,"</span> + res);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>运行结果：time:0ms,135</p>
+<p>时间复杂度：O(n)</p>
+<h4 id="5）转换为递推式（自底向上）"><a href="#5）转换为递推式（自底向上）" class="headerlink" title="5）转换为递推式（自底向上）"></a>5）转换为递推式（自底向上）</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">long</span> start = System.currentTimeMillis();</span><br><span class="line">    <span class="keyword">int</span>[] nums = <span class="keyword">new</span> <span class="keyword">int</span>[]&#123;</span><br><span class="line">            <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">7</span>, <span class="number">9</span>, <span class="number">3</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">9</span>, <span class="number">3</span>, <span class="number">7</span>, <span class="number">9</span>,</span><br><span class="line">            <span class="number">7</span>, <span class="number">9</span>, <span class="number">3</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">7</span>, <span class="number">9</span>, <span class="number">3</span>, <span class="number">12</span>, <span class="number">7</span>, <span class="number">9</span>, <span class="number">3</span>, <span class="number">7</span>, <span class="number">9</span>,</span><br><span class="line">            <span class="number">12</span>, <span class="number">7</span>, <span class="number">9</span>, <span class="number">3</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">7</span>, <span class="number">9</span>, <span class="number">3</span>, <span class="number">12</span>, <span class="number">7</span>, <span class="number">7</span>, <span class="number">9</span></span><br><span class="line">    &#125;;</span><br><span class="line">    <span class="comment">// a是上次的最大收益</span></span><br><span class="line">    <span class="keyword">int</span> a = nums[<span class="number">0</span>];</span><br><span class="line">    <span class="comment">// b是当前的最大受益</span></span><br><span class="line">    <span class="keyword">int</span> b = Math.max(nums[<span class="number">0</span>], nums[<span class="number">1</span>]);</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">2</span>; i &lt; nums.length; i++)&#123;</span><br><span class="line">        <span class="keyword">int</span> tmp = b;</span><br><span class="line">        <span class="comment">// 当前的最大收益是两种选择里较大的那个</span></span><br><span class="line">        b = Math.max(a + nums[i], b);</span><br><span class="line">        a = tmp;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">long</span> end = System.currentTimeMillis() - start;</span><br><span class="line">    System.out.println(<span class="string">"time:"</span> + end + <span class="string">"ms,"</span> + b);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>运行结果：time:0ms,135</p>
+<p>时间复杂度：O(n)</p>
+<p>​    </p>
+
+                <hr>
+                
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2018/03/23/2018-03-23-Shiro.mrkdown/" data-toggle="tooltip" data-placement="top"
+                           title="轻量级权限管理框架之Shiro">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/2018/02/23/2018-02-23-GS/" data-toggle="tooltip" data-placement="top"
+                           title="回溯搜索算法总结">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+                
+
+                
+
+
+                <!--加入新的评论系统-->
+                
+                <!-- 来必力City版安装代码 -->
+                <div id="lv-container" data-id="city" data-uid="MTAyMC8zNjcxNC8xMzI0OQ==">
+                    <script type="text/javascript">
+                        (function(d, s) {
+                            var j, e = d.getElementsByTagName(s)[0];
+
+                            if (typeof LivereTower === 'function') { return; }
+
+                            j = d.createElement(s);
+                            j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+                            j.async = true;
+
+                            e.parentNode.insertBefore(j, e);
+                        })(document, 'script');
+                    </script>
+                    <noscript> 为正常使用来必力评论功能请激活JavaScript</noscript>
+                </div>
+                <!-- City版安装代码已完成 -->
+                
+            </div>
+
+            <div class="hidden-xs col-sm-3 toc-col">
+                <div class="toc-wrap">
+                    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#动态规划一般流程"><span class="toc-text">动态规划一般流程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Fibnacci数列"><span class="toc-text">Fibnacci数列</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-写出暴力递归（自顶向下）"><span class="toc-text">1) 写出暴力递归（自顶向下）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-找出冗余"><span class="toc-text">2) 找出冗余</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-消除冗余（计划搜索）"><span class="toc-text">3) 消除冗余（计划搜索）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-转换为递推式（自底向上）"><span class="toc-text">4) 转换为递推式（自底向上）</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#House-Robber-Leet-code-198"><span class="toc-text">House Robber(Leet code 198)</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-暴力递归（自顶向下）"><span class="toc-text">1) 暴力递归（自顶向下）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-冗余分析"><span class="toc-text">2) 冗余分析</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4）消除冗余（计划搜索）"><span class="toc-text">4）消除冗余（计划搜索）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5）转换为递推式（自底向上）"><span class="toc-text">5）转换为递推式（自底向上）</span></a></li></ol></li></ol>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5 class="text-center">
+                        <a href="/tags/">FEATURED TAGS</a>
+                    </h5>
+                    <div class="tags">
+                        
+                        <a class="tag" href="/tags/#算法"
+                           title="算法">算法</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+                <div style="margin-top: 20px;">
+                    <h5 class="text-center">FRIENDS</h5>
+                    <ul class="list-inline text-center">
+                        
+                        <li><a href="http://www.hulichao.top">Hu</a></li>
+                        
+                        <li><a href="http://www.gubaidan.top">Gu</a></li>
+                        
+                    </ul>
+                </div>
+                
+            </div>
+        </div>
+
+    </div>
+</article>
+
+
+
+
+
+
+
+<!-- Footer -->
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <br>
+                <ul class="list-inline text-center">
+                
+                
+                    <li>
+                        <a target="_blank" href="https://twitter.com/gubaidan">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+                
+                    <li>
+                        <a target="_blank" href="https://www.zhihu.com/people/gubaidan">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa  fa-stack-1x fa-inverse">知</i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank" href="http://weibo.com/gubaidan">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank" href="https://www.facebook.com/gubaidan">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/gubaidan">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://www.linkedin.com/in/gubaidan">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-linkedin fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; Gubaidan 2018
+                    <br>
+                    <span id="busuanzi_container_site_pv" style="font-size: 12px;">PV: <span id="busuanzi_value_site_pv"></span> Times</span>
+                    <br>
+                    Theme by <a href="https://gubaidan.github.io/">Gubaidan</a>
+                </p>
+
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/blog.js"></script>
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("http://www.gubaidan.top/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+<!-- Google Analytics -->
+
+
+
+<!-- Baidu Tongji -->
+
+
+<!-- swiftype -->
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install','','2.0.0');
+</script>
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<!--wechat title img-->
+<img class="wechat-title-img" src="http://p9n2j0ewi.bkt.clouddn.com/img/log.JPG">
+</body>
+
+</html>

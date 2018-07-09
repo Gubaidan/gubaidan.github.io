@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="花有重开日，人无再少年">
+    <meta name="keyword" content="前端,js,jquery,javascript,html5,开发者,程序猿编程,代码,开源,Developer,Programmer,Coder,html,css,css3,用户体验">
+    <meta name="theme-color" content="#600090">
+    <meta name="msapplication-navbutton-color" content="#600090">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="#600090">
+    <link rel="shortcut icon" href="http://p9n2j0ewi.bkt.clouddn.com/img/favicon.ico">
+    <link rel="alternate" type="application/atom+xml" title="Gubaidan" href="/atom.xml">
+
+    <title>
+        
+        BoolmFilter算法解析｜Gubaidan&#39;s blog
+        
+    </title>
+
+    <link rel="canonical" href="http://www.gubaidan.top/2017/05/23/2017-05-31-boolmFilter/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/blog-style.css">
+    <link rel="stylesheet" href="/css/font-awesome.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&amp;subset=latin,latin-ext" rel="stylesheet" type="text/css">
+    <script type="text/javascript"
+ 		src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+		MathJax.Hub.Config({
+	    extensions: ["tex2jax.js","TeX/noErrors.js","TeX/AMSsymbols.js"],
+	    jax: ["input/TeX","output/HTML-CSS"],
+	    tex2jax: {
+	      inlineMath: [['$','$'],["\\(","\\)"]],
+	      displayMath: [['\\[','\\]'], ['$$','$$']],
+	      balanceBraces: true
+	      
+	    },
+	    TeX: {equationNumbers: {autoNumber: ["AMS"], useLabelIds: true}},
+	    "HTML-CSS": {availableFonts:["TeX"]},
+	  });
+	</script>
+
+</head>
+
+<style>
+
+    header.intro-header {
+        background-image: url('http://p9n2j0ewi.bkt.clouddn.com/blogimg/water.jpg')
+    }
+</style>
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="" class="animated fadeIn">
+<!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top " id="nav-top" data-ispost = "true" data-istags="false
+" data-ishome = "false" >
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand animated pulse" href="/">
+                <span class="brand-logo">
+                    Gubaidan
+                </span>
+                's Blog
+            </a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <!-- /.navbar-collapse -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+					
+                    
+                        
+							
+                        <li>
+                            <a href="/archive/">archive</a>
+                        </li>
+							
+						
+                    
+                        
+							
+                        <li>
+                            <a href="/tags/">tags</a>
+                        </li>
+							
+						
+                    
+					
+					
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+//    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+<!-- Main Content -->
+
+<!--only post-->
+
+
+<img class="wechat-title-img"
+     src="http://p9n2j0ewi.bkt.clouddn.com/Header/lake.jpg">
+
+
+<style>
+    
+    header.intro-header {
+        background-image: url('http://p9n2j0ewi.bkt.clouddn.com/Header/lake.jpg?imageView2/1/w/1400/h/400/interlace/1/q/90')
+    }
+
+    
+</style>
+
+<header class="intro-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <div class="post-heading">
+                    <h1>BoolmFilter算法解析</h1>
+                    
+                    <span class="meta">
+                         作者 Gubaidan
+                        <span>
+                          日期 2017-05-23
+                         </span>
+                    </span>
+                    <div class="tags text-center">
+                        
+                        <a class="tag" href="/tags/#算法"
+                           title="算法">算法</a>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="post-title-haojen">
+        <span>
+            BoolmFilter算法解析
+        </span>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <!-- Post Container -->
+            <div class="col-lg-8 col-lg-offset-1 col-sm-9 post-container">
+                <h1 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h1><p>BloomFilter（布隆过滤器）是一种可以高效地判断元素是否在某个集合中的算法。</p>
+<p>在很多日常场景中，都大量存在着布隆过滤器的应用。例如：检查单词是否拼写正确、网络爬虫的URL去重、黑名单检验，微博中昵称不能重复的检测。Google Chrome浏览器使用BloomFilter来判断一个网站是否为恶意网站。</p>
+<p>对于以上场景，可能很多人会说，用HashSet甚至简单的链表、数组做存储，然后判断是否存在不就可以了吗？</p>
+<p>当然，对于少量数据来说，HashSet是很好的选择。但是对于海量数据来说，BloomFilter相比于其他数据结构在空间效率和时间效率方面都有着明显的优势。</p>
+<p>但是，布隆过滤器具有一定的误判率，有可能会将本不存在的元素判定为存在。因此，对于那些需要“零错误”的应用场景，布隆过滤器将不太适用。具体的原因将会在第二部分中介绍。  </p>
+<p>在本文的第二部分，本文将会介绍BloomFilter的基本算法思想；第三部分将会基于Google开源库Guava来讲解BloomFilter的具体实现；在第四部分中，将会介绍一些开源的BloomFilter的扩展，以解决目前BloomFilter的不足。</p>
+<h1 id="算法讲述"><a href="#算法讲述" class="headerlink" title="算法讲述"></a>算法讲述</h1><p>布隆过滤器是基于Hash来实现的，在学习BloomFilter之前，也需要对Hash的原理有基本的了解。个人认为，BloomFilter的总体思想实际上和bitmap很像，但是比bitmap更节省空间，误判率也更低。</p>
+<p>BloomFilter的整体思想并不复杂，主要是使用k个Hash函数将元素映射到位向量的k个位置上面，并将这k个位置全部置为1。当查找某元素是否存在时，查找该元素所对应的k位是否全部为1即可说明该元素是否存在。</p>
+<h1 id="算法流程"><a href="#算法流程" class="headerlink" title="算法流程"></a>算法流程</h1><p><strong>BloomFilter的整体算法流程可总结为如下步骤：</strong></p>
+<ol>
+<li><p>BloomFilter初始化为m位长度的位向量，每一位均初始化为<img src="http://p9n2j0ewi.bkt.clouddn.com/PostImg/2017-05-31-boolmFilter/bf1.jpg" alt="bf1"></p>
+</li>
+<li><p>使用k个相互独立的Hash函数，每个Hash函数将元素映射到{1..m}的范围内，并将对应的位置为1。<img src="http://p9n2j0ewi.bkt.clouddn.com/PostImg/2017-05-31-boolmFilter/bf2.jpg" alt="bf2">如上图所示，元素x分别被三个Hash函数映射到了三个位置8、1、14，并将这三个位置从0变为1。</p>
+</li>
+<li><p>若检查一个元素y是否存在，首先第一步使用k个Hash函数将元素y映射到k位。分别检测每一位是否为0。若某一位为0，则元素y一定不存在，若全部为1，则有可能存在。</p>
+</li>
+</ol>
+<p><strong>空间复杂度</strong></p>
+<p>BloomFilter 使用位向量来表示元素，而不存储本身，这样极大压缩了元素的存储空间。其空间复杂度为O(m)，m是位向量的长度。而m与插入总数量n的关系如公式（1）所示：</p>
+<p>$$<br>\begin{equation} \label{euler}  m=-{\frac {n\ln p}{(\ln 2)^{2}}}   \end{equation}<br>$$<br>我们可以利用这个公式来算一下需要抓取100万个URL时BloomFilter所占据的空间。</p>
+<p>假设要求误判率为1%，因此该公式可转化为m=9.6∗nm=9.6∗n。故此时BloomFilter位向量的大小为100w∗9.6=960wbit100w∗9.6=960wbit，约1.1M内存空间。<br>只需要1.1M的内存空间，就可满足100万个url的去重需求，这个空间复杂度之低不可谓不惊人。<br>实际上，哪怕是1亿个URL，也仅需100M左右的内存空间即可满足BloomFilter的空间需求，这对于绝大部分爬虫的体量来说，是完全可行的。</p>
+<p><strong>时间复杂度</strong><br>时间复杂度方面 BloomFilter的时间复杂度仅与Hash函数的个数k有关，即O(k)</p>
+<h1 id="误判率"><a href="#误判率" class="headerlink" title="误判率"></a>误判率</h1><p>为什么说，在查找元素时，即使某个元素所映射的k位全部位1，依然无法确定它一定存在？</p>
+<p>这是因为当插入的元素很多的情况下，某个元素即使之前不存在，但是它所映射的k位已经被之前其他的元素置为1了，这样就会出现误判，BloomFilter会认为它已经存在了。但是这个概率是非常小的。根据维基百科的推导公式来说，误判率的大小p满足以下公式（2）</p>
+<p>$$<br>\begin{equation}   \ln p = -{\frac {m}{n}}\left(\ln 2\right)^{2} \label{eq:p} \end{equation}<br>$$<br>其中m为位向量的长度，n为要插入元素的总数。当误判率为1%时,mn=9.6mn=9.6即每个元素仅需要9.6个字节存储即可</p>
+<p>Hash函数的个数k，与误判率大小p的关系为公式（3） 所示</p>
+<p>$$<br>\begin{equation}   k = {-{\ln p} \over {\ln 2}} \label{eq:k1} \end{equation}<br>$$<br>当误判率大小为0.1时，k为3。当误判率大小为0.01时，k为7</p>
+<p>与位向量的长度m和插入元素的总数n的关系为公式（4）</p>
+<p>$$<br>\begin{equation}   k = {\frac {m}{n}}\ln 2 \label{eq:k2} \end{equation}<br>$$</p>
+<h1 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h1><p>BloomFilter 由于并不存储元素，而是用位的01来表示元素是否存在，并且很有可能一个位时被多个元素同时使用。所以无法通过将某元素对应的位置为0来删除元素。</p>
+<p>幸运的是，目前学术界和工业界都有很多方法扩展已解决以上问题。具体可以参考本文第三部分 <strong>BloomFilter的优化和扩展</strong></p>
+<h1 id="Guava’s-BloomFilter源码剖析"><a href="#Guava’s-BloomFilter源码剖析" class="headerlink" title="Guava’s BloomFilter源码剖析"></a>Guava’s BloomFilter源码剖析</h1><p>Guava引入了一个叫做<code>Funnel</code>的类，Funnel类定义了如何把一个具体的对象类型分解为原生字段值，从而将值分解为Byte以供后面BloomFilter进行hash运算。通过使用这个类，我们可以自己定义一个属于自己类的Funnel。如下代码</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">enum</span> StringFunnel implements Funnel&lt;String&gt; &#123;    </span><br><span class="line">    INSTANCE;   </span><br><span class="line">    <span class="meta">@Override</span>    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">funnel</span><span class="params">(String from, PrimitiveSink into)</span> </span>&#123;        		</span><br><span class="line">    	into.putString(from,Charset.defaultCharset());    </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>此外，Guava预定义了一些原生类型的Funnel，如String、Long、Integer。具体代码可以在<a href="https://github.com/google/guava/blob/master/guava/src/com/google/common/hash/Funnels.java" target="_blank" rel="noopener">这里看到</a>。当我们的BloomFilter存储的是这些原生类型时，不用再额外自行写Funnel，直接使用Guava预定义的这些即可。</p>
+<p>以下是整个代码调用的流程</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">BloomFilterSamle</span> </span>&#123;                                                                                             </span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;    </span><br><span class="line">	<span class="comment">// 创建一个BloomFilter，其预计插入的个数为10，误判率大约为0.01</span></span><br><span class="line">    BloomFilter&lt;String&gt; bloomFilter = BloomFilter.create(StringFunnel.INSTANCE, <span class="number">10</span>, <span class="number">0.01</span>);                              </span><br><span class="line">    <span class="comment">// 查询www.google.com是否存在                                                                                                                   </span></span><br><span class="line">    System.out.println(bloomFilter.mightContain(<span class="string">"www.google.com"</span>));</span><br><span class="line">     <span class="comment">// 将www.google.com对象放入BloomFilter中</span></span><br><span class="line">    bloomFilter.put(<span class="string">"www.google.com"</span>);  </span><br><span class="line">    <span class="comment">// 再次查询www.google.com是否存在</span></span><br><span class="line">    System.out.println(bloomFilter.mightContain(<span class="string">"www.google.com"</span>));                                                     </span><br><span class="line">	&#125;    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="源码解读"><a href="#源码解读" class="headerlink" title="源码解读"></a>源码解读</h1><p>在例子中，我们通过调用<code>BloomFilter.create</code>工厂方法来生成一个BloomFilter</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">&lt;T&gt; <span class="function">BloomFilter&lt;T&gt; <span class="title">create</span><span class="params">(Funnel&lt;? <span class="keyword">super</span> T&gt; funnel, </span></span></span><br><span class="line"><span class="function"><span class="params">                          <span class="keyword">long</span> expectedInsertions,  //预期会插入多少元素</span></span></span><br><span class="line"><span class="function"><span class="params">                          <span class="keyword">double</span> fpp, //自定义误判率</span></span></span><br><span class="line"><span class="function"><span class="params">                          Strategy strategy //Hash策略 </span></span></span><br><span class="line"><span class="function"><span class="params">                          )</span> </span>&#123;  </span><br><span class="line">    <span class="keyword">if</span> (expectedInsertions == <span class="number">0</span>) &#123;</span><br><span class="line">      expectedInsertions = <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    ...</span><br><span class="line">    <span class="comment">//根据插入的数量和误判率来得出位向量应有的长度,这里使用的算法就是公式 2</span></span><br><span class="line">    <span class="keyword">long</span> numBits = optimalNumOfBits(expectedInsertions, fpp);</span><br><span class="line">    <span class="comment">//根据插入的数量和位向量的长度来得出应该用多少个Hash函数，这里使用的算法是公式 4</span></span><br><span class="line">    <span class="keyword">int</span> numHashFunctions = optimalNumOfHashFunctions(expectedInsertions, numBits);</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> BloomFilter&lt;T&gt;(<span class="keyword">new</span> BitArray(numBits), numHashFunctions, funnel, strategy);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>整个创建流程非常清晰，如果看懂了本文的算法描述部分，应该不难理解该段代码。整个初始化流程的目的主要有两个：根据参数计算出位向量的长度以及Hash函数的个数</p>
+<ul>
+<li><p>根据预期插入的数量expectedInsertions和自定义的误判率fpp来得到位向量的长度numBits，其中optimalNumOfBits的实现如下</p>
+  <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 根据插入的数量和误判率来得出位向量应有的长度</span></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">long</span> <span class="title">optimalNumOfBits</span><span class="params">(<span class="keyword">long</span> n, <span class="keyword">double</span> p)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (p == <span class="number">0</span>) &#123;</span><br><span class="line">      p = Double.MIN_VALUE;</span><br><span class="line">    &#125;</span><br><span class="line">	<span class="keyword">return</span> (<span class="keyword">long</span>) (-n * Math.log(p) / (Math.log(<span class="number">2</span>) * Math.log(<span class="number">2</span>)));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>  可以很明显看出，optimalNumOfBits的源码，其实就是对公式(1)的实现</p>
+</li>
+<li><p>根据插入的数量expectedInsertions和位向量的长度numBits来得出应该用多少个Hash函数，其中optimalNumOfHashFunctions的实现如下</p>
+   <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">int</span> <span class="title">optimalNumOfHashFunctions</span><span class="params">(<span class="keyword">long</span> n, <span class="keyword">long</span> m)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// (m / n) * log(2), but avoid truncation due to division!</span></span><br><span class="line">    <span class="keyword">return</span> Math.max(<span class="number">1</span>, (<span class="keyword">int</span>) Math.round((<span class="keyword">double</span>) m / n * Math.log(<span class="number">2</span>)));</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<p>   同样，optimalNumOfHashFunctions也对应了我们算法中公式(4) </p>
+</li>
+<li><p>根据numBits生成BitArray</p>
+<p>   BitArray是Guava中位向量的表示，具体的实现细节</p>
+<h1 id="位向量的表示"><a href="#位向量的表示" class="headerlink" title="位向量的表示"></a>位向量的表示</h1></li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">BitArray</span> </span>&#123;</span><br><span class="line">   <span class="keyword">final</span> <span class="keyword">long</span>[] data;</span><br><span class="line">   <span class="keyword">long</span> bitCount;</span><br><span class="line"></span><br><span class="line">   BitArray(<span class="keyword">long</span> bits) &#123;</span><br><span class="line">     <span class="comment">//对于长度为m的位向量来说，对应的long数组的长度应为m/64向上取整。</span></span><br><span class="line">     <span class="keyword">this</span>(<span class="keyword">new</span> <span class="keyword">long</span>[Ints.checkedCast(LongMath.divide(bits, <span class="number">64</span>, RoundingMode.CEILING))]);</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   <span class="comment">// Used by serialization</span></span><br><span class="line">   BitArray(<span class="keyword">long</span>[] data) &#123;</span><br><span class="line">     checkArgument(data.length &gt; <span class="number">0</span>, <span class="string">"data length is zero!"</span>);</span><br><span class="line">     <span class="keyword">this</span>.data = data;</span><br><span class="line">     <span class="keyword">long</span> bitCount = <span class="number">0</span>;</span><br><span class="line">     <span class="keyword">for</span> (<span class="keyword">long</span> value : data) &#123;</span><br><span class="line">       bitCount += Long.bitCount(value);</span><br><span class="line">     &#125;</span><br><span class="line">     <span class="keyword">this</span>.bitCount = bitCount;</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   <span class="comment">/** Returns true if the bit changed value. */</span></span><br><span class="line">   <span class="function"><span class="keyword">boolean</span> <span class="title">set</span><span class="params">(<span class="keyword">long</span> index)</span> </span>&#123;</span><br><span class="line">     <span class="keyword">if</span> (!get(index)) &#123;</span><br><span class="line">       data[(<span class="keyword">int</span>) (index &gt;&gt;&gt; <span class="number">6</span>)] |= (<span class="number">1L</span> &lt;&lt; index);</span><br><span class="line">       bitCount++;</span><br><span class="line">       <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">     &#125;</span><br><span class="line">     <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   <span class="function"><span class="keyword">boolean</span> <span class="title">get</span><span class="params">(<span class="keyword">long</span> index)</span> </span>&#123;</span><br><span class="line">     <span class="keyword">return</span> (data[(<span class="keyword">int</span>) (index &gt;&gt;&gt; <span class="number">6</span>)] &amp; (<span class="number">1L</span> &lt;&lt; index)) != <span class="number">0</span>;</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   <span class="comment">/** Number of bits */</span></span><br><span class="line">   <span class="function"><span class="keyword">long</span> <span class="title">bitSize</span><span class="params">()</span> </span>&#123;</span><br><span class="line">     <span class="keyword">return</span> (<span class="keyword">long</span>) data.length * Long.SIZE;</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   <span class="comment">/** Number of set bits (1s) */</span></span><br><span class="line">   <span class="function"><span class="keyword">long</span> <span class="title">bitCount</span><span class="params">()</span> </span>&#123;</span><br><span class="line">     <span class="keyword">return</span> bitCount;</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   <span class="function">BitArray <span class="title">copy</span><span class="params">()</span> </span>&#123;</span><br><span class="line">     <span class="keyword">return</span> <span class="keyword">new</span> BitArray(data.clone());</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   <span class="comment">/** Combines the two BitArrays using bitwise OR. */</span></span><br><span class="line">   <span class="function"><span class="keyword">void</span> <span class="title">putAll</span><span class="params">(BitArray array)</span> </span>&#123;</span><br><span class="line">     checkArgument(</span><br><span class="line">         data.length == array.data.length,</span><br><span class="line">         <span class="string">"BitArrays must be of equal length (%s != %s)"</span>,</span><br><span class="line">         data.length,</span><br><span class="line">         array.data.length);</span><br><span class="line">     bitCount = <span class="number">0</span>;</span><br><span class="line">     <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; data.length; i++) &#123;</span><br><span class="line">       data[i] |= array.data[i];</span><br><span class="line">       bitCount += Long.bitCount(data[i]);</span><br><span class="line">     &#125;</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   <span class="meta">@Override</span></span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">equals</span><span class="params">(Object o)</span> </span>&#123;</span><br><span class="line">     <span class="keyword">if</span> (o <span class="keyword">instanceof</span> BitArray) &#123;</span><br><span class="line">       BitArray bitArray = (BitArray) o;</span><br><span class="line">       <span class="keyword">return</span> Arrays.equals(data, bitArray.data);</span><br><span class="line">     &#125;</span><br><span class="line">     <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   <span class="meta">@Override</span></span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">hashCode</span><span class="params">()</span> </span>&#123;</span><br><span class="line">     <span class="keyword">return</span> Arrays.hashCode(data);</span><br><span class="line">   &#125;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<p>在BitArray中，使用long数组来表示位向量，一个数组元素对应位向量的64位，所以对于长度为m的位向量来说，对应的long数组的长度应为m/64向上取整。</p>
+<p>即</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">new</span> <span class="keyword">long</span>[Ints.checkedCast(LongMath.divide(bits, <span class="number">64</span>, RoundingMode.CEILING))]</span><br></pre></td></tr></table></figure>
+<p>在BloomFilter算法讲解部分，我们可以看到，对于位向量的常用操作主要有两个，将位向量某一位置为1以及查看位向量某一位是否为1。分别对应源码中得set操作和get操作 本文只讲下get方法的源码部分，set方法与get方法类似，不再累述。</p>
+<p>get方法大致可以分为两部分</p>
+<ul>
+<li><p>data[(int) (index &gt;&gt;&gt; 6)] 定位到元素</p>
+<p>上面讲到long数组的每一个元素都包含位向量其中的64位，如果想要找出某个位的bit，那么首先第一步就是定位到该bit所在的元素编号。我们一般的做法是<code>index/64</code>。 而源码中使用了<code>index &gt;&gt;&gt; 6</code>,逻辑右移6位，$2^6 = 64$,其效果与除以64相同。采用位运算的速度比普通的除法要快很多。</p>
+</li>
+<li><p>… &amp; (1L &lt;&lt; index) 获取位的状态</p>
+<p>源码中直接将要查看的bit以及同一数组元素块的64位bits一起取出，将1L左移index位后求且运算，最终即可得出该位的值。</p>
+</li>
+</ul>
+<h1 id="BloomFilter的优化和扩展"><a href="#BloomFilter的优化和扩展" class="headerlink" title="BloomFilter的优化和扩展"></a>BloomFilter的优化和扩展</h1><p>上文提到布隆过滤器无法支持元素的删除操作,Counting BloomFilter通过存储位元素每一位的置为1的数量，使得布隆过滤器可以支持删除操作。 但是这样会数倍地增加布隆过滤器的存储空间。</p>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><blockquote>
+<p><a href="https://en.wikipedia.org/wiki/Bloom_filter" target="_blank" rel="noopener">维基百科</a></p>
+</blockquote>
+<blockquote>
+<p><a href="https://www.cs.dal.ca/research/techreports/cs-2002-10" target="_blank" rel="noopener">Dalhousie University</a></p>
+</blockquote>
+<blockquote>
+<p><a href="http://leadtoit.iteye.com/blog/1961751" target="_blank" rel="noopener">Guava笔记</a></p>
+</blockquote>
+<blockquote>
+<p><a href="https://blog.csdn.net/jiaomeng/article/details/1498283" target="_blank" rel="noopener">Counting Bloom Filter</a></p>
+</blockquote>
+<blockquote>
+<p><a href="http://ifeve.com/google-guava-hashing/" target="_blank" rel="noopener">http://ifeve.com/google-guava-hashing/</a></p>
+</blockquote>
+
+                <hr>
+                
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2017/06/03/1-partten/" data-toggle="tooltip" data-placement="top"
+                           title="别说话，摇头">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/2016/10/30/diary-2016-1023-1029/" data-toggle="tooltip" data-placement="top"
+                           title="旧事 木头人 10.23-10.29">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+                
+
+                
+
+
+                <!--加入新的评论系统-->
+                
+                <!-- 来必力City版安装代码 -->
+                <div id="lv-container" data-id="city" data-uid="MTAyMC8zNjcxNC8xMzI0OQ==">
+                    <script type="text/javascript">
+                        (function(d, s) {
+                            var j, e = d.getElementsByTagName(s)[0];
+
+                            if (typeof LivereTower === 'function') { return; }
+
+                            j = d.createElement(s);
+                            j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+                            j.async = true;
+
+                            e.parentNode.insertBefore(j, e);
+                        })(document, 'script');
+                    </script>
+                    <noscript> 为正常使用来必力评论功能请激活JavaScript</noscript>
+                </div>
+                <!-- City版安装代码已完成 -->
+                
+            </div>
+
+            <div class="hidden-xs col-sm-3 toc-col">
+                <div class="toc-wrap">
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#介绍"><span class="toc-text">介绍</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#算法讲述"><span class="toc-text">算法讲述</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#算法流程"><span class="toc-text">算法流程</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#误判率"><span class="toc-text">误判率</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#缺点"><span class="toc-text">缺点</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Guava’s-BloomFilter源码剖析"><span class="toc-text">Guava’s BloomFilter源码剖析</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#源码解读"><span class="toc-text">源码解读</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#位向量的表示"><span class="toc-text">位向量的表示</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#BloomFilter的优化和扩展"><span class="toc-text">BloomFilter的优化和扩展</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#参考"><span class="toc-text">参考</span></a></li></ol>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5 class="text-center">
+                        <a href="/tags/">FEATURED TAGS</a>
+                    </h5>
+                    <div class="tags">
+                        
+                        <a class="tag" href="/tags/#算法"
+                           title="算法">算法</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+                <div style="margin-top: 20px;">
+                    <h5 class="text-center">FRIENDS</h5>
+                    <ul class="list-inline text-center">
+                        
+                        <li><a href="http://www.hulichao.top">Hu</a></li>
+                        
+                        <li><a href="http://www.gubaidan.top">Gu</a></li>
+                        
+                    </ul>
+                </div>
+                
+            </div>
+        </div>
+
+    </div>
+</article>
+
+
+
+
+
+
+
+<!-- Footer -->
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <br>
+                <ul class="list-inline text-center">
+                
+                
+                    <li>
+                        <a target="_blank" href="https://twitter.com/gubaidan">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+                
+                    <li>
+                        <a target="_blank" href="https://www.zhihu.com/people/gubaidan">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa  fa-stack-1x fa-inverse">知</i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank" href="http://weibo.com/gubaidan">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank" href="https://www.facebook.com/gubaidan">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/gubaidan">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://www.linkedin.com/in/gubaidan">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-linkedin fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; Gubaidan 2018
+                    <br>
+                    <span id="busuanzi_container_site_pv" style="font-size: 12px;">PV: <span id="busuanzi_value_site_pv"></span> Times</span>
+                    <br>
+                    Theme by <a href="https://gubaidan.github.io/">Gubaidan</a>
+                </p>
+
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/blog.js"></script>
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("http://www.gubaidan.top/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+<!-- Google Analytics -->
+
+
+
+<!-- Baidu Tongji -->
+
+
+<!-- swiftype -->
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install','','2.0.0');
+</script>
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<!--wechat title img-->
+<img class="wechat-title-img" src="http://p9n2j0ewi.bkt.clouddn.com/img/log.JPG">
+</body>
+
+</html>

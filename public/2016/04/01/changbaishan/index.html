@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="花有重开日，人无再少年">
+    <meta name="keyword" content="前端,js,jquery,javascript,html5,开发者,程序猿编程,代码,开源,Developer,Programmer,Coder,html,css,css3,用户体验">
+    <meta name="theme-color" content="#600090">
+    <meta name="msapplication-navbutton-color" content="#600090">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="#600090">
+    <link rel="shortcut icon" href="http://p9n2j0ewi.bkt.clouddn.com/img/favicon.ico">
+    <link rel="alternate" type="application/atom+xml" title="Gubaidan" href="/atom.xml">
+
+    <title>
+        
+        长白山 | 来去匆匆，惊鸿一瞥｜Gubaidan&#39;s blog
+        
+    </title>
+
+    <link rel="canonical" href="http://www.gubaidan.top/2016/04/01/changbaishan/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/blog-style.css">
+    <link rel="stylesheet" href="/css/font-awesome.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&amp;subset=latin,latin-ext" rel="stylesheet" type="text/css">
+    <script type="text/javascript"
+ 		src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+		MathJax.Hub.Config({
+	    extensions: ["tex2jax.js","TeX/noErrors.js","TeX/AMSsymbols.js"],
+	    jax: ["input/TeX","output/HTML-CSS"],
+	    tex2jax: {
+	      inlineMath: [['$','$'],["\\(","\\)"]],
+	      displayMath: [['\\[','\\]'], ['$$','$$']],
+	      balanceBraces: true
+	      
+	    },
+	    TeX: {equationNumbers: {autoNumber: ["AMS"], useLabelIds: true}},
+	    "HTML-CSS": {availableFonts:["TeX"]},
+	  });
+	</script>
+
+</head>
+
+<style>
+
+    header.intro-header {
+        background-image: url('http://p9n2j0ewi.bkt.clouddn.com/blogimg/water.jpg')
+    }
+</style>
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="" class="animated fadeIn">
+<!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top " id="nav-top" data-ispost = "true" data-istags="false
+" data-ishome = "false" >
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand animated pulse" href="/">
+                <span class="brand-logo">
+                    Gubaidan
+                </span>
+                's Blog
+            </a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <!-- /.navbar-collapse -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+					
+                    
+                        
+							
+                        <li>
+                            <a href="/archive/">archive</a>
+                        </li>
+							
+						
+                    
+                        
+							
+                        <li>
+                            <a href="/tags/">tags</a>
+                        </li>
+							
+						
+                    
+					
+					
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+//    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+<!-- Main Content -->
+
+<!--only post-->
+
+
+<img class="wechat-title-img"
+     src="http://p9n2j0ewi.bkt.clouddn.com/Header/water.jpg">
+
+
+<style>
+    
+    header.intro-header {
+        background-image: url('http://p9n2j0ewi.bkt.clouddn.com/Header/water.jpg')
+    }
+
+    
+</style>
+
+<header class="intro-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <div class="post-heading">
+                    <h1>长白山 | 来去匆匆，惊鸿一瞥</h1>
+                    
+                    <span class="meta">
+                         作者 Gubaidan
+                        <span>
+                          日期 2016-04-01
+                         </span>
+                    </span>
+                    <div class="tags text-center">
+                        
+                        <a class="tag" href="/tags/#旅行"
+                           title="旅行">旅行</a>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="post-title-haojen">
+        <span>
+            长白山 | 来去匆匆，惊鸿一瞥
+        </span>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <!-- Post Container -->
+            <div class="col-lg-8 col-lg-offset-1 col-sm-9 post-container">
+                <p>—— 写于 2015.12.02 ， 一篇旧游记 </p>
+<h3 id="冷！"><a href="#冷！" class="headerlink" title="冷！"></a>冷！</h3><p>到吉林下了飞机，虽做足了准备，还是冷<br>现在，南国的深圳依然是穿短袖的季节，朋友说，仿佛一夜入冬。<br>但这才是真正的冬天呀！</p>
+<p>小时候作文写四季，唯秋冬难写。<br>如果南方的季节是一把尺子，那它的刻度仅仅是温度的高低<br>到了北方，这把尺子，才变得有质感<br>它丈量着你每一寸的身体发肤</p>
+<p>随行的朋友对下雪满怀期待<br>但听说大雪会封山，可能看不到天池时<br>又陷入愁云惨淡中<br>应了那句话叫“一颗心掉进了冰窖里”</p>
+<p>但未来的事管它呢？<br>那是上帝决定的事情。<br>上帝在工作我在玩，还有什么不开心？（可惜这逻辑没人懂）</p>
+<a id="more"></a>
+<h3 id="鱼"><a href="#鱼" class="headerlink" title="鱼"></a>鱼</h3><p>行走在结冰的松花江上，神清气爽。<br>我喜欢看冻在冰里的小气泡<br>有一种定格相片的美感</p>
+<p>途遇放生的人们，他们表情凝重，一脸严肃<br>随后旌旗翻飞，佛经传扬，鱼虾入水，<br>江面恢复平静后，他们也终于露出了笑脸</p>
+<p>随后在江旁的饭店用餐<br>服务员介绍道：这道蒸鱼，就来自松花江里！<br>真是让人啼笑皆非的事情<br>鱼，让两类不同的人都得到了欢喜<br>可能鱼就是佛吧？</p>
+<h3 id="地广人稀"><a href="#地广人稀" class="headerlink" title="地广人稀"></a>地广人稀</h3><p>下午三点半的时分，天色已逐渐漆黑，市民们陆续回家<br>我想，鹅厂要是在东北，那就是睡个午觉就下班的节奏！<br>不过听说平时要六点多起床上班<br>我又打消了这念头</p>
+<p>但东北确实地广人稀<br>晚上很多店铺都早早关门<br>手套和帽子找了很久才买到<br>但泡温泉的泳裤就难办了<br>况且，在零下十几度的世界里卖泳裤的人，<br>脑子都有问题吧…</p>
+<h3 id="度假区"><a href="#度假区" class="headerlink" title="度假区"></a>度假区</h3><p>后续几天都住万达度假区里<br>漂亮且休闲的小镇，我很喜欢这里。</p>
+<p>也在这学会了滑雪，秦教练尽心尽责<br>得知我是鹅厂工程师后，<br>还加我微信，让我以后有问题多问他（然而我不用微信）<br>他似乎对互联网很感兴趣，<br>我怕他一冲动走上了程序员的不归路<br>跟他说：好好工作，少上网！</p>
+<p>后来偶遇王思聪开了夜场，可以玩到很晚<br>然后在雪夜里迷了路…<br>那晚，我是怎么回到酒店的？<br>这已经是一个未解之谜。</p>
+<h3 id="天池"><a href="#天池" class="headerlink" title="天池"></a>天池</h3><p>也终于到了上长白山的时候！<br>早上还下着雪，导游安慰说：<br>已经封山了一个月，邓小平去了几次都没见着天池云云<br>似乎上帝已经做出了决定</p>
+<p>但旅行之所以迷人，就在于各种不确定性<br>吃完午饭大概一点半，一个消息在园区内爆炸开来—— 封山结束！<br>每个人欣喜若狂，<br>司机大哥相当豪爽，用袖子把车上的积雪一推，只留下一个字：<br>走。</p>
+<p>车子旋绕而行，山路确实很险<br>白茫茫的一片，要是不熟悉真的分不清哪里是路<br>窗外风声越来越大，仿佛有无数的野禽在嘶鸣<br>也终于来到了山顶</p>
+<p>此刻才觉得，所有的防寒措施都不管用<br>风雪抓住每个机会向你的身体里钻<br>刀片般的飞雪把脸刮得通红<br>手机的锂电池也放弃了抵抗<br>陷入了“冬眠”</p>
+<p>那还能怎样？跳吧！让热量释放出来！<br>蹦着走过那段最艰难的路<br>安详的天池就突然出现在脚下</p>
+<p><img src="/assets/blogImg/changbaishan-2.jpg" alt=""></p>
+<p>太阳仿佛只离她几公分<br>柔和的光潜入水中，幻化为风<br>谦卑地贴着湖面缓缓地吹…<br>光与水顺着千年的血脉流进心间，<br>天池，就变成了一枚绝世风华的眼眸。<br>你未能看清，她的眼神里藏了多少秘密，<br>她却早已把你的灵魂一眼望穿。<br>这让我突然忘记了寒冷</p>
+<p>半小时后，风雪加急<br>工作人员催着下山，封山又要开始了<br>这让我更觉得神奇<br>好像天池，就等我见她一面。</p>
+<h3 id="不多"><a href="#不多" class="headerlink" title="不多"></a>不多</h3><p>我要的不多。<br>真的不多。<br>你的一面，一眼，一念，一瞬<br>我就能幸福。<br>事情就能圆满。</p>
+<p>“我为你来看我不顾一切，<br>我将熄灭永不能再回来<br>我在这里啊<br>我在这里啊<br>惊鸿一般短暂<br>像夏花一样绚烂……”</p>
+
+                <hr>
+                
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2016/04/13/hello-world/" data-toggle="tooltip" data-placement="top"
+                           title="Hello World">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                </ul>
+
+                
+
+                
+
+
+                <!--加入新的评论系统-->
+                
+                <!-- 来必力City版安装代码 -->
+                <div id="lv-container" data-id="city" data-uid="MTAyMC8zNjcxNC8xMzI0OQ==">
+                    <script type="text/javascript">
+                        (function(d, s) {
+                            var j, e = d.getElementsByTagName(s)[0];
+
+                            if (typeof LivereTower === 'function') { return; }
+
+                            j = d.createElement(s);
+                            j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+                            j.async = true;
+
+                            e.parentNode.insertBefore(j, e);
+                        })(document, 'script');
+                    </script>
+                    <noscript> 为正常使用来必力评论功能请激活JavaScript</noscript>
+                </div>
+                <!-- City版安装代码已完成 -->
+                
+            </div>
+
+            <div class="hidden-xs col-sm-3 toc-col">
+                <div class="toc-wrap">
+                    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#冷！"><span class="toc-text">冷！</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#鱼"><span class="toc-text">鱼</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#地广人稀"><span class="toc-text">地广人稀</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#度假区"><span class="toc-text">度假区</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#天池"><span class="toc-text">天池</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#不多"><span class="toc-text">不多</span></a></li></ol>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5 class="text-center">
+                        <a href="/tags/">FEATURED TAGS</a>
+                    </h5>
+                    <div class="tags">
+                        
+                        <a class="tag" href="/tags/#旅行"
+                           title="旅行">旅行</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+                <div style="margin-top: 20px;">
+                    <h5 class="text-center">FRIENDS</h5>
+                    <ul class="list-inline text-center">
+                        
+                        <li><a href="http://www.hulichao.top">Hu</a></li>
+                        
+                        <li><a href="http://www.gubaidan.top">Gu</a></li>
+                        
+                    </ul>
+                </div>
+                
+            </div>
+        </div>
+
+    </div>
+</article>
+
+
+
+
+
+
+
+<!-- Footer -->
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <br>
+                <ul class="list-inline text-center">
+                
+                
+                    <li>
+                        <a target="_blank" href="https://twitter.com/gubaidan">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+                
+                    <li>
+                        <a target="_blank" href="https://www.zhihu.com/people/gubaidan">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa  fa-stack-1x fa-inverse">知</i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank" href="http://weibo.com/gubaidan">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank" href="https://www.facebook.com/gubaidan">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/gubaidan">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://www.linkedin.com/in/gubaidan">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-linkedin fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; Gubaidan 2018
+                    <br>
+                    <span id="busuanzi_container_site_pv" style="font-size: 12px;">PV: <span id="busuanzi_value_site_pv"></span> Times</span>
+                    <br>
+                    Theme by <a href="https://gubaidan.github.io/">Gubaidan</a>
+                </p>
+
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/blog.js"></script>
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("http://www.gubaidan.top/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+<!-- Google Analytics -->
+
+
+
+<!-- Baidu Tongji -->
+
+
+<!-- swiftype -->
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install','','2.0.0');
+</script>
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<!--wechat title img-->
+<img class="wechat-title-img" src="http://p9n2j0ewi.bkt.clouddn.com/img/log.JPG">
+</body>
+
+</html>

@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="花有重开日，人无再少年">
+    <meta name="keyword" content="前端,js,jquery,javascript,html5,开发者,程序猿编程,代码,开源,Developer,Programmer,Coder,html,css,css3,用户体验">
+    <meta name="theme-color" content="#600090">
+    <meta name="msapplication-navbutton-color" content="#600090">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="#600090">
+    <link rel="shortcut icon" href="http://p9n2j0ewi.bkt.clouddn.com/img/favicon.ico">
+    <link rel="alternate" type="application/atom+xml" title="Gubaidan" href="/atom.xml">
+
+    <title>
+        
+        Spring-BeanFactory与ApplicationContext基础｜Gubaidan&#39;s blog
+        
+    </title>
+
+    <link rel="canonical" href="http://www.gubaidan.top/2017/11/03/2017-11-3-applicationContext（上）/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/blog-style.css">
+    <link rel="stylesheet" href="/css/font-awesome.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&amp;subset=latin,latin-ext" rel="stylesheet" type="text/css">
+    <script type="text/javascript"
+ 		src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+		MathJax.Hub.Config({
+	    extensions: ["tex2jax.js","TeX/noErrors.js","TeX/AMSsymbols.js"],
+	    jax: ["input/TeX","output/HTML-CSS"],
+	    tex2jax: {
+	      inlineMath: [['$','$'],["\\(","\\)"]],
+	      displayMath: [['\\[','\\]'], ['$$','$$']],
+	      balanceBraces: true
+	      
+	    },
+	    TeX: {equationNumbers: {autoNumber: ["AMS"], useLabelIds: true}},
+	    "HTML-CSS": {availableFonts:["TeX"]},
+	  });
+	</script>
+
+</head>
+
+<style>
+
+    header.intro-header {
+        background-image: url('http://p9n2j0ewi.bkt.clouddn.com/blogimg/water.jpg')
+    }
+</style>
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="" class="animated fadeIn">
+<!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top " id="nav-top" data-ispost = "true" data-istags="false
+" data-ishome = "false" >
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand animated pulse" href="/">
+                <span class="brand-logo">
+                    Gubaidan
+                </span>
+                's Blog
+            </a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <!-- /.navbar-collapse -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+					
+                    
+                        
+							
+                        <li>
+                            <a href="/archive/">archive</a>
+                        </li>
+							
+						
+                    
+                        
+							
+                        <li>
+                            <a href="/tags/">tags</a>
+                        </li>
+							
+						
+                    
+					
+					
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+//    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+<!-- Main Content -->
+
+<!--only post-->
+
+
+<img class="wechat-title-img"
+     src="http://p9n2j0ewi.bkt.clouddn.com/Header/hero@2x.jpg">
+
+
+<style>
+    
+    header.intro-header {
+        background-image: url('http://p9n2j0ewi.bkt.clouddn.com/Header/hero@2x.jpg?imageView2/1/w/1400/h/400/interlace/1/q/90')
+    }
+
+    
+</style>
+
+<header class="intro-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <div class="post-heading">
+                    <h1>Spring-BeanFactory与ApplicationContext基础</h1>
+                    
+                    <span class="meta">
+                         作者 Gubaidan
+                        <span>
+                          日期 2017-11-03
+                         </span>
+                    </span>
+                    <div class="tags text-center">
+                        
+                        <a class="tag" href="/tags/#Spring"
+                           title="Spring">Spring</a>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="post-title-haojen">
+        <span>
+            Spring-BeanFactory与ApplicationContext基础
+        </span>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <!-- Post Container -->
+            <div class="col-lg-8 col-lg-offset-1 col-sm-9 post-container">
+                <h1 id="BeanFactory介绍"><a href="#BeanFactory介绍" class="headerlink" title="BeanFactory介绍"></a>BeanFactory介绍</h1><p>BeanFactory 是Spring中两大核心模块（AOP、IOC）之一IOC的基础，与传统的BeanFactory 不同，BeanFactory时一个通用型的Bean工厂，它可以创建和管理这些Bean，所有可以被Spring 容器实例化并管理的Java类都可以称作Bean。</p>
+<p>Spring在BeanFactory这个接口的基础上实现了很多类，最常用的是XmlBeanFactory，但在Spring3.2    之后已经被弃用，建议使用XmlBeanDefinitionReader和，DefaultListableBeanFactory代替，Spring对这一继承机构设计的相当精巧。</p>
+<p><img src="http://p9n2j0ewi.bkt.clouddn.com/PostImg/2017-11-03-applicationContext/BeanFactoryDependence.png" alt="BeanFactory"></p>
+<p>BeanFactory 接口位于类结构树的顶端，通过其他类和接口的装饰，最后的DefaultBeanFactory就是由其他类和接口不断扩充。</p>
+<ul>
+<li><p>ListableBeanFactory：该接口定义了访问容器中Bean基本信息的若干方法，如查看Bean的个数、获取某一类型Bean的配置名、查看容器中是否包含某一Bean等。</p>
+</li>
+<li><p>HierarchicalBeanFactory：父子及联IOC容器的接口、子接口可以根据接口方法访问父容器。</p>
+</li>
+<li><p>ConfiguratableBeanFactory：这是一个重要的接口，增强了IOC容器的可制定性。它定义了设置类装载器、属性编辑器、容器初始化后置处理器等方法。</p>
+</li>
+<li><p>AutowireCapableBeanFactory：定义了将容器中的Bean按照某种规则（如名字匹配、类型匹配）进行自动装配的方法。</p>
+</li>
+<li><p>SingletonBeanRegister：允许在运行期向容器注册单实例Bean的方法。</p>
+</li>
+<li><p>BeanDefinitionRegister：接口提供了向容器注册BeanDefinition的方法。</p>
+</li>
+</ul>
+<h3 id="BeanFactory使用示例"><a href="#BeanFactory使用示例" class="headerlink" title="BeanFactory使用示例"></a>BeanFactory使用示例</h3><figure class="highlight xml"><table><tr><td class="code"><pre><span class="line">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span><br><span class="line"><span class="tag">&lt;<span class="name">beans</span> <span class="attr">xmlns</span>=<span class="string">"http://www.springframework.org/schema/beans"</span></span></span><br><span class="line"><span class="tag">       <span class="attr">xmlns:xsi</span>=<span class="string">"http://www.w3.org/2001/XMLSchema-instance"</span></span></span><br><span class="line"><span class="tag">       <span class="attr">xsi:schemaLocation</span>=<span class="string">"http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">beans</span> <span class="attr">id</span> = <span class="string">"pension"</span> <span class="attr">class</span> = <span class="string">"com.smart.pension"</span>&gt;</span></span><br><span class="line">        p:name = "zhang"</span><br><span class="line">        p:sex = "nan"</span><br><span class="line">        p:location = "fujian"</span><br><span class="line">    <span class="tag">&lt;/<span class="name">beans</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">beans</span></span></span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">BeanFactoryT</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">getBean</span><span class="params">()</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">        ResourcePatternResolver resourcePatternResolver = <span class="keyword">new</span> PathMatchingResourcePatternResolver();</span><br><span class="line">        Resource[] resource = resourcePatternResolver.getResources(<span class="string">"com.smart.pension"</span>);</span><br><span class="line">        System.out.println(Arrays.toString(resource));</span><br><span class="line"></span><br><span class="line">        <span class="comment">/**</span></span><br><span class="line"><span class="comment">         * 废弃、不建议使用</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line"><span class="comment">//        BeanFactory beanFactory = new XmlBeanFactory(res);</span></span><br><span class="line">        DefaultListableBeanFactory defaultListableBeanFactory = <span class="keyword">new</span> DefaultListableBeanFactory();</span><br><span class="line">        XmlBeanDefinitionReader xmlBeanDefinitionReader = <span class="keyword">new</span> XmlBeanDefinitionReader(defaultListableBeanFactory);</span><br><span class="line">        xmlBeanDefinitionReader.loadBeanDefinitions(resource);</span><br><span class="line">        </span><br><span class="line">        Pension zhang = defaultListableBeanFactory.getBean(Pension.class);</span><br><span class="line">        car.move();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>XmlBeanDefinitionReader 通过Resource装载配置信息并启动IOC容器，这样就可以从beanFactory中的getBean（）方法通过全限定名或者“类名.class” 为参数获取Bean。对于单例的Bean，在第二次getBean时会直接从缓存中读取Bean然后返回。</p>
+<p>在Spring容器启动的时候必须为其设置一个日志框架，用来记录启动信息，不然会启动报错。</p>
+<h1 id="ApplicationContext"><a href="#ApplicationContext" class="headerlink" title="ApplicationContext"></a>ApplicationContext</h1><p>如果说beanFactory是“心脏”的话，那么ApplicationbContext就是一个完整的“躯体”了，Application由BeanFactory一步步扩充而来，提供了很多实用功能，很多在BeanFactory需要配置实现的功能在ApplicationContext中只需要简单的配置即可以实现。</p>
+<h3 id="ApplicationbContext类结构体系"><a href="#ApplicationbContext类结构体系" class="headerlink" title="ApplicationbContext类结构体系"></a>ApplicationbContext类结构体系</h3><p><img src="http://p9n2j0ewi.bkt.clouddn.com/PostImg/2017-11-03-applicationContext/applicationContext.png" alt="application"></p>
+<p>ApplicationContext的主要实现类是FileSystemxmlApplicationContext和ClassPathXmlApplicationContext，前者主要加载存储在文件系统上的配置文件，后者主要加载类结构下的Xml文件。ApplicationContext继承了HierarchicalBeanFactory、即永远父子及联、通过接口让子容器访问父容器的方法。而且通过其他接口扩充了BeanFactory的功能。</p>
+<ul>
+<li>ApplicationEventPublisher：让容器拥有发布上下文事件的功能，包括启动关闭等事件。实现了ApplicationListener事件监听端口的Bean可以接收到容器事件，并进行事件响应。在ApplicationContext的抽象实现类AbstractApplicationContext中存在一个ApplicationEventMulticaster，它负责所有的监听器、以便在容器产生上下文事件时通知事件监听者。</li>
+<li>MessageResource：为应用提i18n国际化消息访问的功能。</li>
+<li>ResourcePatternResolver：所有ApplicationContext实现类都实现了类似于PathMatchingResourcePatternResolver的功能，可以通过带前缀的Ant风格的资源文件装载Spring配置文件。</li>
+<li>Lifecycle：该接口提供了start（）和stop（）两个方法，主要用于异步处理过程。在具体实用时，该接口同时被ApplicationContext实现及具体Bean的实现，ApplicationContext会将start/stop的信息传递给容器中所有实现了该接口的Bean，以达到管理和控制JMX、任务调度的目的。</li>
+</ul>
+<p>ConfigurableApplicationContext扩展于ApplicationContext，它新增了两个方法：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">ConfigurableApplicationContext</span> <span class="keyword">extends</span> <span class="title">ApplicationContext</span>, <span class="title">Lifecycle</span>, <span class="title">Closeable</span> </span>&#123;</span><br><span class="line">    String CONFIG_LOCATION_DELIMITERS = <span class="string">",; \t\n"</span>;</span><br><span class="line">    String CONVERSION_SERVICE_BEAN_NAME = <span class="string">"conversionService"</span>;</span><br><span class="line">    String LOAD_TIME_WEAVER_BEAN_NAME = <span class="string">"loadTimeWeaver"</span>;</span><br><span class="line">    String ENVIRONMENT_BEAN_NAME = <span class="string">"environment"</span>;</span><br><span class="line">    String SYSTEM_PROPERTIES_BEAN_NAME = <span class="string">"systemProperties"</span>;</span><br><span class="line">    String SYSTEM_ENVIRONMENT_BEAN_NAME = <span class="string">"systemEnvironment"</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">setId</span><span class="params">(String var1)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">setParent</span><span class="params">(ApplicationContext var1)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function">ConfigurableEnvironment <span class="title">getEnvironment</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">setEnvironment</span><span class="params">(ConfigurableEnvironment var1)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">addBeanFactoryPostProcessor</span><span class="params">(BeanFactoryPostProcessor var1)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">addApplicationListener</span><span class="params">(ApplicationListener&lt;?&gt; var1)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//整个spring启动的核心方法</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">refresh</span><span class="params">()</span> <span class="keyword">throws</span> BeansException, IllegalStateException</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">registerShutdownHook</span><span class="params">()</span></span>;</span><br><span class="line">	<span class="comment">//关闭</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">close</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">boolean</span> <span class="title">isActive</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function">ConfigurableListableBeanFactory <span class="title">getBeanFactory</span><span class="params">()</span> <span class="keyword">throws</span> IllegalStateException</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>和BeanFactory初始化相似（本质上也是因为继承并且扩展了不同类型的BeanFactory接口），如果配置文件在类路径下，则可以优先考虑使用ClassPathXmlApplicationContext</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">ApplicationContext act = <span class="keyword">new</span> ClassPathXmlApplicationContext(<span class="string">"com.xxxx.config.xml"</span>）;</span><br></pre></td></tr></table></figure>
+<p>如果配置文件放在文件系统中，则使用如下：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">ApplicationContext act = <span class="keyword">new</span> FileSystemXmlApplication(<span class="string">"/Users/xxx/config.xml"</span>);</span><br></pre></td></tr></table></figure>
+<p>在获取到ApplicationContext实例后，同样可以通过getBean（）获取bean。ApplicationContext和BeanFactory初始化时有一个重大的不同是BeanFactory并未初始化Bean，而ApplicationContext在应用初始化阶段就会实例化所有<strong>单实例</strong>的Bean。</p>
+<h3 id="注解式配置方式"><a href="#注解式配置方式" class="headerlink" title="注解式配置方式"></a>注解式配置方式</h3><p>Spring支持注解式的配置方式，主要功能来自JavaConfig子项目，现已升级为Spring核心项目。当一个pojo类标注了@Configuration注解，既可以提供Spring所需的Bean信息：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">//表示这是一个配置类</span></span><br><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Person</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//定义一个bean</span></span><br><span class="line">    <span class="meta">@Bean</span>(name = <span class="string">"Female"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> Female <span class="title">born</span><span class="params">()</span></span>&#123;</span><br><span class="line">        Female Jerry = <span class="keyword">new</span> Female();</span><br><span class="line">        Jerry.setSkin(<span class="string">"Blue"</span>);</span><br><span class="line">        Jerry.setAge(<span class="number">22</span>);</span><br><span class="line">        <span class="keyword">return</span> Jerry;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Spring为注解实现了专门的ApplicationContext实现类：ApplicationConfigApplicationContext。加载上述配置示例如下：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">AnnotationConfig</span> </span>&#123;</span><br><span class="line">    </span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">getBean</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="comment">//通过一个带有Configuration注解的POJO获得Bean</span></span><br><span class="line">        ApplicationContext act = <span class="keyword">new</span> AnnotationConfigApplicationContext(Person.class);</span><br><span class="line">        Femail Jerry = act.getBean(<span class="string">"Female"</span>);</span><br><span class="line">        assertNotNull(Jerry);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="Groovy-DSL配置Bean"><a href="#Groovy-DSL配置Bean" class="headerlink" title="Groovy DSL配置Bean"></a>Groovy DSL配置Bean</h3><p>Spring 4.x支持使用Groovy DSL来进行Bean定义配置。其与基于XML文件的配置类似，只不过基于Groovy脚本语言可以实现更复杂的Bean配置逻辑：</p>
+<figure class="highlight groovy"><table><tr><td class="code"><pre><span class="line">beans&#123;</span><br><span class="line">    Jerry(Person)&#123;<span class="comment">//名字（类型）</span></span><br><span class="line">        name = <span class="string">"jerry"</span></span><br><span class="line">        sex = <span class="string">"female"</span></span><br><span class="line">        age = <span class="number">22</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>基于Groovy的配置方式很容易让开发者配置复杂的Bean初始化过程，比@Configuration和XML更加灵活，读取Groovy也有专门的ApplicationContext - &gt; GenericGorrvyApplicationContet:</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">GroovyConfig</span> </span>&#123;</span><br><span class="line">    </span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">getBean</span><span class="params">()</span></span>&#123;</span><br><span class="line">        ApplicationContext act = </span><br><span class="line">        <span class="keyword">new</span> GenericGorrvyApplicationContet(<span class="string">"com.xxx.beans.groovy"</span>);</span><br><span class="line">        Femail Jerry = act.getBean(<span class="string">"Female"</span>);</span><br><span class="line">        assertNotNull(Jerry);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>对于BeanFactory和ApplicationContext，ApplicationContext面向的是代码开发人员，而BeanFactory则是底层支持，由ApplicationContext实现和扩展，几乎所有的场景都可以使用ApplicationContext。</p>
+<blockquote>
+<p>参考：《Spring技术内幕》、《精通Spring 4.x 企业应用开发实战》</p>
+</blockquote>
+
+                <hr>
+                
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2017/11/06/2017-11-06-refresh/" data-toggle="tooltip" data-placement="top"
+                           title="Spring-AbstractApplicationContext refresh()方法源码解析">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/2017/11/02/2017-11-2-spring-resouce/" data-toggle="tooltip" data-placement="top"
+                           title="Spring-资源加载的方式">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+                
+
+                
+
+
+                <!--加入新的评论系统-->
+                
+                <!-- 来必力City版安装代码 -->
+                <div id="lv-container" data-id="city" data-uid="MTAyMC8zNjcxNC8xMzI0OQ==">
+                    <script type="text/javascript">
+                        (function(d, s) {
+                            var j, e = d.getElementsByTagName(s)[0];
+
+                            if (typeof LivereTower === 'function') { return; }
+
+                            j = d.createElement(s);
+                            j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+                            j.async = true;
+
+                            e.parentNode.insertBefore(j, e);
+                        })(document, 'script');
+                    </script>
+                    <noscript> 为正常使用来必力评论功能请激活JavaScript</noscript>
+                </div>
+                <!-- City版安装代码已完成 -->
+                
+            </div>
+
+            <div class="hidden-xs col-sm-3 toc-col">
+                <div class="toc-wrap">
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#BeanFactory介绍"><span class="toc-text">BeanFactory介绍</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#BeanFactory使用示例"><span class="toc-text">BeanFactory使用示例</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#ApplicationContext"><span class="toc-text">ApplicationContext</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#ApplicationbContext类结构体系"><span class="toc-text">ApplicationbContext类结构体系</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#注解式配置方式"><span class="toc-text">注解式配置方式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Groovy-DSL配置Bean"><span class="toc-text">Groovy DSL配置Bean</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#总结"><span class="toc-text">总结</span></a></li></ol>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5 class="text-center">
+                        <a href="/tags/">FEATURED TAGS</a>
+                    </h5>
+                    <div class="tags">
+                        
+                        <a class="tag" href="/tags/#Spring"
+                           title="Spring">Spring</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+                <div style="margin-top: 20px;">
+                    <h5 class="text-center">FRIENDS</h5>
+                    <ul class="list-inline text-center">
+                        
+                        <li><a href="http://www.hulichao.top">Hu</a></li>
+                        
+                        <li><a href="http://www.gubaidan.top">Gu</a></li>
+                        
+                    </ul>
+                </div>
+                
+            </div>
+        </div>
+
+    </div>
+</article>
+
+
+
+
+
+
+
+<!-- Footer -->
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <br>
+                <ul class="list-inline text-center">
+                
+                
+                    <li>
+                        <a target="_blank" href="https://twitter.com/gubaidan">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+                
+                    <li>
+                        <a target="_blank" href="https://www.zhihu.com/people/gubaidan">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa  fa-stack-1x fa-inverse">知</i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank" href="http://weibo.com/gubaidan">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank" href="https://www.facebook.com/gubaidan">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/gubaidan">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://www.linkedin.com/in/gubaidan">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-linkedin fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; Gubaidan 2018
+                    <br>
+                    <span id="busuanzi_container_site_pv" style="font-size: 12px;">PV: <span id="busuanzi_value_site_pv"></span> Times</span>
+                    <br>
+                    Theme by <a href="https://gubaidan.github.io/">Gubaidan</a>
+                </p>
+
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/blog.js"></script>
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("http://www.gubaidan.top/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+<!-- Google Analytics -->
+
+
+
+<!-- Baidu Tongji -->
+
+
+<!-- swiftype -->
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install','','2.0.0');
+</script>
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<!--wechat title img-->
+<img class="wechat-title-img" src="http://p9n2j0ewi.bkt.clouddn.com/img/log.JPG">
+</body>
+
+</html>
