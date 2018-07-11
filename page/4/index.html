@@ -352,7 +352,9 @@
                     
                     <img src="http://p9n2j0ewi.bkt.clouddn.com/img/log.JPG"/>
                     
-                    <h5><a href="/about/">Gubaidan</a></h5>
+                    <!--about页面暂时废除-->
+                    <!--<h5><a href="/about/index.html">Gubaidan</a></h5>-->
+                    <h5><a href="javascript:void(0)" id = "jump">Gubaidan</a></h5>
                     
                     <p>花有重开日，人无再少年</p>
                     
@@ -434,13 +436,13 @@
                 <div class="tags">
                     
                     
+                    <a href="/tags/#Life" title="Life"
+                       rel="1">Life</a>
+                    
+                    
+                    
                     <a href="/tags/#git" title="git"
                        rel="1">git</a>
-                    
-                    
-                    
-                    <a href="/tags/#shell" title="shell"
-                       rel="1">shell</a>
                     
                     
                     
@@ -449,13 +451,13 @@
                     
                     
                     
+                    <a href="/tags/#shell" title="shell"
+                       rel="1">shell</a>
+                    
+                    
+                    
                     <a href="/tags/#Spring" title="Spring"
                        rel="4">Spring</a>
-                    
-                    
-                    
-                    <a href="/tags/#Life" title="Life"
-                       rel="1">Life</a>
                     
                     
                     
@@ -537,6 +539,7 @@
         </div>
     </div>
 </div>
+
 
 <!-- Footer -->
 <!-- Footer -->
@@ -635,6 +638,8 @@
 <!-- Custom Theme JavaScript -->
 <script src="/js/blog.js"></script>
 
+<script src="/js/jump.js"></script>
+
 <!-- async load function -->
 <script>
     function async(u, c) {
@@ -684,6 +689,25 @@
   })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
 
   _st('install','','2.0.0');
+</script>
+
+<!-- tags happy to jump -->
+<script>
+$(function(){
+    $(".tags a").each(function(k,a){
+        new JumpObj(a,10);
+    });
+});
+$("#jump").on('click',function(){
+   $(".tags a").each(function(k,a){
+        var randomm = Math.random(); 
+        if(randomm > 0.5){
+           setTimeout(function(){
+                $(a).trigger('mouseover');
+           }, randomm * 200); 
+        }
+    });
+});
 </script>
 
 <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
