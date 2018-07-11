@@ -103,6 +103,8 @@
 <!-- Custom Theme JavaScript -->
 <%- js('js/blog.js') %>
 
+<%- js('js/jump.js') %>
+
 <!-- async load function -->
 <script>
     function async(u, c) {
@@ -177,6 +179,25 @@
   })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
 
   _st('install','<%= config.swiftype_key%>','2.0.0');
+</script>
+
+<!-- tags happy to jump -->
+<script>
+$(function(){
+    $(".tags a").each(function(k,a){
+        new JumpObj(a,10);
+    });
+});
+$("#jump").on('click',function(){
+   $(".tags a").each(function(k,a){
+        var randomm = Math.random(); 
+        if(randomm > 0.5){
+           setTimeout(function(){
+                $(a).trigger('mouseover');
+           }, randomm * 200); 
+        }
+    });
+});
 </script>
 
 <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>

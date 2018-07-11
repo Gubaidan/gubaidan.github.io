@@ -163,7 +163,9 @@ layout: layout
                     <% if(config['sidebar-avatar']) { %>
                     <img src="<%= config['sidebar-avatar'] %>"/>
                     <% } %>
-                    <h5><a href="<%= config.root %>about/"><%= config.author %></a></h5>
+                    <!--about页面暂时废除-->
+                    <!--<h5><a href="<%= config.root %>about/index.html"><%= config.author %></a></h5>-->
+                    <h5><a href="javascript:void(0)" id = "jump"><%= config.author %></a></h5>
                     <% if(config['sidebar-about-description']) { %>
                     <p><%= config['sidebar-about-description'] %></p>
                     <% } %>
@@ -275,3 +277,4 @@ layout: layout
         </div>
     </div>
 </div>
+
