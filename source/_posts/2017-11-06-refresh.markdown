@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Spring-AbstractApplicationContext refresh()方法源码解析"
+title: "Spring | AbstractApplicationContext refresh()方法源码解析"
 date: 2017-11-06 21:13
 author: "Gubaidan"
 header-img: "/Header/hero@2x.jpg"

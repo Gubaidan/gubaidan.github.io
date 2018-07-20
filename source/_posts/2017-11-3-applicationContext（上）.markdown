@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Spring-BeanFactory与ApplicationContext基础"
+title: "Spring | BeanFactory与ApplicationContext基础"
 date: 2017-11-03 16:43
 author: "Gubaidan"
 header-img: "/Header/hero@2x.jpg"

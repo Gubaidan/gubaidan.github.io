@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Spring-事务管理"
+title: "Spring | 事务管理"
 date: 2017-11-13 17:08
 author: "Gubaidan"
 header-img: "/Header/2nojJdJoADk.png"

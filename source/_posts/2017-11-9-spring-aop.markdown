@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Spring-AOP理解及实现"
+title: "Spring | AOP理解及实现"
 date: 2017-11-09 13:20
 author: "Gubaidan"
 header-img: "/Header/RbM63-XsLUY.png"

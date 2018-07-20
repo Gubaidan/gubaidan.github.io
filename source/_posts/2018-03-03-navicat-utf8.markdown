@@ -6,7 +6,6 @@ author: "Gubaidan"
 header-img: "/Header/hero@2x.jpg"
 cdn: 'header-on'
 tags:
-	- Navicat
         - mysql
 ---
 

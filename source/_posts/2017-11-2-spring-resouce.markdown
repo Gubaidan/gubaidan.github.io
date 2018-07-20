@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Spring-资源加载的方式"
+title: "Spring | 资源加载的方式"
 date: 2017-11-02 13:20
 author: "Gubaidan"
 header-img: "/Header/RbM63-XsLUY.png"
