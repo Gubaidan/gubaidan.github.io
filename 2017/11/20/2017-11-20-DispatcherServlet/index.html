@@ -98,7 +98,7 @@
                         
 							
                         <li>
-                            <a href="/archive/">archive</a>
+                            <a href="/tags/">tags</a>
                         </li>
 							
 						
@@ -106,7 +106,7 @@
                         
 							
                         <li>
-                            <a href="/tags/">tags</a>
+                            <a href="/archive/">archive</a>
                         </li>
 							
 						
@@ -223,6 +223,9 @@
 <h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>首先，Spring框架在启动的时候IOC容器会遍历IOC容器中的所有bean，对标注了@Controller或@RequestMapping注解的类中方法进行遍历，将类和方法上的@RequestMapping注解中的value值进行合并，使用@RequestMapping注解的相关参数值(如value、method等)封装一个RequestMappingInfo，将这个Controller实例、方法及方法参数信息(类型、注解等)封装到HandlerMethod中，然后以RequestMappingInfo为key，HandlerMethod为value存到一个以Map为结构的handlerMethods中。</p>
 <p>接着，将@RequestMapping注解中的value(即请求路径)值取出，即url，然后以url为key，以RequestMappingInfo为value，存到一个以Map为结构的urlMap属性中。</p>
 <p>客户端发起请求的时候，根据请求的URL到urlMap中查找，找到RequestMappingInfo，然后根据RequestMappingInfo到handlerMethods中查找，找到对应的HandlerMethod，接着将HandlerMethod封装到HandlerExecutionChain；接着遍历容器中所有HandlerAdapter实现类，找到支持这次请求的HandlerAdapter，如RequestMappingHandlerAdapter，然后执行SpringMVC拦截器的前置方法(preHandle方法)，然后对请求参数解析及转换，然后(使用反射)调用具体Controller的对应方法返回一个ModelAndView对象，执行拦截器的后置方法(postHandle方法)，然后对返回的结果进行处理，最后执行afterCompletion方法。</p>
+<blockquote>
+<p>参考：《Spring技术内幕》、《精通Spring 4.x 企业应用开发实战》</p>
+</blockquote>
 
                 <hr>
                 
@@ -230,7 +233,7 @@
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/2017/11/21/2017-11-20-DispatcherServlet-after/" data-toggle="tooltip" data-placement="top"
+                        <a href="/2017/11/21/2017-11-21-DispatcherServlet-after/" data-toggle="tooltip" data-placement="top"
                            title="Spring | DispatcherServlet源码分析(下)">&larr; Previous Post</a>
                     </li>
                     
