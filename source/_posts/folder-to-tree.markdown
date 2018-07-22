@@ -2,8 +2,12 @@
 layout: post
 title: "工具 | CSDN博客转 -> markdown"
 date: 2018-05-25 08:52
+author: "Gubaidan"
+header-img: "/Header/l8Qo5NqYG_k.png"
+cdn: 'header-on'
 tags: 
 	- 工具 
+
 ---
 
 # csdn2md
@@ -41,7 +45,7 @@ public class Main {
 
 展示某个人博客的转换效果
 
-![csdn](http://p9n2j0ewi.bkt.clouddn.com/PostImg/csdn/D2338CFF-0768-4E86-AAAA-9E8305FE381F.png)
+<img style="width:80%;" src="http://p9n2j0ewi.bkt.clouddn.com/PostImg/csdn/D2338CFF-0768-4E86-AAAA-9E8305FE381F.png"/>
 
 ### 用到的工具
 

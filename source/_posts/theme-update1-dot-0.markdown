@@ -2,15 +2,20 @@
 layout: post
 title: "Blog主题更新-1.0"
 date: 2017-12-16 15:16
-comments: true
+author: "Gubaidan"
+header-img: "/Header/l8Qo5NqYG_k.png"
+cdn: 'header-on' 
 tags: 
 	- 主题
 ---
 
-这次的主题更新重点放在**功能的完善与优化**上，以下是本次（<code>1.0</code>）的更新内容：     
+此博客更新自 [Anisina v-3.0](https://github.com/Gubaidan/hexo-theme-Anisina)
+
+这次的主题更新重点放在**功能的完善与优化**上，以下是本次（<code>1.0</code>）的更新内容：    
+
 ### 更新记录
 
-* 1.0
+* V 1.0 
   * **新增** - 修改原主题字体为Lato字体，更加清晰舒适。
 
   * **新增** - “新浪微博”按钮
