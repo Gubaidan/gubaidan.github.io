@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="花有重开日，人无再少年">
+    <meta name="keyword" content="前端,js,jquery,javascript,html5,开发者,程序猿编程,代码,开源,Developer,Programmer,Coder,html,css,css3,用户体验">
+    <meta name="theme-color" content="#600090">
+    <meta name="msapplication-navbutton-color" content="#600090">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="#600090">
+    <link rel="shortcut icon" href="http://p9n2j0ewi.bkt.clouddn.com/img/favicon.ico">
+    <link rel="alternate" type="application/atom+xml" title="Gubaidan" href="/atom.xml">
+
+    <title>
+        
+        Java String.indexOf对比KMP｜Gubaidan&#39;s blog
+        
+    </title>
+
+    <link rel="canonical" href="http://www.gubaidan.top/2017/09/03/2017-09-03-kmp/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/blog-style.css">
+    <link rel="stylesheet" href="/css/font-awesome.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&amp;subset=latin,latin-ext" rel="stylesheet" type="text/css">
+    <script type="text/javascript"
+ 		src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+		MathJax.Hub.Config({
+	    extensions: ["tex2jax.js","TeX/noErrors.js","TeX/AMSsymbols.js"],
+	    jax: ["input/TeX","output/HTML-CSS"],
+	    tex2jax: {
+	      inlineMath: [['$','$'],["\\(","\\)"]],
+	      displayMath: [['\\[','\\]'], ['$$','$$']],
+	      balanceBraces: true
+	      
+	    },
+	    TeX: {equationNumbers: {autoNumber: ["AMS"], useLabelIds: true}},
+	    "HTML-CSS": {availableFonts:["TeX"]},
+	  });
+	</script>
+
+</head>
+
+<style>
+
+    header.intro-header {
+        background-image: url('http://p9n2j0ewi.bkt.clouddn.com/blogimg/water.jpg')
+    }
+</style>
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="" class="animated fadeIn">
+<!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top " id="nav-top" data-ispost = "true" data-istags="false
+" data-ishome = "false" >
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand animated pulse" href="/">
+                <span class="brand-logo">
+                    Gubaidan
+                </span>
+                's Blog
+            </a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <!-- /.navbar-collapse -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+					
+                    
+                        
+							
+                        <li>
+                            <a href="/archive/">archive</a>
+                        </li>
+							
+						
+                    
+                        
+							
+                        <li>
+                            <a href="/tags/">tags</a>
+                        </li>
+							
+						
+                    
+					
+					
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+//    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+<!-- Main Content -->
+
+<!--only post-->
+
+
+<img class="wechat-title-img"
+     src="http://p9n2j0ewi.bkt.clouddn.com/Header/lake.jpg">
+
+
+<style>
+    
+    header.intro-header {
+        background-image: url('http://p9n2j0ewi.bkt.clouddn.com/Header/lake.jpg?imageView2/1/w/1400/h/400/interlace/1/q/90')
+    }
+
+    
+</style>
+
+<header class="intro-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <div class="post-heading">
+                    <h1>Java String.indexOf对比KMP</h1>
+                    
+                    <span class="meta">
+                         作者 Gubaidan
+                        <span>
+                          日期 2017-09-03
+                         </span>
+                    </span>
+                    <div class="tags text-center">
+                        
+                        <a class="tag" href="/tags/#算法"
+                           title="算法">算法</a>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="post-title-haojen">
+        <span>
+            Java String.indexOf对比KMP
+        </span>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <!-- Post Container -->
+            <div class="col-lg-8 col-lg-offset-1 col-sm-9 post-container">
+                <h1 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h1><p>Kmp和indexOf 都是用于匹配字符串，如果匹配到目标字符串则返回首个字符下标，如果匹配到则返回-1</p>
+<p>之前偶然打开Java String.indexOf的源码以为会很高大上，结果发现indexOf中的源码是暴力匹配字符串的…</p>
+<p>所以准备对比一下这两个方法，不过还是先梳理一下这两个算法的源码。</p>
+<h2 id="KMP"><a href="#KMP" class="headerlink" title="KMP"></a>KMP</h2><p>举例来说，有一个字符串”BBC ABCDAB ABCDABCDABDE”，我想知道，里面是否包含另一个字符串”ABCDABD”</p>
+<h3 id="KMP算法流程："><a href="#KMP算法流程：" class="headerlink" title="KMP算法流程："></a>KMP算法流程：</h3><p>1、首先，字符串”BBC ABCDAB ABCDABCDABDE”的第一个字符与搜索词”ABCDABD”的第一个字符，进行比较。因为B与A不匹配，所以搜索词整体后移一位，因为B与A不匹配，搜索词整体再往后移</p>
+<p>2、直到字符串有一个字符，与搜索词的第一个字符相同为止。</p>
+<p>3、接着比较字符串和搜索词的下一个字符，一只比对到搜索词最后一个字符完成。</p>
+<ul>
+<li>如果全部匹配，则返回搜索词第一个字符对应的字符串中字符的下标。(下图index)</li>
+<li>如果某个字符不匹配，执行下一步。</li>
+</ul>
+<p><img src="http://p9n2j0ewi.bkt.clouddn.com/PostImg/2017-09-03-kmp/kmp-accept.png" alt="kmp"></p>
+<p>4、这时，最自然的反应是，将搜索词整个后移一位，再从头逐个比较。这样做虽然可行，但是效率很差，因为你要把”搜索位置”移到已经比较过的位置，重比一遍。</p>
+<p>一个基本事实是，当空格与D不匹配时，你其实知道前面六个字符是”ABCDAB”。KMP算法的想法是，设法利用这个已知信息，不要把”搜索位置”移回已经比较过的位置，继续把它向后移，这样就提高了效率。</p>
+<p>5、怎么做到这一点呢？可以针对搜索词，算出一张《部分匹配表》（Partial Match Table）。这张表是如何产生的，后面再介绍，这里知道如何使用即可。</p>
+<p>6、已知空格与D不匹配时，前面六个字符”ABCDAB”是匹配的。查表可知，最后一个匹配字符B对应的”部分匹配值”为2，因此按照下面的公式算出向后移动的位数：</p>
+<blockquote>
+<p>移动位数 = 已匹配的字符数 - 对应的部分匹配值</p>
+</blockquote>
+<p>因为 6 - 2 等于4，所以将搜索词向后移动4位。</p>
+<p>7、逐位比较，直到搜索词的最后一位，发现完全匹配，于是搜索完成。</p>
+<h3 id="部分匹配表（next数组）："><a href="#部分匹配表（next数组）：" class="headerlink" title="部分匹配表（next数组）："></a>部分匹配表（next数组）：</h3><p>首先，要了解两个概念：”前缀”和”后缀”。 “前缀”指除了最后一个字符以外，一个字符串的全部头部组合；”后缀”指除了第一个字符以外，一个字符串的全部尾部组合。</p>
+<p>“部分匹配值”就是”前缀”和”后缀”的最长的共有元素的长度。以”ABCDABD”为例</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">－　<span class="string">"A"</span>的前缀和后缀都为空集，共有元素的长度为0；</span><br><span class="line"></span><br><span class="line">－　<span class="string">"AB"</span>的前缀为[A]，后缀为[B]，共有元素的长度为0；</span><br><span class="line"></span><br><span class="line">－　<span class="string">"ABC"</span>的前缀为[A, AB]，后缀为[BC, C]，共有元素的长度0；</span><br><span class="line"></span><br><span class="line">－　<span class="string">"ABCD"</span>的前缀为[A, AB, ABC]，后缀为[BCD, CD, D]，共有元素的长度为0；</span><br><span class="line"></span><br><span class="line">－　<span class="string">"ABCDA"</span>的前缀为[A, AB, ABC, ABCD]，后缀为[BCDA, CDA, DA, A]，共有元素为<span class="string">"A"</span>，长度为1；</span><br><span class="line"></span><br><span class="line">－　<span class="string">"ABCDAB"</span>的前缀为[A, AB, ABC, ABCD, ABCDA]，后缀为[BCDAB, CDAB, DAB, AB, B]，共有元素为<span class="string">"AB"</span>，长度为2；</span><br><span class="line"></span><br><span class="line">－　<span class="string">"ABCDABD"</span>的前缀为[A, AB, ABC, ABCD, ABCDA, ABCDAB]，后缀为[BCDABD, CDABD, DABD, ABD, BD, D]，共有元素的长度为0。</span><br></pre></td></tr></table></figure>
+<p>　　</p>
+<p>“部分匹配”的实质是，有时候，字符串头部和尾部会有重复。比如，”ABCDAB”之中有两个”AB”，那么它的”部分匹配值”就是2（”AB”的长度）。搜索词移动的时候，第一个”AB”向后移动4位（字符串长度-部分匹配值），就可以来到第二个”AB”的位置。</p>
+<h3 id="求解Next数组"><a href="#求解Next数组" class="headerlink" title="求解Next数组"></a>求解Next数组</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">cal_next</span><span class="params">(<span class="keyword">char</span>[] str, <span class="keyword">int</span>[] next)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> len = str.length;</span><br><span class="line">    next[<span class="number">0</span>] = -<span class="number">1</span>;         <span class="comment">//next[0]初始化为-1，-1表示不存在相同的最大前缀和最大后缀</span></span><br><span class="line">    <span class="keyword">int</span> k = -<span class="number">1</span>;           <span class="comment">//k初始化为-1</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">//如果下一个不同，那么k就变成next[k]，注意next[k]</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> q = <span class="number">1</span>; q &lt;= len - <span class="number">1</span>; q++) &#123;</span><br><span class="line">        <span class="keyword">while</span> (k &gt; -<span class="number">1</span> &amp;&amp; str[k + <span class="number">1</span>] != str[q]) &#123; <span class="comment">//是小于k的，无论k取任何值。</span></span><br><span class="line">            k = next[k];                         <span class="comment">//往前回溯</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (str[k + <span class="number">1</span>] == str[q]) &#123;              <span class="comment">//如果相同，k++</span></span><br><span class="line">            k ++;</span><br><span class="line">        &#125;</span><br><span class="line">        next[q] = k;      <span class="comment">//这个是把算的k的值（就是相同的最大前缀和最大后缀长）赋给next[q]</span></span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>首先我们看第一个while循环，它到底干了什么。</p>
+<p>在此之前，我们先回到原程序。原程序里有一个大的<strong>for()</strong>循环，那这个for()循环是干嘛的？</p>
+<p>这个for循环就是计算next[0]，next[1],…next[q]…的值。</p>
+<p>里面最后一句next[q]=k就是说明每次循环结束，我们已经计算了ptr的前(q+1)个字母组成的子串的“<strong>相同的最长前缀和最长后缀的长度</strong>”。（这句话前面已经解释了！） 这个“<strong>长度</strong>”就是k。</p>
+<p>好，到此为止，假设循环进行到 第 q 次，即已经计算了next[q]，我们是怎么计算next[q+1]呢？</p>
+<p>比如我们已经知道<strong>ababab</strong>，q=4时，next[4]=2（k=2，表示该字符串的前5个字母组成的子串<strong>ababa</strong>存在<strong>相同的最长前缀和最长后缀的长度</strong>是3，所以k=2,next[4]=2。这个结果可以理解成我们自己观察算的，也可以理解成程序自己算的，这不是重点，重点是程序根据目前的结果怎么算next[5]的）.，那么对于字符串<strong>ababab</strong>，我们计算next[5]的时候，此时q=5, k=2（上一步循环结束后的结果）。那么我们需要比较的是str[k+1]和str[q]是否相等，其实就是str[1]和str[5]是否相等！，为啥从k+1比较呢，因为上一次循环中，<strong>我们已经保证了str[k]和str[q] (注意这个q是上次循环的q)是相等的</strong>（这句话自己想想，很容易理解），所以到本次循环，我们直接比较str[k+1]和str[q]是否相等（这个q是本次循环的q）。 </p>
+<p>如果相等，那么跳出while()，进入if()，k=k+1，接着next[q]=k。即对于<strong>ababab</strong>，我们会得出next[5]=3。 这是程序自己算的，和我们观察的是一样的。 </p>
+<p>如果不等，我们可以用”<strong>ababac</strong>“描述这种情况。 不等，进入while()里面，进行k=next[k]，这句话是说，在str[k + 1] != str[q]的情况下，我们往前找一个k，使str[k + 1]==str[q]，是往前一个一个找呢，还是有更快的找法呢？。程序给出了一种更快的找法，那就是 k = next[k]。 程序的意思是说，一旦str[k + 1] != str[q]，即在后缀里面找不到时，我是可以直接跳过中间一段，跑到前缀里面找，<strong>next[k]</strong>就是<strong>相同的最长前缀和最长后缀的长度</strong>。所以，k=next[k]就变成，k=next[2]，即k=0。此时再比较str[0+1]和str[5]是否相等，不等，则k=next[0]=-1。跳出循环。</p>
+<h3 id="完整的KMP代码"><a href="#完整的KMP代码" class="headerlink" title="完整的KMP代码"></a>完整的KMP代码</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">KMP</span><span class="params">(String s, String p)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> slen = s.length();</span><br><span class="line">    <span class="keyword">int</span> plen = p.length();</span><br><span class="line">    <span class="keyword">char</span>[] str = s.toCharArray();</span><br><span class="line">    <span class="keyword">char</span>[] ptr = p.toCharArray();</span><br><span class="line">    <span class="keyword">int</span>[] next = <span class="keyword">new</span> <span class="keyword">int</span>[plen];</span><br><span class="line">    cal_next(ptr, next);</span><br><span class="line">    <span class="keyword">int</span> k = -<span class="number">1</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; slen; i++) &#123;</span><br><span class="line">        <span class="keyword">while</span> (k &gt; -<span class="number">1</span> &amp;&amp; ptr[k + <span class="number">1</span>] != str[i])  <span class="comment">//ptr和str不匹配，且k&gt;-1（表示ptr和str有部分匹配）</span></span><br><span class="line">            k = next[k];                        <span class="comment">//往前回溯</span></span><br><span class="line">        <span class="keyword">if</span> (ptr[k + <span class="number">1</span>] == str[i])</span><br><span class="line">            k ++;</span><br><span class="line">        <span class="keyword">if</span> (k == plen - <span class="number">1</span>) &#123;            <span class="comment">//说明k移动到ptr的最末端</span></span><br><span class="line">            <span class="keyword">return</span> i - plen + <span class="number">1</span>;        <span class="comment">//返回相应的位置</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">cal_next</span><span class="params">(<span class="keyword">char</span>[] str, <span class="keyword">int</span>[] next)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> len = str.length;</span><br><span class="line">    next[<span class="number">0</span>] = -<span class="number">1</span>;         <span class="comment">//next[0]初始化为-1，-1表示不存在相同的最大前缀和最大后缀</span></span><br><span class="line">    <span class="keyword">int</span> k = -<span class="number">1</span>;           <span class="comment">//k初始化为-1</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">//如果下一个不同，那么k就变成next[k]，注意next[k]</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> q = <span class="number">1</span>; q &lt;= len - <span class="number">1</span>; q++) &#123;</span><br><span class="line">        <span class="keyword">while</span> (k &gt; -<span class="number">1</span> &amp;&amp; str[k + <span class="number">1</span>] != str[q]) &#123; <span class="comment">//是小于k的，无论k取任何值。</span></span><br><span class="line">            k = next[k];                         <span class="comment">//往前回溯</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (str[k + <span class="number">1</span>] == str[q]) &#123;              <span class="comment">//如果相同，k++</span></span><br><span class="line">            k ++;</span><br><span class="line">        &#125;</span><br><span class="line">        next[q] = k;      <span class="comment">//这个是把算的k的值（就是相同的最大前缀和最大后缀长）赋给next[q]</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">long</span> start = System.currentTimeMillis();</span><br><span class="line">    String full = <span class="string">"BBC ABCDAB ABCDABCDABDE"</span>;</span><br><span class="line">    String par = <span class="string">"ABCDABD"</span>;</span><br><span class="line">    <span class="keyword">int</span> res = KMP(full,par);</span><br><span class="line">    <span class="comment">//int res = full.indexOf(par);</span></span><br><span class="line">    System.out.println(res+<span class="string">","</span>+(System.currentTimeMillis() - start)+<span class="string">"ms"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>时间复杂度O(n)</p>
+<h2 id="indexOf（）"><a href="#indexOf（）" class="headerlink" title="indexOf（）"></a>indexOf（）</h2><p>流程：</p>
+<p>1、首先，字符串”BBC ABCDAB ABCDABCDABDE”的第一个字符与搜索词”ABCDABD”的第一个字符，进行比较。因为B与A不匹配，所以搜索词整体后移一位，因为B与A不匹配，搜索词整体再往后移</p>
+<p>2、直到字符串有一个字符，与搜索词的第一个字符相同为止。</p>
+<p>3、接着比较字符串和搜索词的下一个字符，一只比对到搜索词最后一个字符完成。</p>
+<ul>
+<li>如果全部匹配，则返回搜索词第一个字符对应的字符串中字符的下标。</li>
+<li>如果某个字符不匹配，执行下一步。</li>
+</ul>
+<p>4、这时，和KMP不同的是，不再利用Next数组，而是将搜索词整个后移一位，再从头逐个比较。</p>
+<p>indexOf和KMP实现同样的功能，但是用原始暴力的方法求解，所以直接来看看源码：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">* Code shared by String and StringBuffer to do searches. The</span></span><br><span class="line"><span class="comment">* source is the character array being searched, and the target</span></span><br><span class="line"><span class="comment">* is the string being searched for.</span></span><br><span class="line"><span class="comment">*</span></span><br><span class="line"><span class="comment">* <span class="doctag">@param</span>   source       the characters being searched.</span></span><br><span class="line"><span class="comment">* <span class="doctag">@param</span>   sourceOffset offset of the source string.</span></span><br><span class="line"><span class="comment">* <span class="doctag">@param</span>   sourceCount  count of the source string.</span></span><br><span class="line"><span class="comment">* <span class="doctag">@param</span>   target       the characters being searched for.</span></span><br><span class="line"><span class="comment">* <span class="doctag">@param</span>   targetOffset offset of the target string.</span></span><br><span class="line"><span class="comment">* <span class="doctag">@param</span>   targetCount  count of the target string.</span></span><br><span class="line"><span class="comment">* <span class="doctag">@param</span>   fromIndex    the index to begin searching from.</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">int</span> <span class="title">indexOf</span><span class="params">(<span class="keyword">char</span>[] source, <span class="keyword">int</span> sourceOffset, <span class="keyword">int</span> sourceCount,</span></span></span><br><span class="line"><span class="function"><span class="params">        <span class="keyword">char</span>[] target, <span class="keyword">int</span> targetOffset, <span class="keyword">int</span> targetCount,</span></span></span><br><span class="line"><span class="function"><span class="params">        <span class="keyword">int</span> fromIndex)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (fromIndex &gt;= sourceCount) &#123;</span><br><span class="line">        <span class="keyword">return</span> (targetCount == <span class="number">0</span> ? sourceCount : -<span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (fromIndex &lt; <span class="number">0</span>) &#123;</span><br><span class="line">        fromIndex = <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (targetCount == <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> fromIndex;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">char</span> first = target[targetOffset];</span><br><span class="line">    <span class="comment">//找到遍历的最大位置</span></span><br><span class="line">    <span class="keyword">int</span> max = sourceOffset + (sourceCount - targetCount);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = sourceOffset + fromIndex; i &lt;= max; i++) &#123;</span><br><span class="line">        <span class="comment">/* Look for first character. */</span></span><br><span class="line">        <span class="keyword">if</span> (source[i] != first) &#123;</span><br><span class="line">            <span class="keyword">while</span> (++i &lt;= max &amp;&amp; source[i] != first);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">/* Found first character, now look at the rest of v2 */</span></span><br><span class="line">        <span class="keyword">if</span> (i &lt;= max) &#123;</span><br><span class="line">            <span class="keyword">int</span> j = i + <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">int</span> end = j + targetCount - <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> k = targetOffset + <span class="number">1</span>; j &lt; end &amp;&amp; source[j]</span><br><span class="line">                    == target[k]; j++, k++);</span><br><span class="line">			<span class="comment">//完全符合时返回坐标</span></span><br><span class="line">            <span class="keyword">if</span> (j == end) &#123;</span><br><span class="line">                <span class="comment">/* Found whole string. */</span></span><br><span class="line">                <span class="keyword">return</span> i - sourceOffset;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>时间复杂度O(n*m)</p>
+<h3 id="总结："><a href="#总结：" class="headerlink" title="总结："></a>总结：</h3><p>可能是JDK的编写者们认为大多数情况下，字符串都不长，使用原始实现可能代价更低。在我测试过程中，使用indexOf方法时要比KMP算法要快一点。KMP算法对与超长字符串子匹配速度上是优于IndexOf的。</p>
+<p>因为KMP算法需要预先计算处理来获得辅助数组，需要一定的时间和空间，这可能在短字符串查找中相比较原始实现耗费更大的代价。而且一般大字符串查找时，程序员们也会使用其它特定的数据结构，查找起来更简单。这有点类似于排除特定情况下的快速排序了。不同环境选择不同算法。</p>
+<blockquote>
+<p>参考：<a href="https://blog.csdn.net/starstar1992/article/details/54913261/" target="_blank" rel="noopener">经典算法-KMP</a></p>
+</blockquote>
+
+                <hr>
+                
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2017/11/02/2017-11-2-spring-resouce/" data-toggle="tooltip" data-placement="top"
+                           title="Spring | 资源加载的方式">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/2017/08/22/2017-08-22-thin-border/" data-toggle="tooltip" data-placement="top"
+                           title="移动端html5 1px border的实现">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+                
+
+                
+
+
+                <!--加入新的评论系统-->
+                
+                <!-- 来必力City版安装代码 -->
+                <div id="lv-container" data-id="city" data-uid="MTAyMC8zNjcxNC8xMzI0OQ==">
+                    <script type="text/javascript">
+                        (function(d, s) {
+                            var j, e = d.getElementsByTagName(s)[0];
+
+                            if (typeof LivereTower === 'function') { return; }
+
+                            j = d.createElement(s);
+                            j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+                            j.async = true;
+
+                            e.parentNode.insertBefore(j, e);
+                        })(document, 'script');
+                    </script>
+                    <noscript> 为正常使用来必力评论功能请激活JavaScript</noscript>
+                </div>
+                <!-- City版安装代码已完成 -->
+                
+            </div>
+
+            <div class="hidden-xs col-sm-3 toc-col">
+                <div class="toc-wrap">
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#说明"><span class="toc-text">说明</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#KMP"><span class="toc-text">KMP</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#KMP算法流程："><span class="toc-text">KMP算法流程：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#部分匹配表（next数组）："><span class="toc-text">部分匹配表（next数组）：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#求解Next数组"><span class="toc-text">求解Next数组</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#完整的KMP代码"><span class="toc-text">完整的KMP代码</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#indexOf（）"><span class="toc-text">indexOf（）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#总结："><span class="toc-text">总结：</span></a></li></ol></li></ol></li></ol>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5 class="text-center">
+                        <a href="/tags/">FEATURED TAGS</a>
+                    </h5>
+                    <div class="tags">
+                        
+                        <a class="tag" href="/tags/#算法"
+                           title="算法">算法</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+                <div style="margin-top: 20px;">
+                    <h5 class="text-center">FRIENDS</h5>
+                    <ul class="list-inline text-center">
+                        
+                        <li><a href="http://www.hulichao.top">Hu</a></li>
+                        
+                        <li><a href="http://www.gubaidan.top">Gu</a></li>
+                        
+                    </ul>
+                </div>
+                
+            </div>
+        </div>
+
+    </div>
+</article>
+
+
+
+
+
+
+
+<!-- Footer -->
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <br>
+                <ul class="list-inline text-center">
+                
+                
+                    <li>
+                        <a target="_blank" href="https://twitter.com/gubaidan">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+                
+                    <li>
+                        <a target="_blank" href="https://www.zhihu.com/people/gubaidan">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa  fa-stack-1x fa-inverse">知</i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank" href="http://weibo.com/gubaidan">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank" href="https://www.facebook.com/gubaidan">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/Gubaidan">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://www.linkedin.com/in/gubaidan">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-linkedin fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; Gubaidan 2018
+                    <br>
+                    <span id="busuanzi_container_site_pv" style="font-size: 12px;">PV: <span id="busuanzi_value_site_pv"></span> Times</span>
+                    <br>
+                    Theme by <a href="https://gubaidan.github.io/">Gubaidan</a>
+                </p>
+
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/blog.js"></script>
+
+<script src="/js/jump.js"></script>
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("http://www.gubaidan.top/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+<!-- Google Analytics -->
+
+
+
+<!-- Baidu Tongji -->
+
+
+<!-- swiftype -->
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install','','2.0.0');
+</script>
+
+<!-- tags happy to jump -->
+<script>
+$(function(){
+    $(".tags a").each(function(k,a){
+        new JumpObj(a,10);
+    });
+});
+$("#jump").on('click',function(){
+   $(".tags a").each(function(k,a){
+        var randomm = Math.random(); 
+        if(randomm > 0.5){
+           setTimeout(function(){
+                $(a).trigger('mouseover');
+           }, randomm * 200); 
+        }
+    });
+});
+</script>
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<!--wechat title img-->
+<img class="wechat-title-img" src="http://p9n2j0ewi.bkt.clouddn.com/img/log.JPG">
+</body>
+
+</html>

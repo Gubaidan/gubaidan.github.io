@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="花有重开日，人无再少年">
+    <meta name="keyword" content="前端,js,jquery,javascript,html5,开发者,程序猿编程,代码,开源,Developer,Programmer,Coder,html,css,css3,用户体验">
+    <meta name="theme-color" content="#600090">
+    <meta name="msapplication-navbutton-color" content="#600090">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="#600090">
+    <link rel="shortcut icon" href="http://p9n2j0ewi.bkt.clouddn.com/img/favicon.ico">
+    <link rel="alternate" type="application/atom+xml" title="Gubaidan" href="/atom.xml">
+
+    <title>
+        
+        Navicat | show variables like&#39;char%&#39; 字符集无法更改导致乱码｜Gubaidan&#39;s blog
+        
+    </title>
+
+    <link rel="canonical" href="http://www.gubaidan.top/2018/03/03/2018-03-03-navicat-utf8/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/blog-style.css">
+    <link rel="stylesheet" href="/css/font-awesome.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&amp;subset=latin,latin-ext" rel="stylesheet" type="text/css">
+    <script type="text/javascript"
+ 		src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+		MathJax.Hub.Config({
+	    extensions: ["tex2jax.js","TeX/noErrors.js","TeX/AMSsymbols.js"],
+	    jax: ["input/TeX","output/HTML-CSS"],
+	    tex2jax: {
+	      inlineMath: [['$','$'],["\\(","\\)"]],
+	      displayMath: [['\\[','\\]'], ['$$','$$']],
+	      balanceBraces: true
+	      
+	    },
+	    TeX: {equationNumbers: {autoNumber: ["AMS"], useLabelIds: true}},
+	    "HTML-CSS": {availableFonts:["TeX"]},
+	  });
+	</script>
+
+</head>
+
+<style>
+
+    header.intro-header {
+        background-image: url('http://p9n2j0ewi.bkt.clouddn.com/blogimg/water.jpg')
+    }
+</style>
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="" class="animated fadeIn">
+<!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top " id="nav-top" data-ispost = "true" data-istags="false
+" data-ishome = "false" >
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand animated pulse" href="/">
+                <span class="brand-logo">
+                    Gubaidan
+                </span>
+                's Blog
+            </a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <!-- /.navbar-collapse -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+					
+                    
+                        
+							
+                        <li>
+                            <a href="/archive/">archive</a>
+                        </li>
+							
+						
+                    
+                        
+							
+                        <li>
+                            <a href="/tags/">tags</a>
+                        </li>
+							
+						
+                    
+					
+					
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+//    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+<!-- Main Content -->
+
+<!--only post-->
+
+
+<img class="wechat-title-img"
+     src="http://p9n2j0ewi.bkt.clouddn.com/Header/hero@2x.jpg">
+
+
+<style>
+    
+    header.intro-header {
+        background-image: url('http://p9n2j0ewi.bkt.clouddn.com/Header/hero@2x.jpg?imageView2/1/w/1400/h/400/interlace/1/q/90')
+    }
+
+    
+</style>
+
+<header class="intro-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <div class="post-heading">
+                    <h1>Navicat | show variables like&#39;char%&#39; 字符集无法更改导致乱码</h1>
+                    
+                    <span class="meta">
+                         作者 Gubaidan
+                        <span>
+                          日期 2018-03-03
+                         </span>
+                    </span>
+                    <div class="tags text-center">
+                        
+                        <a class="tag" href="/tags/#mysql"
+                           title="mysql">mysql</a>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="post-title-haojen">
+        <span>
+            Navicat | show variables like'char%' 字符集无法更改导致乱码
+        </span>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <!-- Post Container -->
+            <div class="col-lg-8 col-lg-offset-1 col-sm-9 post-container">
+                <h2 id="BUG-FIX"><a href="#BUG-FIX" class="headerlink" title="BUG FIX"></a>BUG FIX</h2><p>今天用python把一个txt文件中的数据导入到Mysql，因为txt中包含中文信息，导致中文乱码。</p>
+<ul>
+<li>Mysql版本：5.7.22</li>
+<li>远程系统 ：CentOS Linux release 7.4.1708 (Core) </li>
+<li>本机系统 : MacOS 10.13.5</li>
+<li>Navicat : 11.8</li>
+<li>python 3.6</li>
+</ul>
+<p>导入中文乱码之后，查了一下远程Mysql的数据库编码：</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">mysql&gt; SHOW VARIABLES LIKE 'character%';</span><br><span class="line">+<span class="comment">--------------------------+----------------------------------+</span></span><br><span class="line">| Variable_name            | Value                            |</span><br><span class="line">+<span class="comment">--------------------------+----------------------------------+</span></span><br><span class="line">| character_set_client     | latin1                           |</span><br><span class="line">| character_set_connection | latin1                           |</span><br><span class="line">| character_set_database   | utf8                             |</span><br><span class="line">| character_set_filesystem | binary                           |</span><br><span class="line">| character_set_results    | latin1                           |</span><br><span class="line">| character_set_server     | utf8                             |</span><br><span class="line">| character_set_system     | utf8                             |</span><br><span class="line">| character_sets_dir       | /usr/local/mysql/share/charsets/ |</span><br><span class="line">+<span class="comment">--------------------------+----------------------------------+</span></span><br><span class="line">8 rows in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br></pre></td></tr></table></figure>
+<p>发现有三个编码是Latin1，于是更改Mysql配置文件my.inf</p>
+<figure class="highlight ini"><table><tr><td class="code"><pre><span class="line"><span class="section">[mysqld]</span> </span><br><span class="line"><span class="attr">character_set_server</span>=utf8   #这里不能写成 default-character-set=utf8</span><br><span class="line"><span class="attr">init-connect</span>=<span class="string">'set names utf8'</span></span><br><span class="line"><span class="attr">collation-server</span> = utf8_general_ci</span><br><span class="line"></span><br><span class="line"><span class="section">[mysql]</span></span><br><span class="line"><span class="attr">default-character-set</span> = utf8</span><br><span class="line"></span><br><span class="line"><span class="section">[client]</span></span><br><span class="line"><span class="attr">default-character-set</span>=utf8</span><br></pre></td></tr></table></figure>
+<p>因Mysql5.7 之后 [mysqld] 中配置 default-character-set=utf8 将会报错。</p>
+<p>修改完成之后重启mysql：</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">mysql&gt; SHOW VARIABLES LIKE 'character%';</span><br><span class="line">+<span class="comment">--------------------------+----------------------------------+</span></span><br><span class="line">| Variable_name            | Value                            |</span><br><span class="line">+<span class="comment">--------------------------+----------------------------------+</span></span><br><span class="line">| character_set_client     | utf8                             |</span><br><span class="line">| character_set_connection | utf8                             |</span><br><span class="line">| character_set_database   | utf8                             |</span><br><span class="line">| character_set_filesystem | binary                           |</span><br><span class="line">| character_set_results    | utf8                             |</span><br><span class="line">| character_set_server     | utf8                             |</span><br><span class="line">| character_set_system     | utf8                             |</span><br><span class="line">| character_sets_dir       | /usr/local/mysql/share/charsets/ |</span><br><span class="line">+<span class="comment">--------------------------+----------------------------------+</span></span><br><span class="line">8 rows in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br></pre></td></tr></table></figure>
+<p>但是更改之后，远程mysql数据库所有编码字符集正常，但是在navicat仍然显示：</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">mysql&gt; SHOW VARIABLES LIKE 'character%';</span><br><span class="line">+<span class="comment">--------------------------+----------------------------------+</span></span><br><span class="line">| Variable_name            | Value                            |</span><br><span class="line">+<span class="comment">--------------------------+----------------------------------+</span></span><br><span class="line">| character_set_client     | latin1                           |</span><br><span class="line">| character_set_connection | latin1                           |</span><br><span class="line">| character_set_database   | utf8                             |</span><br><span class="line">| character_set_filesystem | binary                           |</span><br><span class="line">| character_set_results    | latin1                           |</span><br><span class="line">| character_set_server     | utf8                             |</span><br><span class="line">| character_set_system     | utf8                             |</span><br><span class="line">| character_sets_dir       | /usr/local/mysql/share/charsets/ |</span><br><span class="line">+<span class="comment">--------------------------+----------------------------------+</span></span><br><span class="line">8 rows in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br></pre></td></tr></table></figure>
+<p>当然，我是用navicat图形界面查的，但是结果和这个是一样的。</p>
+<p>测试了一下，导入数据后中文依旧乱码，而且在navicat 右键打开的数据库连接属性中 字符集也是utf8，既然字符集都是一样的，为什么还会出现乱码，百思不解。</p>
+<p>因为怀疑是python处理文件时出错，特地排查了一下python</p>
+<p>python文件读取：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">with</span> open(<span class="string">'/Users/xxxx.txt'</span>, <span class="string">'r'</span>, encoding=<span class="string">"utf8"</span>) <span class="keyword">as</span> txt:</span><br><span class="line">    <span class="keyword">for</span> line <span class="keyword">in</span> txt:</span><br></pre></td></tr></table></figure>
+<p>存入数据库：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">try</span>:</span><br><span class="line">	engine_route = create_engine(<span class="string">"mysql+pymysql://用户名:密码@host:3306/数据库?charset=utf8"</span>,</span><br><span class="line">                                     max_overflow=<span class="number">5</span>)</span><br><span class="line">	pd.io.sql.to_sql(result, name=<span class="string">'hostel'</span>, con=engine_route, if_exists=<span class="string">'append'</span>,</span><br><span class="line">                         index=<span class="keyword">False</span>, index_label=<span class="keyword">False</span>, schema=<span class="string">'DoubleG'</span>, chunksize=<span class="number">10000</span>)</span><br><span class="line"><span class="keyword">finally</span>:</span><br><span class="line">	<span class="keyword">del</span> result</span><br></pre></td></tr></table></figure>
+<p>因为都设置的是utf8，之间测试过，把上述编码改为 latin1 ，依然乱码。</p>
+<p>本着试试又不会死的原则，我把navicat数据库连接中的 编码集由<strong>utf-8 改为 自动</strong>，再次查询Navicat：</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">mysql&gt; SHOW VARIABLES LIKE 'character%';</span><br><span class="line">+<span class="comment">--------------------------+----------------------------------+</span></span><br><span class="line">| Variable_name            | Value                            |</span><br><span class="line">+<span class="comment">--------------------------+----------------------------------+</span></span><br><span class="line">| character_set_client     | utf8                             |</span><br><span class="line">| character_set_connection | utf8                             |</span><br><span class="line">| character_set_database   | utf8                             |</span><br><span class="line">| character_set_filesystem | binary                           |</span><br><span class="line">| character_set_results    | utf8                             |</span><br><span class="line">| character_set_server     | utf8                             |</span><br><span class="line">| character_set_system     | utf8                             |</span><br><span class="line">| character_sets_dir       | /usr/local/mysql/share/charsets/ |</span><br><span class="line">+<span class="comment">--------------------------+----------------------------------+</span></span><br><span class="line">8 rows in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br></pre></td></tr></table></figure>
+<p>结果正常，数据测试正常。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>Mac 版Navicat 貌似和windows不同，windows中数据库连接中将字符编码改为utf8就能解决问题（当然前提是配置好mysql数据库编码），而mac版编码必须自动。</p>
+
+                <hr>
+                
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2018/03/23/2018-03-23-Shiro.mrkdown/" data-toggle="tooltip" data-placement="top"
+                           title="轻量级权限管理框架之Shiro">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/2018/03/02/2018-03-02-DP/" data-toggle="tooltip" data-placement="top"
+                           title="如何写出一个动态规划">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+                
+
+                
+
+
+                <!--加入新的评论系统-->
+                
+                <!-- 来必力City版安装代码 -->
+                <div id="lv-container" data-id="city" data-uid="MTAyMC8zNjcxNC8xMzI0OQ==">
+                    <script type="text/javascript">
+                        (function(d, s) {
+                            var j, e = d.getElementsByTagName(s)[0];
+
+                            if (typeof LivereTower === 'function') { return; }
+
+                            j = d.createElement(s);
+                            j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+                            j.async = true;
+
+                            e.parentNode.insertBefore(j, e);
+                        })(document, 'script');
+                    </script>
+                    <noscript> 为正常使用来必力评论功能请激活JavaScript</noscript>
+                </div>
+                <!-- City版安装代码已完成 -->
+                
+            </div>
+
+            <div class="hidden-xs col-sm-3 toc-col">
+                <div class="toc-wrap">
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#BUG-FIX"><span class="toc-text">BUG FIX</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-text">总结</span></a></li></ol>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5 class="text-center">
+                        <a href="/tags/">FEATURED TAGS</a>
+                    </h5>
+                    <div class="tags">
+                        
+                        <a class="tag" href="/tags/#mysql"
+                           title="mysql">mysql</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+                <div style="margin-top: 20px;">
+                    <h5 class="text-center">FRIENDS</h5>
+                    <ul class="list-inline text-center">
+                        
+                        <li><a href="http://www.hulichao.top">Hu</a></li>
+                        
+                        <li><a href="http://www.gubaidan.top">Gu</a></li>
+                        
+                    </ul>
+                </div>
+                
+            </div>
+        </div>
+
+    </div>
+</article>
+
+
+
+
+
+
+
+<!-- Footer -->
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <br>
+                <ul class="list-inline text-center">
+                
+                
+                    <li>
+                        <a target="_blank" href="https://twitter.com/gubaidan">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+                
+                    <li>
+                        <a target="_blank" href="https://www.zhihu.com/people/gubaidan">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa  fa-stack-1x fa-inverse">知</i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank" href="http://weibo.com/gubaidan">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank" href="https://www.facebook.com/gubaidan">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/Gubaidan">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://www.linkedin.com/in/gubaidan">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-linkedin fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; Gubaidan 2018
+                    <br>
+                    <span id="busuanzi_container_site_pv" style="font-size: 12px;">PV: <span id="busuanzi_value_site_pv"></span> Times</span>
+                    <br>
+                    Theme by <a href="https://gubaidan.github.io/">Gubaidan</a>
+                </p>
+
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/blog.js"></script>
+
+<script src="/js/jump.js"></script>
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("http://www.gubaidan.top/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+<!-- Google Analytics -->
+
+
+
+<!-- Baidu Tongji -->
+
+
+<!-- swiftype -->
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install','','2.0.0');
+</script>
+
+<!-- tags happy to jump -->
+<script>
+$(function(){
+    $(".tags a").each(function(k,a){
+        new JumpObj(a,10);
+    });
+});
+$("#jump").on('click',function(){
+   $(".tags a").each(function(k,a){
+        var randomm = Math.random(); 
+        if(randomm > 0.5){
+           setTimeout(function(){
+                $(a).trigger('mouseover');
+           }, randomm * 200); 
+        }
+    });
+});
+</script>
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<!--wechat title img-->
+<img class="wechat-title-img" src="http://p9n2j0ewi.bkt.clouddn.com/img/log.JPG">
+</body>
+
+</html>
