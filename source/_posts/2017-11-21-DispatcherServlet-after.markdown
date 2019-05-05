@@ -15,7 +15,7 @@ DispatcherServlet是SpringMVC的核心分发器，它实现了请求分发，是
 
  回顾DispatcherServlet 继承关系图：
 
-<img style="width:90%;" src="http://p9n2j0ewi.bkt.clouddn.com/PostImg/2017-11-20-DispatcherServlet/servlet.png"/>
+<img style="width:90%;" src="http://epoch-night.oss-cn-hangzhou.aliyuncs.com/PostImg/servlet.png"/>
 
 
 Servlet在service方法中进行请求接收与分发，DispatcherServlet的service方法继承自HttpServlet，具体代码如下图所示。

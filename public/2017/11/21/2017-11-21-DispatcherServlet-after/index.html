@@ -12,7 +12,7 @@
     <meta name="msapplication-navbutton-color" content="#600090">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="#600090">
-    <link rel="shortcut icon" href="http://pr0yooo59.bkt.clouddn.com/img/favicon.ico">
+    <link rel="shortcut icon" href="http://epoch-night.oss-cn-hangzhou.aliyuncs.com/img/favicon.ico">
     <link rel="alternate" type="application/atom+xml" title="Gubaidan" href="/atom.xml">
 
     <title>
@@ -54,7 +54,7 @@
 <style>
 
     header.intro-header {
-        background-image: url('http://pr0yooo59.bkt.clouddn.com/blogimg/water.jpg')
+        background-image: url('http://epoch-night.oss-cn-hangzhou.aliyuncs.com/blogimg/water.jpg')
     }
 </style>
 <!-- hack iOS CSS :active style -->
@@ -152,13 +152,13 @@
 <!--only post-->
 
 
-<img class="wechat-title-img" src="http://pr0yooo59.bkt.clouddn.com/Header/l8Qo5NqYG_k.png">
+<img class="wechat-title-img" src="http://epoch-night.oss-cn-hangzhou.aliyuncs.com/Header/l8Qo5NqYG_k.png">
 
 
 <style>
     
     header.intro-header {
-        background-image: url('http://pr0yooo59.bkt.clouddn.com/Header/l8Qo5NqYG_k.png?imageView2/1/w/1400/h/400/interlace/1/q/90')
+        background-image: url('http://epoch-night.oss-cn-hangzhou.aliyuncs.com/Header/l8Qo5NqYG_k.png?imageView2/1/w/1400/h/400/interlace/1/q/90')
     }
 
     
@@ -201,7 +201,7 @@
             <div class="col-lg-8 col-lg-offset-1 col-sm-9 post-container">
                 <h1 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h1><p>DispatcherServlet是SpringMVC的核心分发器，它实现了请求分发，是处理请求的入口，本篇将深入源码分析它的请求分发过程。</p>
 <p> 回顾DispatcherServlet 继承关系图：</p>
-<p><img style="width:90%;" src="http://p9n2j0ewi.bkt.clouddn.com/PostImg/2017-11-20-DispatcherServlet/servlet.png"></p>
+<p><img style="width:90%;" src="http://epoch-night.oss-cn-hangzhou.aliyuncs.com/PostImg/servlet.png"></p>
 <p>Servlet在service方法中进行请求接收与分发，DispatcherServlet的service方法继承自HttpServlet，具体代码如下图所示。</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">*代码位置：HttpServlet#service（）</span></span><br><span class="line"><span class="comment">**/</span></span><br><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">service</span><span class="params">(HttpServletRequest req, HttpServletResponse resp)</span></span></span><br><span class="line"><span class="function">        <span class="keyword">throws</span> ServletException, IOException</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">    <span class="comment">//获取请求方式</span></span><br><span class="line">    String method = req.getMethod();</span><br><span class="line">	<span class="comment">//如果是get ，METHOD_GET 不同的请求方法会执行不同的代码，包括put,delete,post,trace.....</span></span><br><span class="line">    <span class="keyword">if</span> (method.equals(METHOD_GET)) &#123;</span><br><span class="line">        <span class="keyword">long</span> lastModified = getLastModified(req);</span><br><span class="line">        <span class="keyword">if</span> (lastModified == -<span class="number">1</span>) &#123;</span><br><span class="line">            <span class="comment">// servlet doesn't support if-modified-since, no reason</span></span><br><span class="line">            <span class="comment">// to go through further expensive logic</span></span><br><span class="line">            doGet(req, resp);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">long</span> ifModifiedSince = req.getDateHeader(HEADER_IFMODSINCE);</span><br><span class="line">            <span class="keyword">if</span> (ifModifiedSince &lt; lastModified) &#123;</span><br><span class="line">                <span class="comment">// If the servlet mod time is later, call doGet()</span></span><br><span class="line">                <span class="comment">// Round down to the nearest second for a proper compare</span></span><br><span class="line">                <span class="comment">// A ifModifiedSince of -1 will always be less</span></span><br><span class="line">                maybeSetLastModified(resp, lastModified);</span><br><span class="line">                doGet(req, resp);</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                resp.setStatus(HttpServletResponse.SC_NOT_MODIFIED);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (method.equals(METHOD_HEAD)) &#123;</span><br><span class="line">        <span class="keyword">long</span> lastModified = getLastModified(req);</span><br><span class="line">        maybeSetLastModified(resp, lastModified);</span><br><span class="line">        doHead(req, resp);</span><br><span class="line"></span><br><span class="line">   &#125; <span class="keyword">else</span> <span class="keyword">if</span> (method.equals(METHOD_POST)) &#123;</span><br><span class="line">        doPost(req, resp);</span><br><span class="line">            </span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (method.equals(METHOD_PUT)) &#123;</span><br><span class="line">        doPut(req, resp);</span><br><span class="line">            </span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (method.equals(METHOD_DELETE)) &#123;</span><br><span class="line">        doDelete(req, resp);</span><br><span class="line">            </span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (method.equals(METHOD_OPTIONS)) &#123;</span><br><span class="line">        doOptions(req,resp);</span><br><span class="line">            </span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (method.equals(METHOD_TRACE)) &#123;</span><br><span class="line">        doTrace(req,resp);</span><br><span class="line">           </span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="comment">//</span></span><br><span class="line">        <span class="comment">// Note that this means NO servlet supports whatever</span></span><br><span class="line">        <span class="comment">// method was requested, anywhere on this server.</span></span><br><span class="line">        <span class="comment">//</span></span><br><span class="line"></span><br><span class="line">        String errMsg = lStrings.getString(<span class="string">"http.method_not_implemented"</span>);</span><br><span class="line">        Object[] errArgs = <span class="keyword">new</span> Object[<span class="number">1</span>];</span><br><span class="line">        errArgs[<span class="number">0</span>] = method;</span><br><span class="line">        errMsg = MessageFormat.format(errMsg, errArgs);</span><br><span class="line">            </span><br><span class="line">        resp.sendError(HttpServletResponse.SC_NOT_IMPLEMENTED, errMsg);</span><br><span class="line">    &#125;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
 <p>在FrameworkServlet中对这个protected修饰的service方法进行了重写，重写的目的是支持PATCH方式请求，具体代码如下图所示。 </p>
@@ -495,7 +495,7 @@ $("#jump").on('click',function(){
 <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 
 <!--wechat title img-->
-<img class="wechat-title-img" src="http://pr0yooo59.bkt.clouddn.com/img/log.JPG">
+<img class="wechat-title-img" src="http://epoch-night.oss-cn-hangzhou.aliyuncs.com/img/log.JPG">
 </body>
 
 </html>

@@ -12,12 +12,12 @@ timezone:
 # custom Site settings
 # more detail check out docs
 SEOTitle: Gubaidan's blog  
-header-img: http://pr0yooo59.bkt.clouddn.com/blogimg/water.jpg
+header-img: http://epoch-night.oss-cn-hangzhou.aliyuncs.com/blogimg/water.jpg
 email: gubaidan@126.com
 description: "花有重开日，人无再少年"
 keyword: "前端,js,jquery,javascript,html5,开发者,程序猿编程,代码,开源,Developer,Programmer,Coder,html,css,css3,用户体验"       # seo key words
 
-favicon: http://pr0yooo59.bkt.clouddn.com/img/favicon.ico   # your favicon png
+favicon: http://epoch-night.oss-cn-hangzhou.aliyuncs.com/img/favicon.ico   # your favicon png
 # custom end
 
 # URL
@@ -68,7 +68,7 @@ ga_domain:
 
 # Sidebar settings
 sidebar-about-description: "花有重开日，人无再少年"  # 个人描述
-sidebar-avatar: http://pr0yooo59.bkt.clouddn.com/img/log.JPG    # use absolute URL
+sidebar-avatar: http://epoch-night.oss-cn-hangzhou.aliyuncs.com/img/log.JPG    # use absolute URL
 
 
 # Featured Tags
@@ -155,7 +155,7 @@ deploy:
 
 
 # img CDN path
-cdn-url:  http://pr0yooo59.bkt.clouddn.com # 你的CDN地址
+cdn-url:  http://epoch-night.oss-cn-hangzhou.aliyuncs.com # 你的CDN地址
 
 # Qiniu imageView2 API
 # More info http://developer.qiniu.com/code/v6/api/kodo-api/image/imageview2.html
@@ -165,8 +165,8 @@ clip-avatar: "?imageView2/2/w/300/h/300/interlace/1/q/90"
 clip-home-post-bg: "?imageView2/1/w/800/h/300/interlace/1/q/70"
 
 # post default images
-post-default-img: http://pr0yooo59.bkt.clouddn.com/Header/water.jpg  #博文默认的图片
-post-default-img-mobile: http://pr0yooo59.bkt.clouddn.com/Header/water.jpg #移动端显示的图片
+post-default-img: http://epoch-night.oss-cn-hangzhou.aliyuncs.com/Header/water.jpg  #博文默认的图片
+post-default-img-mobile: http://epoch-night.oss-cn-hangzhou.aliyuncs.com/Header/water.jpg #移动端显示的图片
 
 # search api , set your custom key
 swiftype_key: 

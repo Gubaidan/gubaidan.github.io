@@ -133,7 +133,7 @@ protected ConfigurableListableBeanFactory obtainFreshBeanFactory() {
 
 因为在一个web项目中测试，所有BeanDefintion 中已经包含了一些基本的Bean，当前classLoader为WebAppClassoader
 
-![beanfactory](http://p9n2j0ewi.bkt.clouddn.com/PostImg/2017-05-31-refresh/Beanfactory.png)
+![beanfactory](http://epoch-night.oss-cn-hangzhou.aliyuncs.com/PostImg/Beanfactory.png)
 
 
 
@@ -293,7 +293,7 @@ resfresh（）方法在一个项目启动时会启动2次，第二次加载时�
 
 # 流程整理
 
-![process](http://p9n2j0ewi.bkt.clouddn.com/PostImg/2017-05-31-refresh/process.png)
+![process](http://epoch-night.oss-cn-hangzhou.aliyuncs.com/PostImg/process.png)
 
 Spring协调多个组件共同完成整个IOC启动，上图描述了从加载配置文件到实例化一个Bean的过程。
 

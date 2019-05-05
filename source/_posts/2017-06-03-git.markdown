@@ -26,7 +26,7 @@ tags:
 
 ### git基本操作：
 
-![git流程](http://p9n2j0ewi.bkt.clouddn.com/PostImg/2017-06-03-git/git-prosessor.png)
+![git流程](http://epoch-night.oss-cn-hangzhou.aliyuncs.com/PostImg/git-prosessor.png)
 
 #### 一、 git init 
 

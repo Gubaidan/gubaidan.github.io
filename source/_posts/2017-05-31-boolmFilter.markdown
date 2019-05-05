@@ -34,9 +34,9 @@ BloomFilter的整体思想并不复杂，主要是使用k个Hash函数将元素�
 
 
 
-1. BloomFilter初始化为m位长度的位向量，每一位均初始化为![bf1](http://p9n2j0ewi.bkt.clouddn.com/PostImg/2017-05-31-boolmFilter/bf1.jpg)
+1. BloomFilter初始化为m位长度的位向量，每一位均初始化为![bf1](http://epoch-night.oss-cn-hangzhou.aliyuncs.com/PostImg/bf1.jpg)
 
-2. 使用k个相互独立的Hash函数，每个Hash函数将元素映射到{1..m}的范围内，并将对应的位置为1。![bf2](http://p9n2j0ewi.bkt.clouddn.com/PostImg/2017-05-31-boolmFilter/bf2.jpg)如上图所示，元素x分别被三个Hash函数映射到了三个位置8、1、14，并将这三个位置从0变为1。
+2. 使用k个相互独立的Hash函数，每个Hash函数将元素映射到{1..m}的范围内，并将对应的位置为1。![bf2](http://epoch-night.oss-cn-hangzhou.aliyuncs.com/PostImg/bf2.jpg)如上图所示，元素x分别被三个Hash函数映射到了三个位置8、1、14，并将这三个位置从0变为1。
 
 3. 若检查一个元素y是否存在，首先第一步使用k个Hash函数将元素y映射到k位。分别检测每一位是否为0。若某一位为0，则元素y一定不存在，若全部为1，则有可能存在。
 

@@ -45,7 +45,7 @@ public class Main {
 
 展示某个人博客的转换效果
 
-<img style="width:80%;" src="http://p9n2j0ewi.bkt.clouddn.com/PostImg/csdn/D2338CFF-0768-4E86-AAAA-9E8305FE381F.png"/>
+<img style="width:80%;" src="http://epoch-night.oss-cn-hangzhou.aliyuncs.com/PostImg/D2338CFF-0768-4E86-AAAA-9E8305FE381F.png"/>
 
 ### 用到的工具
 

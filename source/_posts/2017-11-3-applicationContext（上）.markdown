@@ -15,7 +15,7 @@ BeanFactory 是Spring中两大核心模块（AOP、IOC）之一IOC的基础，�
 
 Spring在BeanFactory这个接口的基础上实现了很多类，最常用的是XmlBeanFactory，但在Spring3.2	之后已经被弃用，建议使用XmlBeanDefinitionReader和，DefaultListableBeanFactory代替，Spring对这一继承机构设计的相当精巧。
 
-![BeanFactory](http://p9n2j0ewi.bkt.clouddn.com/PostImg/2017-11-03-applicationContext/BeanFactoryDependence.png)
+![BeanFactory](http://epoch-night.oss-cn-hangzhou.aliyuncs.com/PostImg/BeanFactoryDependence.png)
 
 BeanFactory 接口位于类结构树的顶端，通过其他类和接口的装饰，最后的DefaultBeanFactory就是由其他类和接口不断扩充。
 
@@ -80,7 +80,7 @@ XmlBeanDefinitionReader 通过Resource装载配置信息并启动IOC容器，这
 
 ### ApplicationbContext类结构体系
 
-![application](http://p9n2j0ewi.bkt.clouddn.com/PostImg/2017-11-03-applicationContext/applicationContext.png)
+![application](http://epoch-night.oss-cn-hangzhou.aliyuncs.com/PostImg/applicationContext.png)
 
 
 

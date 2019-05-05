@@ -121,7 +121,7 @@ css
 ### 四、对比
 
 上图是原生1px，下图是解决后的效果                
-![与原生方案对比](http://p9n2j0ewi.bkt.clouddn.com/blogimg/border1px.jpg)  
+![与原生方案对比](http://epoch-night.oss-cn-hangzhou.aliyuncs.com/blogimg/border1px.jpg)  
 
 ### 五、产生差别的原因
 

@@ -87,8 +87,8 @@ tags:
 
 5. 效果
 
-   ![sh](http://p9n2j0ewi.bkt.clouddn.com/PostImg/2017-06-04-sh/nginx.png)
+   ![sh](http://epoch-night.oss-cn-hangzhou.aliyuncs.com/PostImg/nginx.png)
 
 6. mac可以把.sh文件后缀改为.command，这样双击就可以直接运行。
 
-   ![command](http://p9n2j0ewi.bkt.clouddn.com/PostImg/2017-06-04-sh/command.png)
+   ![command](http://epoch-night.oss-cn-hangzhou.aliyuncs.com/PostImg/command.png)

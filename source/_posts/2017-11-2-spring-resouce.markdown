@@ -15,7 +15,7 @@ tags:
 
 
 
-![Resource接口依赖](http://p9n2j0ewi.bkt.clouddn.com/PostImg/2017-11-02-spring-resource/ResourceClassDependence.png)
+![Resource接口依赖](http://epoch-night.oss-cn-hangzhou.aliyuncs.com/PostImg/ResourceClassDependence.png)
 
 为了访问访问不同的资源类型，必须使用不同的Resource实现类，这个是比较麻烦的，Spring提供了Resource这个强大的资源加载机制，不但能识别ftp、http、classpath等前缀的资源，还支持ant风格带通配符的资源地址。
 
@@ -61,7 +61,7 @@ Ant风格的资源地址支持三种匹配符。
 
 Spring定义了一套资源加载的接口，并提供了实现：
 
-![loader](http://p9n2j0ewi.bkt.clouddn.com/PostImg/2017-11-02-spring-resource/loader.png)
+![loader](http://epoch-night.oss-cn-hangzhou.aliyuncs.com/PostImg/loader.png)
 
 ```java
 import org.junit.jupiter.api.Test;
